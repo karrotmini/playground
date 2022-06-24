@@ -1,0 +1,5 @@
+[package]
+name = "karrotmini-miniapp-package"
+version = "0.0.1"
+authors = ["Hyeseong Kim <tim@daangn.com>"]
+edition = "2021"

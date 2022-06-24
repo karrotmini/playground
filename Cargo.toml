@@ -1,0 +1,6 @@
+[workspace]
+members = [
+  "karrotmini-miniapp-manifest",
+  "karrotmini-miniapp-package",
+  "playground-webapp-controller",
+]

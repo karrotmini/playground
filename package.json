@@ -1,0 +1,10 @@
+{
+  "name": "project",
+  "private": true,
+  "packageManager": "yarn@3.2.1",
+  "workspaces": [
+    "playground-core",
+    "playground-cloudflare-adapter",
+    "playground-dist-*"
+  ]
+}
