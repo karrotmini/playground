@@ -1,4 +1,5 @@
 .yarn/**             linguist-vendored
 
 **/__generated__/**  linguist-generated
+**/__snapshots__/**  linguist-generated
 **/*.generated.*     linguist-generated

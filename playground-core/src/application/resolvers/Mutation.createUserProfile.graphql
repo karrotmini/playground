@@ -1,0 +1,13 @@
+input CreateUserProfileInput {
+  _: String
+}
+
+type CreateUserProfileResult {
+  userProfile: UserProfile!
+}
+
+type Mutation {
+  createUserProfile(
+    input: CreateUserProfileInput! = {}
+  ): CreateUserProfileResult!
+}

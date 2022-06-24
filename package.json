@@ -6,5 +6,8 @@
     "playground-core",
     "playground-cloudflare-adapter",
     "playground-dist-*"
-  ]
+  ],
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
 }

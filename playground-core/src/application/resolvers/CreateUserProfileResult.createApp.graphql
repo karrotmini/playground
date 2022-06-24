@@ -1,0 +1,16 @@
+input CreateUserProfileResultCreateAppInput {
+  appId: String!
+  name: String!
+}
+
+type CreateUserProfileResultCreateAppResult {
+  customHost: CustomHost!
+  userProfile: UserProfile!
+  app: App!
+}
+
+type CreateUserProfileResult {
+  createApp(
+    input: CreateUserProfileResultCreateAppInput!
+  ): CreateUserProfileResultCreateAppResult!
+}

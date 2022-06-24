@@ -1,0 +1,11 @@
+// Vitest Snapshot v1
+
+exports[`UserProfile > should be valid after UserProfileCreated > $snapshot version 1 1`] = `
+{
+  "appIds": [],
+  "createdAt": 1654819200000,
+  "deletedAt": null,
+  "name": null,
+  "profileImageUrl": null,
+}
+`;

@@ -1,0 +1,21 @@
+mutation CreateUserProfileWithFirstApp(
+  $appId: String!
+  $name: String!
+) {
+  createUserProfile {
+    createApp(input: {
+      appId: $appId
+      name: $name
+    }) {
+      userProfile {
+        id
+      }
+      customHost {
+        id
+      }
+      app {
+        id
+      }
+    }
+  }
+}

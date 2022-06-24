@@ -1,0 +1,7 @@
+query UserProfileById($userProfileId: ID!) {
+  userProfile(id: $userProfileId) {
+    id
+    name
+    profileImageUrl
+  }
+}

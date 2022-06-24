@@ -1,0 +1,17 @@
+input CreateAppInput {
+  userProfileId: ID!
+  appId: String!
+  name: String!
+}
+
+type CreateAppResult {
+  customHost: CustomHost!
+  userProfile: UserProfile!
+  app: App!
+}
+
+type Mutation {
+  createApp(
+    input: CreateAppInput!
+  ): CreateAppResult!
+}

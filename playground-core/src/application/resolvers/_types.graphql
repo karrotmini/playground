@@ -1,0 +1,57 @@
+scalar URL
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  node(id: ID!): Node
+  userProfile(id: ID!): UserProfile
+}
+
+interface Node {
+  id: ID!
+}
+
+type App implements Node {
+  id: ID!
+  version: Int!
+  manifest: AppManifest!
+  customHost: CustomHost!
+  currentBundle: AppBundle!
+}
+
+type AppManifest {
+  name: String!
+  icon: URL!
+}
+
+union AppBundle = AppBundleUpload | AppBundleTemplate
+
+type AppBundleUpload implements Node {
+  id: ID!
+}
+
+type AppBundleTemplate {
+  id: ID!
+}
+
+type CustomHost implements Node {
+  id: ID!
+  providerInfo: HostnameProviderInfo
+}
+
+type HostnameProviderInfo {
+  url: URL!
+  hostname: String!
+  healthCheckUrl: URL!
+  managementUrl: URL!
+}
+
+type UserProfile implements Node {
+  id: ID!
+  name: String!
+  apps: [App!]!
+  profileImageUrl: URL!
+}

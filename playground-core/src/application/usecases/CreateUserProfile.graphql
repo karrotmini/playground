@@ -1,0 +1,7 @@
+mutation CreateUserProfile {
+  createUserProfile {
+    userProfile {
+      id
+    }
+  }
+}

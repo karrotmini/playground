@@ -1,3 +1,3 @@
 # Karrotmini Playground Core Logic
 
-TBD
+WIP

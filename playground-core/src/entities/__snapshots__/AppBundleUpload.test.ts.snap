@@ -1,0 +1,10 @@
+// Vitest Snapshot v1
+
+exports[`AppBundleUpload > should have valid state after AppBundleUpload > $snapshot version 1 1`] = `
+{
+  "appId": "TEST",
+  "createdAt": 1654819200000,
+  "deletedAt": null,
+  "uploaderId": "TEST",
+}
+`;

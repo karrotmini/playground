@@ -1,0 +1,62 @@
+schema:
+  - src/application/resolvers/**/*.graphql
+
+documents: 
+  - src/application/usecases/*.graphql
+
+generates:
+  src/application/__generated__/schema.graphql:
+    plugins:
+      - schema-ast
+
+  src/application/__generated__/types.ts:
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+      - typescript-resolvers
+    config:
+      contextType: ../runtime/ApplicationContext#IApplicationContext
+      scalars:
+        URL: string
+      mappers:
+        App: ../../entities#App
+        AppManifest: ../../entities#AppManifest
+        AppBundle: ../../entities#AppBundle
+        AppBundleUpload: ../../entities#AppBundleUpload
+        AppBundleTemplate: ../../entities#AppBundleTemplate
+        CustomHost: ../../entities#CustomHost
+        UserProfile: ../../entities#UserProfile
+        HostnameProviderInfo: ../../entities#HostnameProviderInfo
+        CreateUserProfileResult: ../resolvers/CreateUserProfileResult#Root
+      mapperTypeSuffix: Model
+      useTypeImports: true
+      avoidOptionals: true
+      skipTypename: true
+      nonOptionalTypename: true
+      maybeValue: T | null
+      customResolverFn: |
+        (
+          parent: TParent,
+          args: TArgs,
+          context: TContext,
+        ) => Promise<TResult> | TResult;
+
+  src/application/__generated__/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: types.ts
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript-operations
+      - typed-document-node
+    config:
+      scalars:
+        URL: string
+      useTypeImports: true
+      maybeValue: T | null
+      avoidOptionals: true
+      skipTypename: true
+      nonOptionalTypename: true

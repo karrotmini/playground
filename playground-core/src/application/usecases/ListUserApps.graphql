@@ -1,0 +1,23 @@
+fragment AppCard on App {
+  id
+  version
+  manifest {
+    name
+    icon
+  }
+  customHost {
+    providerInfo {
+      url
+    }
+  }
+}
+
+query ListUserApps(
+  $userProfileId: ID!
+) {
+  userProfile(id: $userProfileId) {
+    apps {
+      ...AppCard
+    }
+  }
+}
