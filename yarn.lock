@@ -1340,12 +1340,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@karrotmini/playground-api-worker@workspace:playground-dist-fetch-worker":
-  version: 0.0.0-use.local
-  resolution: "@karrotmini/playground-api-worker@workspace:playground-dist-fetch-worker"
-  languageName: unknown
-  linkType: soft
-
 "@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter":
   version: 0.0.0-use.local
   resolution: "@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter"
@@ -1385,6 +1379,14 @@ __metadata:
     typescript: ^4.7.4
     vite: ^2.9.9
     vitest: ^0.12.9
+  languageName: unknown
+  linkType: soft
+
+"@karrotmini/playground-management-api@workspace:playground-dist-management-api":
+  version: 0.0.0-use.local
+  resolution: "@karrotmini/playground-management-api@workspace:playground-dist-management-api"
+  dependencies:
+    typescript: ^4.7.4
   languageName: unknown
   linkType: soft
 
