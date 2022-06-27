@@ -4999,6 +4999,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minictl@workspace:minictl":
+  version: 0.0.0-use.local
+  resolution: "minictl@workspace:minictl"
+  languageName: unknown
+  linkType: soft
+
 "miniflare@npm:^2.5.1":
   version: 2.5.1
   resolution: "miniflare@npm:2.5.1"
