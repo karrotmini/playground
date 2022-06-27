@@ -5,6 +5,9 @@
     "prepack": "yarn build",
     "build": "tsc"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "src/out",
     "lib"
