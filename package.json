@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "yarn@3.2.1",
   "workspaces": [
+    "cloudflare-hostname-provider",
     "playground-core",
     "playground-cloudflare-adapter",
     "playground-dist-*"

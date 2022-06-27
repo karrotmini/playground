@@ -1,0 +1,8 @@
+{
+  "name": "@karrotmini/cloudflare-hostname-provider",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@karrotmini/playground-core": "workspace:^"
+  }
+}

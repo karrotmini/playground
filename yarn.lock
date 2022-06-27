@@ -1332,6 +1332,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider":
+  version: 0.0.0-use.local
+  resolution: "@karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider"
+  dependencies:
+    "@karrotmini/playground-core": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@karrotmini/playground-api-worker@workspace:playground-dist-fetch-worker":
   version: 0.0.0-use.local
   resolution: "@karrotmini/playground-api-worker@workspace:playground-dist-fetch-worker"
