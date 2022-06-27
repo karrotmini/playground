@@ -2,15 +2,15 @@
 
 [Cloudflare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/) & [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/) 백엔드로 구현된 Playground 어댑터
 
-- In: Playground 서비스를 Cloudflare 인프라스트럭쳐에 포팅합니다.
-- Out: [Fetch API](https://developer.mozilla.org/ko/docs/Web/API/Fetch_API) 기반 클라이언트를 제공합니다. Fetch 클라이언트가 존재하는 Node.js 18+, Deno, Cloudflare Workers와 같은 환경에서 인스턴스를 생성할 수 있습니다.
+- In: Playground 서비스를 Cloudflare 인프라스트럭쳐(KV, Durable Objects)로 포팅합니다.
+- Out: [Fetch API](https://developer.mozilla.org/ko/docs/Web/API/Fetch_API) 기반 클라이언트를 제공합니다. [Service Bindings](https://developers.cloudflare.com/workers/platform/bindings/about-service-bindings/) Stub을 감싸서 사용합니다.
 
 ## Infrastructure
 
 ![Infrastructure Overview](_images/playground-cloudflare-infrastructure-overview.png)
 [See on Excalidraw](https://excalidraw.com/#json=bgse0GaQT4xgha9bR7e9z,YKRMirhUr5y3FTmOy2CF6Q)
 
-### Components
+### Key Components
 
 - **Event Store**: 글로벌 분산 스토리지인 *Cloudflare KV*에 발행된 이벤트를 모두 저장합니다. 애그리게잇 ID, 이벤트 명, 이벤트 날짜 기반으로 정렬된 키를 각각 보관하여 이론적으로 [Hexastore](http://karras.rutgers.edu/hexastore.pdf) 수준 인덱싱을 가능하게 만듭니다.
   > **Warning**

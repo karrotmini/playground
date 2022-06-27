@@ -192,7 +192,7 @@ export abstract class AggregatorProtocolClient<Aggregate extends AnyAggregate> {
     this.#namespace = config.namespace;
   }
 
-  abstract newId(): EntityID<Aggregate>;
+  abstract newId(): Promise<EntityID<Aggregate>>;
   abstract convertId(id: EntityID<Aggregate>): DurableObjectId;
   abstract spawn(
     id: EntityID<Aggregate>,

@@ -1340,13 +1340,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter":
+"@karrotmini/playground-cloudflare-adapter-worker@workspace:playground-cloudflare-adapter/worker":
   version: 0.0.0-use.local
-  resolution: "@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter"
+  resolution: "@karrotmini/playground-cloudflare-adapter-worker@workspace:playground-cloudflare-adapter/worker"
   dependencies:
     "@cloudflare/workers-types": ^3.13.0
     "@karrotmini/playground-core": "workspace:^"
+    esbuild: ^0.14.47
+    typescript: ^4.7.4
     wrangler: ^2.0.15
+  languageName: unknown
+  linkType: soft
+
+"@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter/lib":
+  version: 0.0.0-use.local
+  resolution: "@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter/lib"
+  dependencies:
+    "@karrotmini/playground-core": "workspace:^"
+    typescript: ^4.7.4
   languageName: unknown
   linkType: soft
 
@@ -1382,17 +1393,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@karrotmini/playground-management-api@workspace:playground-dist-management-api":
+"@karrotmini/playground-management-api-worker@workspace:playground-management-api/worker":
   version: 0.0.0-use.local
-  resolution: "@karrotmini/playground-management-api@workspace:playground-dist-management-api"
+  resolution: "@karrotmini/playground-management-api-worker@workspace:playground-management-api/worker"
+  dependencies:
+    esbuild: ^0.14.47
+    miniflare: ^2.5.1
+    typescript: ^4.7.4
+    wrangler: ^2.0.15
+  languageName: unknown
+  linkType: soft
+
+"@karrotmini/playground-management-api@workspace:playground-management-api/lib":
+  version: 0.0.0-use.local
+  resolution: "@karrotmini/playground-management-api@workspace:playground-management-api/lib"
   dependencies:
     typescript: ^4.7.4
   languageName: unknown
   linkType: soft
 
-"@karrotmini/playground-remix-worker@workspace:playground-dist-remix-worker":
+"@karrotmini/playground-remix-ui@workspace:playground-remix-ui":
   version: 0.0.0-use.local
-  resolution: "@karrotmini/playground-remix-worker@workspace:playground-dist-remix-worker"
+  resolution: "@karrotmini/playground-remix-ui@workspace:playground-remix-ui"
   languageName: unknown
   linkType: soft
 
@@ -3390,7 +3412,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.14.27":
+"esbuild@npm:^0.14.27, esbuild@npm:^0.14.47":
   version: 0.14.47
   resolution: "esbuild@npm:0.14.47"
   dependencies:
@@ -5660,7 +5682,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "project@workspace:."
   dependencies:
+    "@cloudflare/workers-types": ^3.13.0
     typescript: ^4.7.4
+    wrangler: ^2.0.15
   languageName: unknown
   linkType: soft
 

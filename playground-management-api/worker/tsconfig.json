@@ -1,11 +1,11 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ESNext"]
   },
   "include": [
     "wrangler.d.ts",
-    "src/**/*.ts"
+    "src/**/*"
   ],
   "exclude": [
   ]

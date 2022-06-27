@@ -22,8 +22,10 @@ export class AppRepository
     this.#namespace = config.namespace;
   }
 
-  newId(): AppID {
-    return AppID(Utils.generateShortId());
+  newId(): Promise<AppID> {
+    return Promise.resolve(
+      AppID(Utils.generateShortId()),
+    );
   }
 
   convertId(id: AppID): DurableObjectId {

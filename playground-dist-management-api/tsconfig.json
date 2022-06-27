@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "moduleResolution": "NodeNext",
-    "rootDir": "./src/out/",
-    "outDir": "./lib/"
-  }
-}
