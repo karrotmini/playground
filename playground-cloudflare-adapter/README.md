@@ -2,7 +2,7 @@
 
 [Cloudflare KV](https://developers.cloudflare.com/workers/runtime-apis/kv/) & [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/) 백엔드로 구현된 Playground 어댑터
 
-- In: Karrotmini 코어 로직을 Cloudflare 인프라스트럭쳐에 포팅합니다.
+- In: Playground 서비스를 Cloudflare 인프라스트럭쳐에 포팅합니다.
 - Out: [Fetch API](https://developer.mozilla.org/ko/docs/Web/API/Fetch_API) 기반 클라이언트를 제공합니다. Fetch 클라이언트가 존재하는 Node.js 18+, Deno, Cloudflare Workers와 같은 환경에서 인스턴스를 생성할 수 있습니다.
 
 ## Infrastructure
