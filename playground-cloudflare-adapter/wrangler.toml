@@ -1,0 +1,26 @@
+name = "karrotmini-playground-adapter"
+type = "javascript"
+workers_dev = true
+compatibility_date = "2022-05-22"
+compatibility_flags = [
+  "url_standard",
+]
+account_id = "aad5c82543cd1f267b89737d0f56405e"
+
+[[kv_namespaces]]
+binding = "KV_EVENT_STORE"
+id = ""
+preview_id = ""
+
+[[durable_objects.bindings]]
+name = "DO_APP_REPOSITORY"
+class_name = "AppRepositoryObject"
+
+[build]
+watch_dir = "src"
+command = "yarn build"
+
+[build.upload]
+format = "modules"
+dir = "./dist"
+main = "./worker.mjs"

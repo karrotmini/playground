@@ -1,0 +1,36 @@
+import {
+  App,
+  AppID,
+  type AppSnapshot,
+  type IAppRepository,
+} from '@karrotmini/playground-core/src';
+import {
+  AggregatorProtocolClient,
+} from './base/protocol';
+import * as Utils from './base/utils';
+
+export class AppRepository
+  extends AggregatorProtocolClient<App>
+  implements IAppRepository
+{
+  #namespace: DurableObjectNamespace;
+
+  constructor(config: {
+    namespace: DurableObjectNamespace,
+  }) {
+    super(config);
+    this.#namespace = config.namespace;
+  }
+
+  newId(): AppID {
+    return AppID(Utils.generateShortId());
+  }
+
+  convertId(id: AppID): DurableObjectId {
+    return this.#namespace.idFromName(id);
+  }
+
+  spawn(id: AppID, snapshot: AppSnapshot): App {
+    return new App(id, snapshot);
+  }
+}
