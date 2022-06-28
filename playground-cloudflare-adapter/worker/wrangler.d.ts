@@ -6,4 +6,5 @@ declare interface WranglerEnv {
 
   // DOs
   DO_APP_REPOSITORY: DurableObjectNamespace;
+  DO_USER_PROFILE_REPOSITORY: DurableObjectNamespace;
 }

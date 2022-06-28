@@ -17,6 +17,10 @@ preview_id = ""
 name = "DO_APP_REPOSITORY"
 class_name = "AppRepositoryObject"
 
+[[durable_objects.bindings]]
+name = "DO_USER_PROFILE_REPOSITORY"
+class_name = "UserProfileRepositoryObject"
+
 [build]
 watch_dir = "src/in"
 command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --format=esm"
