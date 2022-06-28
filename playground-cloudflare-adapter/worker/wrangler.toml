@@ -15,11 +15,11 @@ preview_id = ""
 
 [[durable_objects.bindings]]
 name = "DO_APP_REPOSITORY"
-class_name = "AppRepositoryObject"
+class_name = "AppRepositoryDurableObject"
 
 [[durable_objects.bindings]]
 name = "DO_USER_PROFILE_REPOSITORY"
-class_name = "UserProfileRepositoryObject"
+class_name = "UserProfileRepositoryDurableObject"
 
 [build]
 watch_dir = "src/in"

@@ -1,13 +1,14 @@
 import {
   type EntityID,
   type AnyAggregate,
+  type AnyDomainEvent,
   type AggregateEvent,
   type AggregateSnapshot,
 } from '@karrotmini/playground-core/src';
 
 import { HexaKV, type SPO } from './HexaKV';
 
-export type AggregatorProtocolStub<T extends AnyAggregate> = {
+type DurableObjectAggregatorProtocolStub<T extends AnyAggregate> = {
   aggregate: (
     id: EntityID<T>,
   ) => Promise<AggregateSnapshot<T> | null>,
@@ -18,35 +19,32 @@ export type AggregatorProtocolStub<T extends AnyAggregate> = {
   ) => Promise<Array<AggregateEvent<T>> | null>,
 };
 
-export type AggregatorProtocolWire<T extends AnyAggregate> = (
+type DurableObjectAggregatorProtocolWire<T extends AnyAggregate> = (
   | { op: 'AGGREGATE', id: EntityID<T> }
   | { op: 'COMMIT', id: EntityID<T>, events: Array<AggregateEvent<T>> }
 );
 
-export type AggregatorBookmark<T extends AnyAggregate> = [
+type DurableObjectAggregatorBookmark<T extends AnyAggregate> = [
   cursor: string | null,
   snapshot: AggregateSnapshot<T>,
 ];
 
-interface ErrorLike {
-  message: string;
-  stack?: string;
+type EventStoreKey = SPO<AggregateID, EventName, EventOrder>;
+
+type AggregateID = string & { __BRAND__: 'AggregateID' };
+function AggregateID(aggregate: AnyAggregate) {
+  return `${aggregate.typename}:${aggregate.id}` as AggregateID;
 }
 
-class AggregatorDurableObjectError extends Error {
-  constructor({ message, stack }: ErrorLike) {
-    super(message);
-    if (stack) {
-      this.stack = stack;
-    }
-  }
+type EventName = string & { __BRAND__: 'EventName' };
+function EventName(event: AnyDomainEvent) {
+  return event.eventName as EventName;
 }
 
-type EventStoreKey = SPO<
-  string, /* AggregateID (name + id)    */ 
-  string, /* EventName                  */ 
-  string  /* EventOrder (date + serial) */
->;
+type EventOrder = string & { __BRAND__: 'EventOrder' };
+function EventOrder(event: AnyDomainEvent, serial: number) {
+  return `${event.eventDate}:${serial}` as EventOrder;
+}
 
 export abstract class AggregatorDurableObject<T extends AnyAggregate>
   implements DurableObject
@@ -84,7 +82,7 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
     let listCompleted = false;
     while (!listCompleted) {
       const result = await this.#eventStore.listPO({
-        predicate: { s: `${this.aggregateName}:${id}` },
+        predicate: { s: AggregateID(aggregate) },
         cursor,
       });
       events.push(...result.values);
@@ -100,14 +98,14 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
     return aggregate;
   }
 
-  async #saveBookmark(version: number, bookmark: AggregatorBookmark<T>) {
+  async #saveBookmark(version: number, bookmark: DurableObjectAggregatorBookmark<T>) {
     const key = `bookmark:${version}:${Date.now()}`;
     await this.#state.storage.put(key, bookmark);
   }
 
   async #getBookmark(version: number) {
     const prefix = `bookmark:${version}`;
-    const result = await this.#state.storage.list<AggregatorBookmark<T>>({
+    const result = await this.#state.storage.list<DurableObjectAggregatorBookmark<T>>({
       prefix,
       reverse: true,
       limit: 1,
@@ -117,7 +115,7 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
   }
 
   async fetch(request: Request) {
-    type WireMessage = AggregatorProtocolWire<T>;
+    type WireMessage = DurableObjectAggregatorProtocolWire<T>;
     const wire = await request.json<WireMessage>();
 
     this.#deferredAggregate ||= this.#restore(wire.id);
@@ -135,10 +133,10 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
           let serial = 0;
           let cursor: string | null = null;
           for (const event of wire.events) {
-            const key = {
-              s: `${aggregate.typename}:${aggregate.id}`,
-              p: event.eventName,
-              o: `${event.eventDate}:${serial++}`,
+            const key: EventStoreKey = {
+              s: AggregateID(aggregate),
+              p: EventName(event),
+              o: EventOrder(event, serial++),
             };
             await this.#eventStore.put(key, event);
             cursor = HexaKV.SPO(key);
@@ -168,6 +166,20 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
           );
         }
       }
+    }
+  }
+}
+
+interface ErrorLike {
+  message: string;
+  stack?: string;
+}
+
+class AggregatorDurableObjectError extends Error {
+  constructor({ message, stack }: ErrorLike) {
+    super(message);
+    if (stack) {
+      this.stack = stack;
     }
   }
 }
@@ -215,8 +227,8 @@ export abstract class AggregatorProtocolClient<Aggregate extends AnyAggregate> {
     }
   }
 
-  #wrapStub(stub: DurableObjectStub): AggregatorProtocolStub<Aggregate> {
-    async function request<T>(wire: AggregatorProtocolWire<Aggregate>) {
+  #wrapStub(stub: DurableObjectStub): DurableObjectAggregatorProtocolStub<Aggregate> {
+    async function request<T>(wire: DurableObjectAggregatorProtocolWire<Aggregate>) {
       try {
         const response = await stub
           .fetch('http://aggregator/', {

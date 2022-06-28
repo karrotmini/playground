@@ -6,9 +6,9 @@ import {
 
 import {
   AggregatorDurableObject,
-} from '../base/protocol';
+} from '../base/DurableObjectAggregatorProtocol';
 
-export class AppRepositoryObject
+export class AppRepositoryDurableObject
   extends AggregatorDurableObject<App>
   implements DurableObject
 {

@@ -6,7 +6,7 @@ import {
 } from '@karrotmini/playground-core/src';
 import {
   AggregatorProtocolClient,
-} from './base/protocol';
+} from './base/DurableObjectAggregatorProtocol';
 import * as Utils from './base/utils';
 
 export class UserProfileRepository

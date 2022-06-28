@@ -1,2 +1,2 @@
-export * from './AppRepositoryObject';
-export * from './UserProfileRepositoryObject';
+export * from './AppRepositoryDurableObject';
+export * from './UserProfileRepositoryDurableObject';
