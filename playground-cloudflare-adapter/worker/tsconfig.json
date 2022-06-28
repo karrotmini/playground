@@ -5,7 +5,7 @@
   },
   "include": [
     "./wrangler.d.ts",
-    "./src/in/**/*"
+    "./src"
   ],
   "exclude": [
   ]

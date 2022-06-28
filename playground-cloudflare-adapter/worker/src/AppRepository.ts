@@ -24,7 +24,7 @@ export class AppRepository
 
   newId(): Promise<AppID> {
     return Promise.resolve(
-      AppID(Utils.generateShortId()),
+      AppID(Utils.generateShortId(13)),
     );
   }
 
@@ -32,7 +32,7 @@ export class AppRepository
     return this.#namespace.idFromName(id);
   }
 
-  spawn(id: AppID, snapshot: AppSnapshot): App {
+  spawn(id: AppID, snapshot?: AppSnapshot): App {
     return new App(id, snapshot);
   }
 }
