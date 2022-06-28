@@ -2,11 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "NodeNext",
-    "rootDir": "src/out/",
-    "outDir": "lib/"
+    "rootDir": "src",
+    "outDir": "lib"
   },
   "include": [
-    "src/**/*"
+    "src"
   ],
   "exclude": [
   ]
