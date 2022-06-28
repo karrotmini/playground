@@ -7,6 +7,7 @@
     "miniflare": "miniflare"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^3.13.0",
     "esbuild": "^0.14.47",
     "miniflare": "^2.5.1",
     "typescript": "^4.7.4",
