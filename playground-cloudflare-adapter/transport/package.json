@@ -1,12 +1,12 @@
 {
-  "name": "@karrotmini/playground-cloudflare-adapter",
+  "name": "@karromtini/playground-cloudflare-adapter-transport",
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@karromtini/playground-cloudflare-adapter-transport": "workspace:^",
     "@karrotmini/playground-core": "workspace:^"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^3.13.0",
     "typescript": "^4.7.4"
   }
 }

@@ -1332,6 +1332,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@karromtini/playground-cloudflare-adapter-transport@workspace:^, @karromtini/playground-cloudflare-adapter-transport@workspace:playground-cloudflare-adapter/transport":
+  version: 0.0.0-use.local
+  resolution: "@karromtini/playground-cloudflare-adapter-transport@workspace:playground-cloudflare-adapter/transport"
+  dependencies:
+    "@cloudflare/workers-types": ^3.13.0
+    "@karrotmini/playground-core": "workspace:^"
+    typescript: ^4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider":
   version: 0.0.0-use.local
   resolution: "@karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider"
@@ -1345,6 +1355,7 @@ __metadata:
   resolution: "@karrotmini/playground-cloudflare-adapter-worker@workspace:playground-cloudflare-adapter/worker"
   dependencies:
     "@cloudflare/workers-types": ^3.13.0
+    "@karromtini/playground-cloudflare-adapter-transport": "workspace:^"
     "@karrotmini/playground-core": "workspace:^"
     esbuild: ^0.14.47
     typescript: ^4.7.4
@@ -1356,6 +1367,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter/lib"
   dependencies:
+    "@karromtini/playground-cloudflare-adapter-transport": "workspace:^"
     "@karrotmini/playground-core": "workspace:^"
     typescript: ^4.7.4
   languageName: unknown

@@ -60,14 +60,13 @@ export abstract class Aggregate<
     throw new InvalidStateError(this);
   }
 
-  constructor(id: ID, snapshot?: Snapshot) {
+  constructor(id: ID, snapshot?: Snapshot, events: Event[] = []) {
     super(id);
-    this.#events = [];
+    this.#events = events;
     this.#state = {};
 
     if (snapshot) {
-      const state = structuredClone(snapshot);
-      this.#state = state;
+      this.#state = structuredClone(snapshot);
       this.#valid = true;
     }
   }

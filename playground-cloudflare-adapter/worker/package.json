@@ -6,6 +6,7 @@
     "wrangler": "wrangler"
   },
   "dependencies": {
+    "@karromtini/playground-cloudflare-adapter-transport": "workspace:^",
     "@karrotmini/playground-core": "workspace:^"
   },
   "devDependencies": {
