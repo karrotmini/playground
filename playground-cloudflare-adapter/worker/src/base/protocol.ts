@@ -5,6 +5,8 @@ import {
   type AggregateSnapshot,
 } from '@karrotmini/playground-core/src';
 
+import { HexaKV, type SPO } from './HexaKV';
+
 export type AggregatorProtocolStub<T extends AnyAggregate> = {
   aggregate: (
     id: EntityID<T>,
@@ -40,12 +42,11 @@ class AggregatorDurableObjectError extends Error {
   }
 }
 
-const EventStoreKey = {
-  spliter: ':',
-  join(...keys: string[]) {
-    return keys.join(this.spliter);
-  },
-};
+type EventStoreKey = SPO<
+  string, /* AggregateID (name + id)    */ 
+  string, /* EventName                  */ 
+  string  /* EventOrder (date + serial) */
+>;
 
 export abstract class AggregatorDurableObject<T extends AnyAggregate>
   implements DurableObject
@@ -54,7 +55,7 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
   static BOOKMARK_PREFIX = `bookmark:`;
 
   #state: DurableObjectState;
-  #eventStore: KVNamespace;
+  #eventStore: HexaKV<EventStoreKey, AggregateEvent<T>>;
   #deferredAggregate: Promise<T> | null;
   #commitCount: number;
 
@@ -65,7 +66,7 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
 
   constructor(state: DurableObjectState, env: WranglerEnv) {
     this.#state = state;
-    this.#eventStore = env.KV_EVENT_STORE;
+    this.#eventStore = new HexaKV({ namespace: env.KV_EVENT_STORE });
     this.#deferredAggregate = null;
     this.#commitCount = 0;
   }
@@ -78,43 +79,25 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
       aggregate = this.spawn(id, bookmark[1]);
     }
 
-    const events: Event[] = [];
-    const prefix = this.#getEventStorePrefix(id);
+    const events: Array<AggregateEvent<T>> = [];
     let cursor = bookmark?.[0];
     let listCompleted = false;
     while (!listCompleted) {
-      const result = await this.#eventStore.list({
-        prefix,
+      const result = await this.#eventStore.listPO({
+        predicate: { s: `${this.aggregateName}:${id}` },
         cursor,
       });
-      events.push(
-        ...await Promise.all(
-          result.keys.map(
-            key => this.#eventStore.get<Event>(key.name, 'json'),
-          ),
-        ) as Event[],
-      );
+      events.push(...result.values);
       cursor = result.cursor;
-      listCompleted = result.list_complete;
+      listCompleted = result.listCompleted;
     }
+
     aggregate.$restoreState(events);
+    if (!aggregate.$valid) {
+      throw new Error(`failed to restore ${aggregate.typename}(${aggregate.id})`);
+    }
 
     return aggregate;
-  }
-
-  #getEventStorePrefix(id: EntityID<T>) {
-    return EventStoreKey.join(
-      this.aggregateName,
-      id,
-    );
-  }
-
-  #getEventStoreKey(id: EntityID<T>, eventDate: number, serial: number) {
-    return EventStoreKey.join(
-      this.#getEventStorePrefix(id),
-      eventDate.toString(),
-      serial.toString(),
-    );
   }
 
   async #saveBookmark(version: number, bookmark: AggregatorBookmark<T>) {
@@ -152,11 +135,17 @@ export abstract class AggregatorDurableObject<T extends AnyAggregate>
           let serial = 0;
           let cursor: string | null = null;
           for (const event of wire.events) {
-            cursor = this.#getEventStoreKey(aggregate.id, event.eventDate, serial++);
-            await this.#eventStore.put(cursor, JSON.stringify(event));
+            const key = {
+              s: `${aggregate.typename}:${aggregate.id}`,
+              p: event.eventName,
+              o: `${event.eventDate}:${serial++}`,
+            };
+            await this.#eventStore.put(key, event);
+            cursor = HexaKV.SPO(key);
           }
           aggregate.$restoreState(wire.events);
           this.#commitCount += serial;
+
           if (cursor && this.#commitCount >= AggregatorDurableObject.SNAPSHOT_PER) {
             await this.#saveBookmark(
               aggregate.snapshotVersion,
