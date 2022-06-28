@@ -7,6 +7,8 @@ import type {
   ResponseMessage,
 } from './types';
 
+export * from './types';
+
 export type ServiceStub<Env = unknown> = {
   [K in Action]: (
     message: ActionMap[K]['Request'],

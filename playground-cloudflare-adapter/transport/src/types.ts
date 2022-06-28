@@ -7,6 +7,10 @@ import type {
 
 type Maybe<T> = T | null;
 
+export type ServiceBinding = {
+  fetch: typeof fetch,
+};
+
 export type RequestMessage = {
   [K in Action]: {
     action: K,

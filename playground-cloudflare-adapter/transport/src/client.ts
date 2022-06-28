@@ -1,12 +1,15 @@
 import {
   UserProfile,
   UserProfileID,
-} from "@karrotmini/playground-core/src";
+} from '@karrotmini/playground-core/src';
 
 import type {
+  ServiceBinding,
   RequestMessage,
   ResponseMessage,
 } from './types';
+
+export * from './types';
 
 export class PlaygroundCloudflareAdapterServiceError extends Error {
 }
@@ -15,12 +18,12 @@ export class PlaygroundCloudflareAdapterTransportError extends Error {
 }
 
 export class PlaygroundCloudflareAdapterClient {
-  #fetch: typeof fetch;
+  #service: ServiceBinding;
 
   constructor(config: {
-    fetch: typeof fetch,
+    service: ServiceBinding,
   }) {
-    this.#fetch = config.fetch;
+    this.#service = config.service;
   }
 
   async UserProfile_newID() {
@@ -66,7 +69,7 @@ export class PlaygroundCloudflareAdapterClient {
 
     let response: ResponseMessage;
     try {
-      const res = await this.#fetch(request);
+      const res = await this.#service.fetch(request);
       response = await res.json() as ResponseMessage;
     } catch (e: any) {
       throw new PlaygroundCloudflareAdapterTransportError(

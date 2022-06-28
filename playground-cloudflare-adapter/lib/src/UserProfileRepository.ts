@@ -1,12 +1,13 @@
-import {
+import type {
   UserProfile,
   UserProfileID,
-  type UserProfileEvent,
-  type IUserProfileRepository,
+  UserProfileEvent,
+  IUserProfileRepository,
 } from '@karrotmini/playground-core/src';
 
 import {
   PlaygroundCloudflareAdapterClient,
+  type ServiceBinding,
 } from '@karromtini/playground-cloudflare-adapter-transport/src/client';
 
 export class UserProfileRepository
@@ -15,10 +16,10 @@ export class UserProfileRepository
   #client: PlaygroundCloudflareAdapterClient;
 
   constructor(config: {
-    fetch: typeof fetch,
+    service: ServiceBinding,
   }) {
     this.#client = new PlaygroundCloudflareAdapterClient({
-      fetch: config.fetch,
+      service: config.service,
     });
   }
 
