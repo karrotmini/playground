@@ -1,4 +1,4 @@
-import type {
+import {
   UserProfile,
   UserProfileID,
   UserProfileEvent,
@@ -23,15 +23,33 @@ export class UserProfileRepository
     });
   }
 
-  newId(): Promise<UserProfileID> {
-    return this.#client.UserProfile_newID();
+  async newId(): Promise<UserProfileID> {
+    const response = await this.#client.request({
+      action: 'UserProfile_newID',
+      payload: {},
+    });
+    return UserProfileID(response.id);
   }
 
-  aggregate(id: UserProfileID): Promise<UserProfile | null> {
-    return this.#client.UserProfile_aggregate(id);
+  async aggregate(id: UserProfileID): Promise<UserProfile | null> {
+    const response = await this.#client.request({
+      action: 'UserProfile_aggregate',
+      payload: {
+        id,
+      },
+    });
+    return response && new UserProfile(id, response.snapshot);
   }
 
-  commit(userProfile: UserProfile): Promise<UserProfileEvent[] | null> {
-    return this.#client.UserProfile_commit(userProfile);
+  async commit(userProfile: UserProfile): Promise<UserProfileEvent[] | null> {
+    const response = await this.#client.request({
+      action: 'UserProfile_commit',
+      payload: {
+        id: userProfile.id,
+        snapshot: userProfile.$snapshot,
+        events: userProfile.$pullEvents(),
+      },
+    });
+    return response.published;
   }
 }

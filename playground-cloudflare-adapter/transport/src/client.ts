@@ -26,37 +26,7 @@ export class PlaygroundCloudflareAdapterClient {
     this.#service = config.service;
   }
 
-  async UserProfile_newID() {
-    const response = await this.#request({
-      action: 'UserProfile_newID',
-      payload: {},
-    });
-    return UserProfileID(response.id);
-  }
-
-  async UserProfile_aggregate(id: UserProfileID) {
-    const response = await this.#request({
-      action: 'UserProfile_aggregate',
-      payload: {
-        id,
-      },
-    });
-    return response && new UserProfile(id, response.snapshot);
-  }
-
-  async UserProfile_commit(userProfile: UserProfile) {
-    const response = await this.#request({
-      action: 'UserProfile_commit',
-      payload: {
-        id: userProfile.id,
-        snapshot: userProfile.$snapshot,
-        events: userProfile.$pullEvents(),
-      },
-    });
-    return response.published;
-  }
-
-  async #request<T extends RequestMessage>(
+  async request<T extends RequestMessage>(
     message: T,
   ): Promise<Extract<ResponseMessage, {
     success: true,
