@@ -1,8 +1,8 @@
 import {
   UserProfile,
   UserProfileID,
-  UserProfileEvent,
-  IUserProfileRepository,
+  type UserProfileEvent,
+  type IUserProfileRepository,
 } from '@karrotmini/playground-core/src';
 
 import {

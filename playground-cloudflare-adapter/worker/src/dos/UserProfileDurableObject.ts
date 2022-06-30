@@ -8,7 +8,7 @@ import {
   AggregatorDurableObject,
 } from '../base/DurableObjectAggregatorProtocol';
 
-export class UserProfileRepositoryDurableObject
+export class UserProfileDurableObject
   extends AggregatorDurableObject<UserProfile>
   implements DurableObject
 {

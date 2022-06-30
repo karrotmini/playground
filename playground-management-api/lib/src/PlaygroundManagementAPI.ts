@@ -10,7 +10,7 @@ import type {
   UpdateAppManifestResult,
   UpdateAppBundleInput,
   UpdateAppBundleResult,
-} from './interface.js';
+} from '@karrotmini/playground-management-api/interface';
 
 export class PlaygroundManagementAPI implements IPlaygroundManagementAPI {
   #baseUrl: URL;

@@ -1,8 +1,8 @@
 import {
-  App,
-  AppID,
-  type AppEvent,
-  type IAppRepository,
+  CustomHost,
+  CustomHostID,
+  type CustomHostEvent,
+  type ICustomHostRepository,
 } from '@karrotmini/playground-core/src';
 
 import {
@@ -10,8 +10,8 @@ import {
   type ServiceBinding,
 } from '@karromtini/playground-cloudflare-adapter-transport/src/client';
 
-export class AppRepository
-  implements IAppRepository
+export class CustomHostRepository
+  implements ICustomHostRepository
 {
   #client: PlaygroundCloudflareAdapterClient;
 
@@ -23,27 +23,27 @@ export class AppRepository
     });
   }
 
-  async newId(): Promise<AppID> {
+  async newId(): Promise<CustomHostID> {
     const response = await this.#client.request({
-      action: 'App_newID',
+      action: 'CustomHost_newID',
       payload: {},
     });
-    return AppID(response.id);
+    return CustomHostID(response.id);
   }
 
-  async aggregate(id: AppID): Promise<App | null> {
+  async aggregate(id: CustomHostID): Promise<CustomHost | null> {
     const response = await this.#client.request({
-      action: 'App_aggregate',
+      action: 'CustomHost_aggregate',
       payload: {
         id,
       },
     });
-    return response && new App(id, response.snapshot);
+    return response && new CustomHost(id, response.snapshot);
   }
 
-  async commit(app: App): Promise<AppEvent[] | null> {
+  async commit(app: CustomHost): Promise<CustomHostEvent[] | null> {
     const response = await this.#client.request({
-      action: 'App_commit',
+      action: 'CustomHost_commit',
       payload: {
         id: app.id,
         snapshot: app.$snapshot,

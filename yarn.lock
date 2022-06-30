@@ -1363,7 +1363,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter/lib":
+"@karrotmini/playground-cloudflare-adapter@workspace:^, @karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter/lib":
   version: 0.0.0-use.local
   resolution: "@karrotmini/playground-cloudflare-adapter@workspace:playground-cloudflare-adapter/lib"
   dependencies:
@@ -1410,6 +1410,8 @@ __metadata:
   resolution: "@karrotmini/playground-management-api-worker@workspace:playground-management-api/worker"
   dependencies:
     "@cloudflare/workers-types": ^3.13.0
+    "@karrotmini/playground-cloudflare-adapter": "workspace:^"
+    "@karrotmini/playground-core": "workspace:^"
     esbuild: ^0.14.47
     miniflare: ^2.5.1
     typescript: ^4.7.4

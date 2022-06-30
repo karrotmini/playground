@@ -1,18 +1,16 @@
 {
   "name": "@karrotmini/playground-management-api",
   "version": "0.0.0-alpha.1",
-  "main": "./lib/index.cjs",
-  "types": "./lib/index.d.ts",
   "exports": {
     ".": {
-      "require": "./lib/PlaygroundManagementAPI.cjs",
+      "types": "./lib/PlaygroundManagementAPI.d.ts",
       "import": "./lib/PlaygroundManagementAPI.mjs",
-      "types": "./lib/PlaygroundManagementAPI.d.ts"
+      "require": "./lib/PlaygroundManagementAPI.cjs"
     },
     "./interface": {
-      "require": "./lib/interface.cjs",
+      "types": "./lib/interface.d.ts",
       "import": "./lib/interface.mjs",
-      "types": "./lib/interface.d.ts"
+      "require": "./lib/interface.cjs"
     },
     "./package.json": "./package.json"
   },

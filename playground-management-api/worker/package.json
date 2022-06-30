@@ -6,6 +6,10 @@
     "wrangler": "wrangler",
     "miniflare": "miniflare"
   },
+  "dependencies": {
+    "@karrotmini/playground-cloudflare-adapter": "workspace:^",
+    "@karrotmini/playground-core": "workspace:^"
+  },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.13.0",
     "esbuild": "^0.14.47",

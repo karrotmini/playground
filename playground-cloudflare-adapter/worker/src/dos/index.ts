@@ -1,2 +1,4 @@
-export * from './AppRepositoryDurableObject';
-export * from './UserProfileRepositoryDurableObject';
+export * from './AppBundleUploadDurableObject';
+export * from './AppDurableObject';
+export * from './CustomHostDurableObject';
+export * from './UserProfileDurableObject';

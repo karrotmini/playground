@@ -14,15 +14,23 @@ id = ""
 preview_id = ""
 
 [[durable_objects.bindings]]
-name = "DO_APP_REPOSITORY"
-class_name = "AppRepositoryDurableObject"
+name = "DO_App"
+class_name = "AppDurableObject"
 
 [[durable_objects.bindings]]
-name = "DO_USER_PROFILE_REPOSITORY"
-class_name = "UserProfileRepositoryDurableObject"
+name = "DO_AppBundleUpload"
+class_name = "AppBundleUploadDurableObject"
+
+[[durable_objects.bindings]]
+name = "DO_CustomHost"
+class_name = "CustomHostDurableObject"
+
+[[durable_objects.bindings]]
+name = "DO_UserProfile"
+class_name = "UserProfileDurableObject"
 
 [build]
-watch_dir = "src/in"
+watch_dir = "src"
 command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --format=esm"
 
 # Deprecated in Wrangler v2, But still required for miniflare

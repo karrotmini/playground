@@ -6,8 +6,8 @@ import {
 } from '@karrotmini/playground-core/src';
 import {
   AggregatorProtocolClient,
-} from './base/DurableObjectAggregatorProtocol';
-import * as Utils from './base/utils';
+} from '../base/DurableObjectAggregatorProtocol';
+import * as Util from '../base/Util';
 
 export class UserProfileRepository
   extends AggregatorProtocolClient<UserProfile>
@@ -24,7 +24,7 @@ export class UserProfileRepository
 
   newId(): Promise<UserProfileID> {
     return Promise.resolve(
-      UserProfileID(Utils.generateShortId(13)),
+      UserProfileID(Util.generateShortId(13)),
     );
   }
 

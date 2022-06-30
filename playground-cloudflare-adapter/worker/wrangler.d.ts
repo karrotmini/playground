@@ -5,6 +5,8 @@ declare interface WranglerEnv {
   KV_EVENT_STORE: KVNamespace;
 
   // DOs
-  DO_APP_REPOSITORY: DurableObjectNamespace;
-  DO_USER_PROFILE_REPOSITORY: DurableObjectNamespace;
+  DO_App: DurableObjectNamespace;
+  DO_AppBundleUpload: DurableObjectNamespace;
+  DO_CustomHost: DurableObjectNamespace;
+  DO_UserProfile: DurableObjectNamespace;
 }

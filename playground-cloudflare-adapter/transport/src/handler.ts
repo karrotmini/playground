@@ -11,10 +11,10 @@ export * from './types';
 
 export type ServiceStub<Env = unknown> = {
   [K in Action]: (
-    message: ActionMap[K]['Request'],
+    message: ActionMap[K]['request'],
     env: Env,
     ctx: ExecutionContext,
-  ) => Promise<ActionMap[K]['Response']>
+  ) => Promise<ActionMap[K]['response']>
 };
 
 export function makePlaygroundServiceHandler<Env = unknown>(stub: ServiceStub<Env>): ExportedHandlerFetchHandler<Env> {
