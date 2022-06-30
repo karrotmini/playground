@@ -1,22 +1,56 @@
 import {
   App,
+  AppEvent,
   AppID,
-  type AppSnapshot,
-  type IAppRepository,
+  AppSnapshot,
+  IAppRepository,
 } from '@karrotmini/playground-core/src';
+
+import {
+  PlaygroundCloudflareAdapterClient,
+  type ServiceBinding,
+} from '@karromtini/playground-cloudflare-adapter-transport/src/client';
 
 export class AppRepository
   implements IAppRepository
 {
-  #fetch: typeof fetch;
+  #client: PlaygroundCloudflareAdapterClient;
 
   constructor(config: {
-    fetch: typeof fetch,
+    service: ServiceBinding,
   }) {
-    this.#fetch = config.fetch;
+    this.#client = new PlaygroundCloudflareAdapterClient({
+      service: config.service,
+    });
   }
 
-  newId(): Promise<AppID> {
-    throw new Error('not implemented');
+  async newId(): Promise<AppID> {
+    const response = await this.#client.request({
+      action: 'App_newID',
+      payload: {},
+    });
+    return AppID(response.id);
+  }
+
+  async aggregate(id: AppID): Promise<App | null> {
+    const response = await this.#client.request({
+      action: 'App_aggregate',
+      payload: {
+        id,
+      },
+    });
+    return response && new App(id, response.snapshot);
+  }
+
+  async commit(app: App): Promise<AppEvent[] | null> {
+    const response = await this.#client.request({
+      action: 'App_commit',
+      payload: {
+        id: app.id,
+        snapshot: app.$snapshot,
+        events: app.$pullEvents(),
+      },
+    });
+    return response.published;
   }
 }

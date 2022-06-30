@@ -1,4 +1,6 @@
 import {
+  App,
+  AppID,
   UserProfile,
   UserProfileID,
 } from '@karrotmini/playground-core/src';

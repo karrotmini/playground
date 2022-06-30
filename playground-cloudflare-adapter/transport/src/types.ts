@@ -1,7 +1,11 @@
 import type {
+  App,
+  AppID,
+  AppEvent,
+  AppSnapshot,
   UserProfile,
-  UserProfileEvent,
   UserProfileID,
+  UserProfileEvent,
   UserProfileSnapshot,
 } from '@karrotmini/playground-core/src';
 
@@ -36,6 +40,43 @@ export type Action = Definition['Action'];
 export type ActionMap = { [K in Action]: Extract<Definition, { Action: K }> };
 
 export type Definition = (
+  | {
+    Action: 'App_newID',
+    Request: {
+    },
+    Response: {
+      id: string,
+    },
+    Return: {
+      id: AppID,
+    },
+  }
+  | {
+    Action: 'App_aggregate',
+    Request: {
+      id: AppID,
+    },
+    Response: Maybe<{
+      id: AppID,
+      snapshot: AppSnapshot,
+    }>,
+    Return: {
+      app: Maybe<App>,
+    },
+  }
+  | {
+    Action: 'App_commit',
+    Request: {
+      id: AppID,
+      snapshot: AppSnapshot,
+      events: AppEvent[],
+    },
+    Response: {
+      published: Maybe<AppEvent[]>,
+    },
+    Return: {
+    },
+  }
   | {
     Action: 'UserProfile_newID',
     Request: {
