@@ -7,8 +7,8 @@ import {
 } from '../../entities';
 import {
   Authorization,
-  ApplicationContext,
   Mutator,
+  deriveLoaders,
   type IEventBus,
   type IApplicationContext,
   type IReporter,
@@ -30,14 +30,12 @@ export class VitestApplicationContext implements IApplicationContext {
   tracer: IApplicationContext['tracer'];
   mutator: IApplicationContext['mutator'];
   authz: IApplicationContext['authz'];
-
   repos: {
     App: VitestAggregator<App>,
     AppBundleUpload: VitestAggregator<AppBundleUpload>,
     CustomHost: VitestCustomHostRepository,
     UserProfile: VitestAggregator<UserProfile>,
   };
-
   services: {
     appBundleStorage: VitestAppBundleStorage,
     hostnameProvider: VitestHostnameProvider,
@@ -59,16 +57,13 @@ export class VitestApplicationContext implements IApplicationContext {
         CREDENTIAL_SECRET: 'TEST',
       },
     };
-
     this.authz = new Authorization();
     this.reporter = config.reporter ?? new NoopReporter();
     this.tracer = config.tracer ?? new NoopTracer();
-
     this.services = {
       appBundleStorage: new VitestAppBundleStorage(config),
       hostnameProvider: new VitestHostnameProvider(config),
     };
-
     const repoConfig = {
       newId: () => config.crypto.randomUUID(),
       vitestUtils: config.vitestUtils,
@@ -79,9 +74,7 @@ export class VitestApplicationContext implements IApplicationContext {
       CustomHost: new VitestCustomHostRepository(repoConfig),
       UserProfile: new VitestAggregator(repoConfig),
     };
-    this.loaders = ApplicationContext.deriveLoaders(
-      this.repos,
-    );
+    this.loaders = deriveLoaders({ repos: this.repos });
     this.mutator = new Mutator({
       eventBus: config.eventBus,
       repos: this.repos,
