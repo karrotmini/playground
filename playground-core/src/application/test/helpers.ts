@@ -1,6 +1,13 @@
-import { vi } from 'vitest';
 import { webcrypto } from 'node:crypto';
+import {
+  vi,
+  expect,
+  type SpyInstanceFn,
+} from 'vitest';
 
+import {
+  type AnyDomainEvent,
+} from '../../framework';
 import {
   MemoryEventBus,
   VitestApplicationContext,
@@ -9,6 +16,18 @@ import {
   Executor,
 } from '../runtime';
 
+export type SpyOf<T extends object, K extends keyof T> = (
+  T[K] extends ((...args: infer TArgs) => infer TReturn)
+    ? SpyInstanceFn<TArgs, TReturn>
+    : never
+);
+
+export function eventMatch<E extends AnyDomainEvent>(
+  eventPartial: Partial<AnyDomainEvent>,
+): E {
+  return expect.objectContaining(eventPartial);
+}
+
 export function setupVitestContext() {
   const eventBus = new MemoryEventBus();
   const context = new VitestApplicationContext({
@@ -16,8 +35,10 @@ export function setupVitestContext() {
     vitestUtils: vi,
     crypto: webcrypto as unknown as Crypto,
   });
+
   const executor = new Executor({
     context,
   });
+
   return { eventBus, context, executor };
 }

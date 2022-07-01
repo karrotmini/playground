@@ -9,7 +9,7 @@ import {
 import {
   setupVitestContext,
   eventMatch,
-} from '../_test';
+} from '../test/helpers';
 
 import { CreateUserProfileDocument } from './CreateUserProfile.generated';
 

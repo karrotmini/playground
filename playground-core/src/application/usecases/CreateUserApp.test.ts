@@ -18,12 +18,11 @@ import {
 import {
   Resource,
   MutationResult,
-  UnauthorizedError,
 } from '../runtime';
 import {
   setupVitestContext,
   eventMatch,
-} from '../_test';
+} from '../test/helpers';
 
 import {
   CreateUserAppDocument,
@@ -47,7 +46,6 @@ describe('CreateUserApp', test => {
     }));
     context.repos.UserProfile.aggregate
       .mockResolvedValueOnce(userProfile);
-    context.authz.permit(userProfile, 'write');
 
     const appId = AppID('TEST');
     context.repos.App.newId
@@ -165,7 +163,6 @@ describe('CreateUserApp', test => {
     }));
     context.repos.UserProfile.aggregate
       .mockResolvedValueOnce(userProfile);
-    context.authz.permit(userProfile, 'write');
 
     const appId = AppID('TEST');
     context.repos.App.newId
@@ -282,7 +279,6 @@ describe('CreateUserApp', test => {
     }));
     context.repos.UserProfile.aggregate
       .mockResolvedValueOnce(userProfile);
-    context.authz.permit(userProfile, 'write');
 
     const appId = AppID('TEST');
     context.repos.App.newId
@@ -388,7 +384,6 @@ describe('CreateUserApp', test => {
     }));
     context.repos.UserProfile.aggregate
       .mockResolvedValueOnce(userProfile);
-    context.authz.permit(userProfile, 'write');
 
     const appId = AppID('TEST');
     context.repos.App.newId
@@ -445,7 +440,6 @@ describe('CreateUserApp', test => {
     }));
     context.repos.UserProfile.aggregate
       .mockResolvedValueOnce(userProfile);
-    context.authz.permit(userProfile, 'write');
 
     const appId = AppID('TEST');
     const otherAppId = AppID('OTHER_APP_ID');
@@ -477,64 +471,6 @@ describe('CreateUserApp', test => {
 
     expect(MutationResult.unwrapError(result))
       .toBeInstanceOf(HostnameAlreadyUsedError);
-
-    expect(context.repos.UserProfile.commit).not.toBeCalled();
-    expect(context.repos.App.commit).not.toBeCalled();
-    expect(context.repos.CustomHost.commit).not.toBeCalled();
-
-    const record = eventBus.pull();
-    expect(record).toHaveLength(0);
-  });
-
-  test('fail if has not write access for the UserProfile', async () => {
-    const {
-      executor,
-      context,
-      eventBus,
-    } = setupVitestContext();
-
-    const userProfileId = UserProfileID('TEST');
-    const userProfile = new UserProfile(userProfileId, UserProfileSnapshot({
-      createdAt: Date.now(),
-      deletedAt: null,
-      name: null,
-      profileImageUrl: null,
-      appIds: [],
-    }));
-    context.repos.UserProfile.aggregate
-      .mockResolvedValueOnce(userProfile);
-    context.authz.permit(userProfile, 'read');
-
-    const appId = AppID('TEST');
-    const otherAppId = AppID('OTHER_APP_ID');
-    context.repos.App.newId
-      .mockReturnValueOnce(appId);
-
-    const customHostId = CustomHostID('TEST');
-    context.repos.CustomHost.queryByHostname
-      .mockImplementationOnce(async hostname => {
-        return new CustomHost(customHostId, CustomHostSnapshot({
-          createdAt: Date.now(),
-          deletedAt: null,
-          providerInfo: {
-            hostname,
-            healthCheckUrl: 'https://healthcheck/',
-            managementUrl: 'https://management/',
-          },
-          connectedAppId: otherAppId,
-        }));
-      });
-
-    const result = await executor.execute(
-      CreateUserAppDocument, {
-        userProfileId: Resource.toGlobalId(userProfile),
-        name: 'TEST',
-        appId: 'daangn',
-      },
-    );
-
-    expect(MutationResult.unwrapError(result))
-      .toBeInstanceOf(UnauthorizedError);
 
     expect(context.repos.UserProfile.commit).not.toBeCalled();
     expect(context.repos.App.commit).not.toBeCalled();

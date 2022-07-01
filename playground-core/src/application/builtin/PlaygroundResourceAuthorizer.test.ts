@@ -5,14 +5,14 @@ import {
   AppID,
 } from '../../entities';
 import {
-  Authorization,
+  PlaygroundResourceAuthorizer,
   AuthorizationError,
   UnauthorizedError,
-} from './Authorization';
+} from './PlaygroundResourceAuthorizer';
 
-describe('Authorization', test => {
-  test('unknown permission', () => {
-    const auth = new Authorization();
+describe('PlaygroundResourceAuthorizer', test => {
+  test('unknown resource', () => {
+    const auth = new PlaygroundResourceAuthorizer();
     const resource = {
       typename: 'Unknown',
       id: 'TEST',
@@ -24,7 +24,7 @@ describe('Authorization', test => {
   });
 
   test('App - permit read access', () => {
-    const auth = new Authorization();
+    const auth = new PlaygroundResourceAuthorizer();
 
     const appId = AppID('TEST');
     const app = new App(appId);
@@ -37,7 +37,7 @@ describe('Authorization', test => {
   });
 
   test('App - permit write access', () => {
-    const auth = new Authorization();
+    const auth = new PlaygroundResourceAuthorizer();
 
     const appId = AppID('TEST');
     const app = new App(appId);
@@ -49,21 +49,21 @@ describe('Authorization', test => {
     expect(() => auth.guard(app, 'admin')).toThrowError(UnauthorizedError);
   });
 
-  test('App - permit admin access', () => {
-    const auth = new Authorization();
+  test('App - permit owner access', () => {
+    const auth = new PlaygroundResourceAuthorizer();
 
     const appId = AppID('TEST');
     const app = new App(appId);
 
-    auth.permit(app, 'admin');
+    auth.permit(app, 'owner');
 
     expect(() => auth.guard(app, 'read')).not.toThrow();
     expect(() => auth.guard(app, 'write')).not.toThrow();
-    expect(() => auth.guard(app, 'admin')).not.toThrow();
+    expect(() => auth.guard(app, 'owner')).not.toThrow();
   });
 
   test('App - contextual access control', () => {
-    const auth = new Authorization();
+    const auth = new PlaygroundResourceAuthorizer();
 
     const appId = AppID('TEST');
     const app = new App(appId);
@@ -77,8 +77,5 @@ describe('Authorization', test => {
     auth.prohibit(app);
     auth.permit(app, 'read');
     expect(() => auth.guard(app, 'write')).toThrowError(UnauthorizedError);
-
-    auth.reset();
-    expect(() => auth.guard(app, 'read')).toThrowError(UnauthorizedError);
   });
 });

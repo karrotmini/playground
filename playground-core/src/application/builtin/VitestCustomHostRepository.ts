@@ -7,7 +7,7 @@ import {
 } from '../ports';
 import {
   type SpyOf,
-} from '../_test';
+} from '../test/helpers';
 import { VitestAggregator } from './VitestAggregator';
 
 export class VitestCustomHostRepository

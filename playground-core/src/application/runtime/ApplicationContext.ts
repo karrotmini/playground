@@ -10,7 +10,7 @@ import {
 } from './_common';
 
 import { type IEventBus } from './EventBus';
-import { type Authorization } from './Authorization';
+import { type IResourceAuthorizer } from './ResourceAuthorizer';
 import { Mutator, type IMutator } from './Mutator';
 import { type IReporter } from './Reporter';
 import { type ITracer } from './Tracer';
@@ -33,7 +33,7 @@ export interface IApplicationContext {
   mutator: IMutator;
   reporter: IReporter;
   tracer: ITracer;
-  authz: Authorization;
+  authz: IResourceAuthorizer;
 }
 
 export function makeApplicationContext(config: {
@@ -43,7 +43,7 @@ export function makeApplicationContext(config: {
   eventBus: IEventBus,
   reporter: IReporter,
   tracer: ITracer,
-  authz: Authorization,
+  authz: IResourceAuthorizer,
   aggregateCache?: Map<string, Promise<AnyAggregate | null>>,
 }): Readonly<IApplicationContext> {
   const loaders = deriveLoaders({ repos: config.repos });
@@ -81,8 +81,8 @@ export function deriveLoaders(config: {
             }),
           );
         }, {
-          cacheKeyFn: makeCacheKeyFn(name),
           cache: true,
+          cacheKeyFn: makeCacheKeyFn(name),
           cacheMap: config.aggregateCache || new Map(),
         }),
       ] as const),

@@ -4,7 +4,7 @@ import {
 } from '../ports';
 import {
   type SpyOf,
-} from '../_test';
+} from '../test/helpers';
 
 export class VitestHostnameProvider implements IHostnameProvider {
   searchHostname: SpyOf<IHostnameProvider, 'searchHostname'>;

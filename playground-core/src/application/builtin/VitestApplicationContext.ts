@@ -6,9 +6,9 @@ import {
   type UserProfile,
 } from '../../entities';
 import {
-  Authorization,
   Mutator,
   deriveLoaders,
+  type IResourceAuthorizer,
   type IEventBus,
   type IApplicationContext,
   type IReporter,
@@ -17,6 +17,7 @@ import {
 import {
   NoopReporter,
   NoopTracer,
+  BypassResourceAuthorizer,
   VitestAggregator,
   VitestCustomHostRepository,
   VitestAppBundleStorage,
@@ -57,7 +58,7 @@ export class VitestApplicationContext implements IApplicationContext {
         CREDENTIAL_SECRET: 'TEST',
       },
     };
-    this.authz = new Authorization();
+    this.authz = new BypassResourceAuthorizer();
     this.reporter = config.reporter ?? new NoopReporter();
     this.tracer = config.tracer ?? new NoopTracer();
     this.services = {

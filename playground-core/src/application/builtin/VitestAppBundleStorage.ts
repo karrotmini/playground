@@ -4,7 +4,7 @@ import {
 } from '../ports';
 import {
   type SpyOf,
-} from '../_test';
+} from '../test/helpers';
 
 export class VitestAppBundleStorage implements IAppBundleStorage {
   writeIndex: SpyOf<IAppBundleStorage, 'writeIndex'>;

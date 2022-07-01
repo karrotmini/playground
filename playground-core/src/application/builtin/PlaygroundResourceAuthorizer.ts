@@ -1,12 +1,16 @@
-import * as Resource from './Resource';
+import {
+  AuthorizationError,
+  UnauthorizedError,
+  type IResourceAuthorizer,
+} from '../runtime/ResourceAuthorizer';
+import * as Resource from '../runtime/Resource';
 
-type PermissionScheme = {
-  [typename: string]: {
-    [level: string]: string[],
-  },
-};
+export {
+  AuthorizationError,
+  UnauthorizedError,
+} from '../runtime/ResourceAuthorizer';
 
-type PermissionState = {
+export type AuthorizationState = {
   [typename: string]: {
     [id: string]: {
       [level: string]: boolean,
@@ -14,32 +18,29 @@ type PermissionState = {
   },
 };
 
-export class AuthorizationError extends TypeError {
-}
+export type PermissionScheme = {
+  [typename: string]: {
+    [level: string]: string[],
+  },
+};
 
-export class UnauthorizedError extends Error {
-  constructor(resource: Resource.T, level: string) {
-    super(`${resource.typename}(${resource.id}):${level} 권한이 없습니다.`);
-  }
-}
-
-export class Authorization {
-  static #scheme: PermissionScheme = {
+export class PlaygroundResourceAuthorizer implements IResourceAuthorizer {
+  static Scheme: PermissionScheme = {
     UserProfile: {
+      owner: ['write', 'read'],
       write: ['read'],
       read: [],
     },
     App: {
-      owner: ['write'],
-      admin: ['write'],
+      owner: ['write', 'read'],
       write: ['read'],
       read: [],
     },
   };
 
-  #state: PermissionState;
+  #state: AuthorizationState;
 
-  constructor(state: PermissionState = {}) {
+  constructor(state: AuthorizationState = {}) {
     this.#state = state;
   }
 
@@ -49,7 +50,7 @@ export class Authorization {
 
   permit(resource: Resource.T, level: string) {
     const { id, typename } = resource;
-    const scheme = Authorization.#scheme[typename];
+    const scheme = PlaygroundResourceAuthorizer.Scheme[typename];
     if (!scheme?.[level]) {
       throw new AuthorizationError();
     }
@@ -66,17 +67,18 @@ export class Authorization {
     this.permit(resource, level);
   }
 
-  reset() {
-    this.#state = {};
-  }
-
   prohibit({ typename, id }: Resource.T) {
-    const scheme = Authorization.#scheme[typename];
+    const scheme = PlaygroundResourceAuthorizer.Scheme[typename];
     if (!scheme) {
       throw new AuthorizationError();
     }
     this.#state[typename] = this.#state[typename] || {};
     this.#state[typename][id] = {};
+  }
+
+  prohibitByGlobalId(globalId: string) {
+    const resource = Resource.fromGlobalId(globalId);
+    this.prohibit(resource);
   }
 
   guard(resource: Resource.T, level: string): void {

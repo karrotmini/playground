@@ -12,26 +12,26 @@ import {
   type IUserProfileRepository,
 } from '../ports';
 
-export type Repositories = {
+export type Repositories = Readonly<{
   App: IAppRepository,
   AppBundleUpload: IAppBundleUploadRepository,
   CustomHost: ICustomHostRepository,
   UserProfile: IUserProfileRepository,
-};
+}>;
 
 export type RepositoryName = keyof Repositories;
 export type Repository = Repositories[RepositoryName];
 
-export type RepositoryLoaders = {
+export type RepositoryLoaders = Readonly<{
   [K in RepositoryName]: (
     Repositories[K] extends Aggregator<infer Aggregate>
       ? DataLoader<EntityID<Aggregate>, Aggregate | null, string>
       : never
   )
-};
+}>;
 export type RepositoryLoader = RepositoryLoaders[RepositoryName];
 
-export type Services = {
+export type Services = Readonly<{
   appBundleStorage: IAppBundleStorage,
   hostnameProvider: IHostnameProvider,
-};
+}>;
