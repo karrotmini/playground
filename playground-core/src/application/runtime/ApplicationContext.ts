@@ -13,7 +13,6 @@ import { type IEventBus } from './EventBus';
 import { type IResourceAuthorizer } from './ResourceAuthorizer';
 import { Mutator, type IMutator } from './Mutator';
 import { type IReporter } from './Reporter';
-import { type ITracer } from './Tracer';
 
 export type ApplicationEnvironment = Readonly<{
   crypto: Crypto,
@@ -32,7 +31,6 @@ export interface IApplicationContext {
   loaders: RepositoryLoaders;
   mutator: IMutator;
   reporter: IReporter;
-  tracer: ITracer;
   authz: IResourceAuthorizer;
 }
 
@@ -42,7 +40,6 @@ export function makeApplicationContext(config: {
   services: Services,
   eventBus: IEventBus,
   reporter: IReporter,
-  tracer: ITracer,
   authz: IResourceAuthorizer,
   aggregateCache?: Map<string, Promise<AnyAggregate | null>>,
 }): Readonly<IApplicationContext> {

@@ -1342,7 +1342,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider":
+"@karrotmini/cloudflare-hostname-provider@workspace:^, @karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider":
   version: 0.0.0-use.local
   resolution: "@karrotmini/cloudflare-hostname-provider@workspace:cloudflare-hostname-provider"
   dependencies:
@@ -1390,7 +1390,6 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": ^2.6.4
     "@graphql-tools/schema": ^8.3.13
     "@graphql-typed-document-node/core": ^3.1.1
-    "@types/node": ^17.0.40
     "@urlpack/base62": ^1.1.0
     "@urlpack/json": ^1.1.0
     "@urlpack/msgpack": ^1.1.0
@@ -1410,11 +1409,16 @@ __metadata:
   resolution: "@karrotmini/playground-management-api-worker@workspace:playground-management-api/worker"
   dependencies:
     "@cloudflare/workers-types": ^3.13.0
+    "@karrotmini/cloudflare-hostname-provider": "workspace:^"
     "@karrotmini/playground-cloudflare-adapter": "workspace:^"
     "@karrotmini/playground-core": "workspace:^"
+    "@urlpack/base62": ^1.1.0
+    "@urlpack/json": ^1.1.0
+    "@urlpack/msgpack": ^1.1.0
     esbuild: ^0.14.47
     miniflare: ^2.5.1
     typescript: ^4.7.4
+    worktop: next
     wrangler: ^2.0.15
   languageName: unknown
   linkType: soft
@@ -1761,13 +1765,6 @@ __metadata:
   version: 18.0.0
   resolution: "@types/node@npm:18.0.0"
   checksum: aab2b325727a2599f6d25ebe0dedf58c40fb66a51ce4ca9c0226ceb70fcda2d3afccdca29db5942eb48b158ee8585a274a1e3750c718bbd5399d7f41d62dfdcc
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^17.0.40":
-  version: 17.0.45
-  resolution: "@types/node@npm:17.0.45"
-  checksum: aa04366b9103b7d6cfd6b2ef64182e0eaa7d4462c3f817618486ea0422984c51fc69fd0d436eae6c9e696ddfdbec9ccaa27a917f7c2e8c75c5d57827fe3d95e8
   languageName: node
   linkType: hard
 
@@ -5194,6 +5191,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mrmime@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "mrmime@npm:1.0.1"
+  checksum: cc979da44bbbffebaa8eaf7a45117e851f2d4cb46a3ada6ceb78130466a04c15a0de9a9ce1c8b8ba6f6e1b8618866b1352992bf1757d241c0ddca558b9f28a77
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.1.2":
   version: 2.1.2
   resolution: "ms@npm:2.1.2"
@@ -5798,6 +5802,13 @@ __metadata:
   bin:
     regexp-tree: bin/regexp-tree
   checksum: 5807013289d9205288d665e0f8d8cff94843dfd55fdedd1833eb9d9bbd07188a37dfa02942ec5cdc671180037f715148fac1ba6f18fd6be4268e5a8feb49d340
+  languageName: node
+  linkType: hard
+
+"regexparam@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "regexparam@npm:2.0.0"
+  checksum: 8db9559041b5f5304fd224b5c87b33f12bbb97e07292e7f573a57d73690c0f2e3e2a956fefe6169527b5585d7d0828b8aecedcf61ce5fae40530185ebcae3031
   languageName: node
   linkType: hard
 
@@ -6964,6 +6975,16 @@ __metadata:
   version: 1.0.0
   resolution: "wordwrap@npm:1.0.0"
   checksum: 2a44b2788165d0a3de71fd517d4880a8e20ea3a82c080ce46e294f0b68b69a2e49cff5f99c600e275c698a90d12c5ea32aff06c311f0db2eb3f1201f3e7b2a04
+  languageName: node
+  linkType: hard
+
+"worktop@npm:next":
+  version: 0.8.0-next.14
+  resolution: "worktop@npm:0.8.0-next.14"
+  dependencies:
+    mrmime: ^1.0.0
+    regexparam: ^2.0.0
+  checksum: a52ce8df2d4c32602b685813a53c833243fb18a6bf5bf750d4b28dcba5848181b6a08ecb21a165e886d3e36aea7073b701f6f73cabd513372cec1b95ced3bd9f
   languageName: node
   linkType: hard
 

@@ -50,6 +50,14 @@ export class CustomHostRepository
         events: app.$pullEvents(),
       },
     });
-    return response.published;
+    return response && response.published;
+  }
+
+  async queryByHostname(hostname: string): Promise<CustomHost | null> {
+    throw new Error('not implemented');
+  }
+
+  async writeIndex(customHost: CustomHost): Promise<void> {
+    throw new Error('not implemented');
   }
 }

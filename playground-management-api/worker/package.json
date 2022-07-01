@@ -7,8 +7,13 @@
     "miniflare": "miniflare"
   },
   "dependencies": {
+    "@karrotmini/cloudflare-hostname-provider": "workspace:^",
     "@karrotmini/playground-cloudflare-adapter": "workspace:^",
-    "@karrotmini/playground-core": "workspace:^"
+    "@karrotmini/playground-core": "workspace:^",
+    "@urlpack/base62": "^1.1.0",
+    "@urlpack/json": "^1.1.0",
+    "@urlpack/msgpack": "^1.1.0",
+    "worktop": "next"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.13.0",

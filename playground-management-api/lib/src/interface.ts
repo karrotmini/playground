@@ -28,7 +28,7 @@ export type AppManifest = {
    *
    * 주의: 리소스 ID와는 다른 값 입니다.
    */
-  appId: string,
+  app_id: string,
 
   /**
    * 사용자가 입력한 앱 이름. 한 글자보다 커야합니다.

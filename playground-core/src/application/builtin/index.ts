@@ -1,6 +1,7 @@
 export * from './ConsoleReporter';
 export * from './NoopReporter';
 export * from './MemoryEventBus';
+export * from './NoopEventBus';
 export * from './NoopTracer';
 export * from './BypassResourceAuthorizer';
 export * from './PlaygroundResourceAuthorizer';
