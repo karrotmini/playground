@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@karrotmini/cloudflare-hostname-provider": "workspace:^",
+    "@karrotmini/playground-application": "workspace:^",
     "@karrotmini/playground-cloudflare-adapter": "workspace:^",
     "@karrotmini/playground-core": "workspace:^",
     "@urlpack/base62": "^1.1.0",

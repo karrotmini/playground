@@ -2,8 +2,11 @@ import {
   UserProfile,
   UserProfileID,
   type UserProfileSnapshot,
-  type IUserProfileRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type IUserProfileRepository,
+} from '@karrotmini/playground-application/src';
+
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';

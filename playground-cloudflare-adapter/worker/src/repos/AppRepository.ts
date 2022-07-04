@@ -2,8 +2,11 @@ import {
   App,
   AppID,
   type AppSnapshot,
-  type IAppRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type IAppRepository,
+} from '@karrotmini/playground-application/src';
+
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';

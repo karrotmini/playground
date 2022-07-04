@@ -2,8 +2,10 @@ import {
   AppBundleUpload,
   AppBundleUploadID,
   type AppBundleUploadEvent,
-  type IAppBundleUploadRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type IAppBundleUploadRepository,
+} from '@karrotmini/playground-application/src';
 
 import {
   PlaygroundCloudflareAdapterClient,

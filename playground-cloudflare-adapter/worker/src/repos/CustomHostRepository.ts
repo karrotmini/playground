@@ -2,8 +2,11 @@ import {
   CustomHost,
   CustomHostID,
   type CustomHostSnapshot,
-  type ICustomHostRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type ICustomHostRepository,
+} from '@karrotmini/playground-application/src';
+
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';

@@ -2,8 +2,10 @@ import {
   App,
   AppID,
   type AppEvent,
-  type IAppRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type IAppRepository,
+} from '@karrotmini/playground-application/src';
 
 import {
   PlaygroundCloudflareAdapterClient,

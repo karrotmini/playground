@@ -4,35 +4,10 @@
   "private": true,
   "scripts": {
     "test:run": "vitest run --coverage",
-    "test:watch": "vitest",
-    "deps:lint": "depcruise src --config depcruiser.config.js",
-    "deps:visualize": "depcruise src --config depcruiser.config.js --output-type dot | dot -T svg > dependencygraph.svg",
-    "codegen": "graphql-codegen && node scripts/dump-ast.mjs"
-  },
-  "dependencies": {
-    "@cometjs/core": "^2.0.2",
-    "@cometjs/relay-utils": "^1.0.0",
-    "@envelop/core": "^2.3.2",
-    "@graphql-tools/schema": "^8.3.13",
-    "@graphql-typed-document-node/core": "^3.1.1",
-    "@urlpack/base62": "^1.1.0",
-    "@urlpack/json": "^1.1.0",
-    "@urlpack/msgpack": "^1.1.0",
-    "dataloader": "^2.1.0",
-    "graphql": "^16.5.0",
-    "graphql-scalars": "^1.17.0"
+    "test:dev": "vitest"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^3.1.1",
-    "@graphql-codegen/cli": "^2.6.2",
-    "@graphql-codegen/near-operation-file-preset": "^2.2.12",
-    "@graphql-codegen/schema-ast": "^2.4.1",
-    "@graphql-codegen/typed-document-node": "^2.2.11",
-    "@graphql-codegen/typescript": "^2.4.11",
-    "@graphql-codegen/typescript-operations": "^2.4.0",
-    "@graphql-codegen/typescript-resolvers": "^2.6.4",
     "c8": "^7.11.3",
-    "dependency-cruiser": "^11.9.0",
     "typescript": "^4.7.4",
     "vite": "^2.9.9",
     "vitest": "^0.12.9"

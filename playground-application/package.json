@@ -1,0 +1,24 @@
+{
+  "name": "@karrotmini/playground-application",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test:run": "vitest run --coverage",
+    "test:dev": "vitest"
+  },
+  "dependencies": {
+    "@cometjs/core": "^2.1.0",
+    "@cometjs/relay-utils": "^1.0.0",
+    "@envelop/core": "^2.4.0",
+    "@graphql-tools/schema": "^8.5.0",
+    "@graphql-typed-document-node/core": "^3.1.1",
+    "@karrotmini/playground-core": "workspace:^",
+    "dataloader": "^2.1.0",
+    "graphql": "^16.5.0",
+    "graphql-scalars": "^1.17.0"
+  },
+  "devDependencies": {
+    "vite": "^2.9.13",
+    "vitest": "^0.17.0"
+  }
+}

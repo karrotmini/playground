@@ -10,7 +10,7 @@ import {
   ConsoleReporter,
   NoopEventBus,
   makeApplicationContext,
-} from '@karrotmini/playground-core/src';
+} from '@karrotmini/playground-application/src';
 import {
   AppRepository,
   AppBundleUploadRepository,

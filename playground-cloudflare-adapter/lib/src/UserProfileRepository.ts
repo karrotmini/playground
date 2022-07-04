@@ -2,8 +2,10 @@ import {
   UserProfile,
   UserProfileID,
   type UserProfileEvent,
-  type IUserProfileRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type IUserProfileRepository,
+} from '@karrotmini/playground-application/src';
 
 import {
   PlaygroundCloudflareAdapterClient,

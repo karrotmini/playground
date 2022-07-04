@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@karromtini/playground-cloudflare-adapter-transport": "workspace:^",
+    "@karrotmini/playground-application": "workspace:^",
     "@karrotmini/playground-core": "workspace:^"
   },
   "devDependencies": {

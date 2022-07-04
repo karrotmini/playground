@@ -2,8 +2,11 @@ import {
   AppBundleUpload,
   AppBundleUploadID,
   type AppBundleUploadSnapshot,
-  type IAppBundleUploadRepository,
 } from '@karrotmini/playground-core/src';
+import {
+  type IAppBundleUploadRepository,
+} from '@karrotmini/playground-application/src';
+
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';
