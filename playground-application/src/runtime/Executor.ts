@@ -24,6 +24,10 @@ export interface IExecutor {
   ): Promise<ExecutionResult<ResponseData>>;
 }
 
+type ConfigType<T> = T extends (config: infer U) => any ? U : never;
+type TypeDefsConfig = ConfigType<typeof makeExecutableSchema>['typeDefs'];
+type ResolversConfig = ConfigType<typeof makeExecutableSchema>['resolvers'];
+
 export class Executor implements IExecutor {
   #context: IApplicationContext;
   #schema: GraphQLSchema;
@@ -32,11 +36,19 @@ export class Executor implements IExecutor {
   constructor(config: {
     context: IApplicationContext,
     plugins?: PluginOrDisabledPlugin[],
+    additionalTypeDefs?: TypeDefsConfig,
+    additionalResolvers?: ResolversConfig,
   }) {
     this.#context = config.context;
     this.#schema = makeExecutableSchema({
-      typeDefs,
-      resolvers,
+      typeDefs: [typeDefs, config.additionalTypeDefs]
+        .flatMap(v => v || []),
+      resolvers: [resolvers, config.additionalResolvers]
+        .flatMap(v => v || []) as ResolversConfig,
+      resolverValidationOptions: {
+        requireResolversForAllFields: 'error',
+        requireResolversForResolveType: 'error',
+      },
     });
     const getEnveloped = envelop({
       plugins: [

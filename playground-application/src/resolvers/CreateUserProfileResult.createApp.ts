@@ -1,6 +1,6 @@
 import {
   type CreateUserProfileResultResolvers,
-} from '../__generated__/types';
+} from '@karrotmini/playground-application/src/__generated__/types';
 
 import {
   createApp as _createApp,

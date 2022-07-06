@@ -9,6 +9,9 @@ account_id = "aad5c82543cd1f267b89737d0f56405e"
 main = "./dist/worker.mjs"
 tsconfig = "./tsconfig.json"
 
+[[vars]]
+HOSTNAME_PATTERN = "*.karrotmini.app"
+
 [[services]]
 binding = "playground"
 service = "playground-cloudflare-adapter"

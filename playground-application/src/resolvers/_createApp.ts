@@ -15,7 +15,7 @@ import {
 } from '@karrotmini/playground-core/src/utils';
 import {
   type IApplicationContext,
-} from '../runtime';
+} from '@karrotmini/playground-application/src/runtime';
 
 export async function createApp(
   root: {

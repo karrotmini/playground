@@ -1,4 +1,6 @@
-import { type AppManifestResolvers } from '../__generated__/types';
+import {
+  type AppManifestResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
 
 export const AppManifest: AppManifestResolvers = {
   name(manifest) {

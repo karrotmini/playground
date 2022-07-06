@@ -1,8 +1,10 @@
 import {
   HostnameProviderInfo,
+} from '@karrotmini/playground-core/src';
+import {
   type HostnameStatus,
   type IHostnameProvider,
-} from '@karrotmini/playground-core/src';
+} from '@karrotmini/playground-application/src';
 
 export class CloudflareHostnameProvider
   implements IHostnameProvider

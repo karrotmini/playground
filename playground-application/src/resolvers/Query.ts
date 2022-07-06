@@ -1,8 +1,10 @@
-import { UserProfileID } from '@karrotmini/playground-core/src/entities';
-
+import {
+  UserProfileID,
+} from '@karrotmini/playground-core/src/entities';
 import {
   type QueryResolvers,
-} from '../__generated__/types';
+} from '@karrotmini/playground-application/src/__generated__/types';
+
 import {
   Resource,
   type RepositoryName,

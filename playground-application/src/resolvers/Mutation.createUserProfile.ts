@@ -3,7 +3,7 @@ import {
 } from '@karrotmini/playground-core/src/entities';
 import {
   type MutationResolvers,
-} from '../__generated__/types';
+} from '@karrotmini/playground-application/src/__generated__/types';
 
 export const createUserProfile: MutationResolvers['createUserProfile'] = async (
   _root,

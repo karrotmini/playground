@@ -1,6 +1,10 @@
-import { type NodeResolvers } from '../__generated__/types';
-import { toGlobalId } from '../runtime/Resource';
+import {
+  Resource,
+} from '@karrotmini/playground-application/src/runtime';
+import {
+  type NodeResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
 
 export const globalIdResolver: NodeResolvers['id'] = root => {
-  return toGlobalId({ typename: root.typename, id: root.id });
+  return Resource.toGlobalId({ typename: root.typename, id: root.id });
 };

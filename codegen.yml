@@ -1,5 +1,5 @@
 schema:
-  - playground-application/src/resolvers/**/*.graphql
+  - playground-application/src/resolvers/*.graphql
 
 generates:
   playground-application/src/__generated__/schema.graphql:
@@ -7,11 +7,7 @@ generates:
       - schema-ast
     hooks:
       afterOneFileWrite:
-        - node _scripts/dump-application-ast.mjs
-
-  playground-application/src/__generated__/introspection.json:
-    plugins:
-      - introspection
+        - node _scripts/dump-ast-module.mjs
 
   playground-application/src/__generated__/types.ts:
     plugins:
@@ -49,6 +45,8 @@ generates:
         ) => Promise<TResult> | TResult;
 
   playground-application/src/__generated__/:
+    documents:
+      - playground-application/src/usecases/*.graphql
     preset: near-operation-file
     presetConfig:
       extension: .generated.ts
@@ -66,3 +64,71 @@ generates:
       avoidOptionals: true
       skipTypename: true
       nonOptionalTypename: true
+
+  playground-management-api/worker/src/__generated__/:
+    schema:
+      - playground-management-api/worker/src/resolvers/*.graphql
+    documents:
+      - playground-management-api/worker/src/usecases/*.graphql
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: types.ts
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript-operations
+      - typed-document-node
+    config:
+      scalars:
+        URL: string
+      useTypeImports: true
+      maybeValue: T | null
+      avoidOptionals: true
+      skipTypename: true
+      nonOptionalTypename: true
+
+  playground-management-api/worker/src/__generated__/schema.graphql:
+    schema:
+      - playground-management-api/worker/src/resolvers/*.graphql
+    plugins:
+      - schema-ast
+    hooks:
+      afterOneFileWrite:
+        - node _scripts/dump-ast-module.mjs
+
+  playground-management-api/worker/src/__generated__/types.ts:
+    schema:
+      - playground-management-api/worker/src/resolvers/*.graphql
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+      - typescript-resolvers
+    config:
+      contextType: "@karrotmini/playground-application/src/runtime/ApplicationContext#IApplicationContext"
+      scalars:
+        URL: string
+      mappers:
+        # Core Mappers
+        App: "@karrotmini/playground-core/src/entities#App"
+        AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
+        AppBundle: "@karrotmini/playground-core/src/entities#AppBundle"
+        AppBundleUpload: "@karrotmini/playground-core/src/entities#AppBundleUpload"
+        AppBundleTemplate: "@karrotmini/playground-core/src/entities#AppBundleTemplate"
+        CustomHost: "@karrotmini/playground-core/src/entities#CustomHost"
+        UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
+        HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"
+        # Application Mappers
+      mapperTypeSuffix: Model
+      useTypeImports: true
+      avoidOptionals: true
+      skipTypename: true
+      nonOptionalTypename: true
+      maybeValue: T | null
+      customResolverFn: |
+        (
+          parent: TParent,
+          args: TArgs,
+          context: TContext,
+        ) => Promise<TResult> | TResult;

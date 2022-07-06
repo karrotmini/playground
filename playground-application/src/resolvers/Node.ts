@@ -1,4 +1,7 @@
-import { type NodeResolvers } from '../__generated__/types';
+import {
+  type NodeResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
+
 import { globalIdResolver } from './_globalId';
 
 export const Node: NodeResolvers = {

@@ -5,7 +5,7 @@ import {
   AuthorizationError,
   PlaygroundResourceAuthorizer,
   type AuthorizationState,
-} from '@karrotmini/playground-core/src';
+} from '@karrotmini/playground-application/src';
 
 import { type Context } from './context';
 import * as Credential from './credential';
@@ -19,7 +19,7 @@ export function permit(): Handler<Context> {
 }
 
 export async function authStateFromHeaders(headers: Headers, secret: string): Promise<AuthorizationState> {
-  const header = headers.get('X-Playground-Management-Credential');
+  const header = headers.get('X-Playground-Credential');
   if (!header) {
     throw new AuthorizationError();
   }

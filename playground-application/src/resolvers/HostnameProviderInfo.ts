@@ -1,4 +1,6 @@
-import { type HostnameProviderInfoResolvers } from '../__generated__/types';
+import {
+  type HostnameProviderInfoResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
 
 export const HostnameProviderInfo: HostnameProviderInfoResolvers = {
   url(provierInfo) {

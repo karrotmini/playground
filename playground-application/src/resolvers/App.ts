@@ -4,8 +4,10 @@ import {
 import {
   InvariantError,
 } from '@karrotmini/playground-core/src/errors';
+import {
+  type AppResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
 
-import { type AppResolvers } from '../__generated__/types';
 import { globalIdResolver } from './_globalId';
 
 export const App: AppResolvers = {

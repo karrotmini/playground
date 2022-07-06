@@ -1,3 +1,4 @@
+import { type DocumentNode } from 'graphql';
 import { Router, compose } from 'worktop';
 import { reply } from 'worktop/response';
 import * as CORS from 'worktop/cors';
@@ -21,27 +22,41 @@ import {
   CloudflareHostnameProvider,
 } from '@karrotmini/cloudflare-hostname-provider/src';
 
+import typeDefs from './__generated__/schema';
+import * as resolvers from './resolvers';
 import { type Context } from './context';
-import * as Authorization from './authorization';
+import * as Trust from './trust';
+import * as Authz from './authorization';
+
+import {
+  IssueAppCredentialDocument,
+  IssueUserProfileCredentialDocument,
+} from './usecases';
+
+const operationDict: Record<string, DocumentNode | undefined> = {
+  IssueAppCredential: IssueAppCredentialDocument,
+  IssueUserProfileCredential: IssueUserProfileCredentialDocument,
+};
 
 const API = new Router<Context>();
 
 API.prepare = compose(
   CORS.preflight(),
-  Authorization.permit(),
+  Trust.guard(),
+  Authz.permit(),
   Cache.sync(),
 );
 
 API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
-  const pattern = /Playground-Management-Key (?<key>\w+)/i;
-  const header = req.headers.get('Authorization');
-  const authorization = header?.match(pattern)?.groups?.key;
-  if (!authorization || authorization !== ctx.bindings.MANAGEMENT_KEY) {
-    return reply(401, 'operation not permitted');
-  }
-
   const applicationContext = makeApplicationContext({
     env: {
+      crypto,
+      vars: {
+        HOSTNAME_PATTERN: ctx.bindings.HOSTNAME_PATTERN,
+      },
+      secrets: {
+        CREDENTIAL_SECRET: ctx.bindings.CREDENTIAL_SECRET,
+      },
     },
     services: {
       hostnameProvider: new CloudflareHostnameProvider({
@@ -63,19 +78,11 @@ API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
 
   const executor = new Executor({
     context: applicationContext,
+    additionalTypeDefs: typeDefs,
+    additionalResolvers: resolvers,
   });
 
-  const operation = {
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-    IssueUserProfileCredential: IssueUserProfileCredentialDocument,
-  }[ctx.params.operation];
-
+  const operation = operationDict[ctx.params.operation];
   if (!operation) {
     return reply(404, 'Unknown operation');
   }
@@ -87,7 +94,7 @@ API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
 
   const decoder = makeJsonDecoder<unknown>();
   try {
-    var variables = decoder.decode(variablesParam);
+    var variables = decoder.decode(variablesParam) as Record<string, unknown>;
   } catch {
     return reply(400, 'Invalid variables');
   }
@@ -95,11 +102,7 @@ API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
     return reply(400, 'Invalid variables');
   }
 
-  const result = await executor.execute(
-    operation,
-    variables as Record<string, unknown>,
-  );
-
+  const result = await executor.execute(operation, variables);
   return reply(200, result);
 });
 

@@ -1,6 +1,5 @@
 export * from './entities';
 export * from './errors';
-export * from './application';
 export * from './utils';
 
 export {

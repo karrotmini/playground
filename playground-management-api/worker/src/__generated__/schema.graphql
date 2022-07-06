@@ -1,0 +1,123 @@
+type App implements Node {
+  currentBundle: AppBundle!
+  customHost: CustomHost!
+  id: ID!
+  manifest: AppManifest!
+  version: Int!
+}
+
+union AppBundle = AppBundleTemplate | AppBundleUpload
+
+type AppBundleTemplate {
+  id: ID!
+}
+
+type AppBundleUpload implements Node {
+  id: ID!
+}
+
+type AppManifest {
+  icon: URL!
+  name: String!
+}
+
+enum AppPermision {
+  ADMIN
+  READ
+  WRITE
+}
+
+input CreateAppInput {
+  appId: String!
+  name: String!
+  userProfileId: ID!
+}
+
+type CreateAppResult {
+  app: App!
+  customHost: CustomHost!
+  userProfile: UserProfile!
+}
+
+input CreateUserProfileInput {
+  _: String
+}
+
+type CreateUserProfileResult {
+  createApp(input: CreateUserProfileResultCreateAppInput!): CreateUserProfileResultCreateAppResult!
+  userProfile: UserProfile!
+}
+
+input CreateUserProfileResultCreateAppInput {
+  appId: String!
+  name: String!
+}
+
+type CreateUserProfileResultCreateAppResult {
+  app: App!
+  customHost: CustomHost!
+  userProfile: UserProfile!
+}
+
+type CustomHost implements Node {
+  id: ID!
+  providerInfo: HostnameProviderInfo
+}
+
+type HostnameProviderInfo {
+  healthCheckUrl: URL!
+  hostname: String!
+  managementUrl: URL!
+  url: URL!
+}
+
+type IssueAppCredentialInput {
+  appId: ID
+  permission: AppPermision!
+}
+
+type IssueAppCredentialResult {
+  app: App!
+  credential: String!
+}
+
+type IssueUserProfileCredentialInput {
+  permission: UserProfilePermision!
+  userProfileId: ID
+}
+
+type IssueUserProfileCredentialResult {
+  credential: String!
+  userProfile: UserProfile!
+}
+
+type Mutation {
+  createApp(input: CreateAppInput!): CreateAppResult!
+  createUserProfile(input: CreateUserProfileInput! = {}): CreateUserProfileResult!
+  issueAppCredential(input: IssueAppCredentialInput!): IssueAppCredentialResult!
+  issueUserProfileCredential(input: IssueUserProfileCredentialInput!): IssueUserProfileCredentialResult!
+}
+
+interface Node {
+  id: ID!
+}
+
+type Query {
+  node(id: ID!): Node
+  userProfile(id: ID!): UserProfile
+}
+
+scalar URL
+
+type UserProfile implements Node {
+  apps: [App!]!
+  id: ID!
+  name: String!
+  profileImageUrl: URL!
+}
+
+enum UserProfilePermision {
+  ADMIN
+  READ
+  WRITE
+}

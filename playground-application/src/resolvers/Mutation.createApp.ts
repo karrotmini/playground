@@ -5,11 +5,11 @@ import {
   UserProfileID,
 } from '@karrotmini/playground-core/src/entities';
 import {
-  type MutationResolvers,
-} from '../__generated__/types';
-import {
   Resource,
-} from '../runtime';
+} from '@karrotmini/playground-application/src/runtime';
+import {
+  type MutationResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
 
 import { createApp as _createApp } from './_createApp';
 

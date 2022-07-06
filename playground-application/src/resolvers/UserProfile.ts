@@ -1,6 +1,8 @@
 import { Condition } from '@cometjs/core';
+import {
+  type UserProfileResolvers,
+} from '@karrotmini/playground-application/src/__generated__/types';
 
-import { type UserProfileResolvers } from '../__generated__/types';
 import { globalIdResolver } from './_globalId';
 
 export const UserProfile: UserProfileResolvers = {

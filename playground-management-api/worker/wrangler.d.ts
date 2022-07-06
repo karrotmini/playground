@@ -6,6 +6,7 @@ interface ServiceBinding {
 
 declare interface WranglerEnv {
   // vars
+  HOSTNAME_PATTERN: string;
   CLOUDFLARE_CUSTOMHOST_ZONE_ID: string;
 
   // secrets

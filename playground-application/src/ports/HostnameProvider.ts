@@ -8,6 +8,7 @@ export type HostnameStatus = (
   | 'not_available'
 );
 
+// FIXME: 웹앱 컨트롤러 인터페이스로 기능 위임하기
 export interface IHostnameProvider {
   searchHostname(props: {
     hostname: string,
