@@ -6,15 +6,7 @@ compatibility_flags = [
 ]
 account_id = "aad5c82543cd1f267b89737d0f56405e"
 
-main = "./dist/worker.mjs"
-tsconfig = "./tsconfig.json"
-
-[[vars]]
-HOSTNAME_PATTERN = "*.karrotmini.app"
-
-[[services]]
-binding = "playground"
-service = "playground-cloudflare-adapter"
+# main = "./dist/worker.mjs"
 
 [build]
 watch_dir = "src/in"
@@ -25,6 +17,13 @@ command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --forma
 format = "modules"
 dir = "./dist"
 main = "./worker.mjs"
+
+[[vars]]
+HOSTNAME_PATTERN = "*.karrotmini.app"
+
+[[services]]
+binding = "playground"
+service = "karrotmini-playground-adapter"
 
 [miniflare.mounts]
 playground-cloudflare-adapter = "../../playground-cloudflare-adapter/worker"

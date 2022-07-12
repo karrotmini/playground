@@ -6,12 +6,20 @@ compatibility_flags = [
 ]
 account_id = "aad5c82543cd1f267b89737d0f56405e"
 
-main = "./dist/worker.mjs"
+[build]
+watch_dir = "src"
+command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --format=esm"
+
+# Deprecated in Wrangler v2, But still required for miniflare
+[build.upload]
+format = "modules"
+dir = "./dist"
+main = "./worker.mjs"
 
 [[kv_namespaces]]
 binding = "KV_EVENT_STORE"
-id = ""
-preview_id = ""
+id = "853c2294e23848e5bc8128abca316c0e"
+preview_id = "36e7d6e06600400e8c030e9c9a376980"
 
 [[durable_objects.bindings]]
 name = "DO_App"
@@ -29,12 +37,11 @@ class_name = "CustomHostDurableObject"
 name = "DO_UserProfile"
 class_name = "UserProfileDurableObject"
 
-[build]
-watch_dir = "src"
-command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --format=esm"
-
-# Deprecated in Wrangler v2, But still required for miniflare
-[build.upload]
-format = "modules"
-dir = "./dist"
-main = "./worker.mjs"
+[[migrations]]
+tag = "v1"
+new_classes = [
+  "AppDurableObject",
+  "BundleUploadDurableObject",
+  "CustomHostDurableObject",
+  "UserProfileDurableObject",
+]
