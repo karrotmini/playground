@@ -16,11 +16,11 @@ import {
 import {
   AppManifest,
   type AppManifestPayload,
-  type AppBundleUpload,
-  type AppBundleID,
-  type AppBundleUploadID,
-  type AppBundleTemplate,
-  type AppBundleTemplateID,
+  type BundleUpload,
+  type BundleID,
+  type BundleUploadID,
+  type BundleTemplate,
+  type BundleTemplateID,
   type CustomHostID,
   type UserProfileID,
 } from '../entities';
@@ -42,7 +42,7 @@ export type AppSnapshot = Snapshot<1, {
   createdAt: number,
   deletedAt: number | null,
   manifest: AppManifestPayload,
-  versions: AppBundleID[],
+  versions: BundleID[],
   ownerId: UserProfileID,
   isTemplate: boolean,
   customHostId: CustomHostID,
@@ -56,8 +56,8 @@ export type AppDTO = Serializable<{
   customHostId: CustomHostID,
   currentVersion: number,
   currentBundle: (
-    | { type: 'template', id: AppBundleTemplateID }
-    | { type: 'upload', id: AppBundleUploadID }
+    | { type: 'template', id: BundleTemplateID }
+    | { type: 'upload', id: BundleUploadID }
   ),
 }>;
 
@@ -92,12 +92,12 @@ export class App
     if (this.$snapshot.isTemplate) {
       return {
         type: 'template' as const,
-        id: latestBundleId as AppBundleTemplateID,
+        id: latestBundleId as BundleTemplateID,
       };
     } else {
       return {
         type: 'upload' as const,
-        id: latestBundleId as AppBundleUploadID,
+        id: latestBundleId as BundleUploadID,
       };
     }
   }
@@ -157,7 +157,7 @@ export class App
     id: AppID,
     manifest: AppManifest,
     ownerId: UserProfileID,
-    template: AppBundleTemplate,
+    template: BundleTemplate,
     customHostId: CustomHostID,
   }): App {
     const id = props.id;
@@ -180,7 +180,7 @@ export class App
     return app;
   }
 
-  updateBundle(upload: AppBundleUpload): void {
+  updateBundle(upload: BundleUpload): void {
     this.$publishEvent({
       aggregateName: this.typename,
       aggregateId: this.id,

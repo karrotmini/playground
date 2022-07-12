@@ -1,5 +1,5 @@
 import {
-  AppBundleTemplate,
+  BundleTemplate,
 } from '@karrotmini/playground-core/src/entities';
 import {
   InvariantError,
@@ -28,10 +28,10 @@ export const App: AppResolvers = {
   async currentBundle(app, _args, context) {
     switch (app.currentBundle.type) {
       case 'template': {
-        return new AppBundleTemplate(app.currentBundle.id);
+        return new BundleTemplate(app.currentBundle.id);
       }
       case 'upload': {
-        const upload = await context.loaders.AppBundleUpload.load(app.currentBundle.id);
+        const upload = await context.loaders.BundleUpload.load(app.currentBundle.id);
         if (!upload) {
           throw new InvariantError(`couldn't load AppBundleUpload(${app.currentBundle.id})`);
         }

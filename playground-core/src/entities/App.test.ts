@@ -5,8 +5,8 @@ import {
   AppID,
   UserProfileID,
   CustomHostID,
-  AppBundleTemplate,
-  AppBundleUploadID,
+  BundleTemplate,
+  BundleUploadID,
 } from '../entities';
 
 describe('App', test => {
@@ -14,7 +14,7 @@ describe('App', test => {
     const id = AppID('TEST');
     const ownerId = UserProfileID('TEST');
     const customHostId = CustomHostID('TEST');
-    const bundleId = AppBundleUploadID('TEST');
+    const bundleId = BundleUploadID('TEST');
     const manifest = new AppManifest({
       appId: '123123',
       name: 'TEST',
@@ -46,7 +46,7 @@ describe('App', test => {
     const id = AppID('TEST');
     const ownerId = UserProfileID('TEST');
     const customHostId = CustomHostID('TEST');
-    const template = AppBundleTemplate.centeringDiv();
+    const template = BundleTemplate.centeringDiv();
     const manifest = new AppManifest({
       appId: '123123',
       name: 'TEST',

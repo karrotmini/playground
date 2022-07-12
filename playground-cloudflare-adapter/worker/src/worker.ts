@@ -1,6 +1,6 @@
 import {
   App,
-  AppBundleUpload,
+  BundleUpload,
   CustomHost,
   UserProfile,
 } from '@karrotmini/playground-core/src';
@@ -10,7 +10,7 @@ import {
 
 import {
   AppRepository,
-  AppBundleUploadRepository,
+  BundleUploadRepository,
   CustomHostRepository,
   UserProfileRepository,
 } from './repos';
@@ -33,19 +33,19 @@ const handlePlaygroundRequest = makePlaygroundServiceHandler<WranglerEnv>({
     return { published };
   },
 
-  async AppBundleUpload_newID(_msg, env) {
-    const repo = new AppBundleUploadRepository({ namespace: env.DO_AppBundleUpload });
+  async BundleUpload_newID(_msg, env) {
+    const repo = new BundleUploadRepository({ namespace: env.DO_BundleUpload });
     const id = await repo.newId();
     return { id };
   },
-  async AppBundleUpload_aggregate({ id }, env) {
-    const repo = new AppBundleUploadRepository({ namespace: env.DO_AppBundleUpload });
+  async BundleUpload_aggregate({ id }, env) {
+    const repo = new BundleUploadRepository({ namespace: env.DO_BundleUpload });
     const appBundleUpload = await repo.aggregate(id);
     return appBundleUpload && { id, snapshot: appBundleUpload.$snapshot };
   },
-  async AppBundleUpload_commit({ id, snapshot, events }, env) {
-    const repo = new AppBundleUploadRepository({ namespace: env.DO_AppBundleUpload });
-    const appBundleUpload = new AppBundleUpload(id, snapshot, events);
+  async BundleUpload_commit({ id, snapshot, events }, env) {
+    const repo = new BundleUploadRepository({ namespace: env.DO_BundleUpload });
+    const appBundleUpload = new BundleUpload(id, snapshot, events);
     const published = await repo.commit(appBundleUpload);
     return { published };
   },

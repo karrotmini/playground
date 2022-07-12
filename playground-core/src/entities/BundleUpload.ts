@@ -6,44 +6,44 @@ import {
   type Snapshot,
 } from '../framework';
 import {
-  type AppBundleUploadedEvent,
-  type AppBundleDeletedEvent,
+  type BundleUploadedEvent,
+  type BundleDeletedEvent,
 } from '../events';
 import {
   type AppID,
   type UserProfileID,
 }from '../entities';
 
-export type AppBundleUploadID = GUID<'AppBundleUpload'>;
-export const AppBundleUploadID = registerGUID<AppBundleUploadID>();
+export type BundleUploadID = GUID<'BundleUpload'>;
+export const BundleUploadID = registerGUID<BundleUploadID>();
 
-export type AppBundleUploadEvent = (
-  | AppBundleUploadedEvent
-  | AppBundleDeletedEvent
+export type BundleUploadEvent = (
+  | BundleUploadedEvent
+  | BundleDeletedEvent
 );
 
-export type AppBundleUploadSnapshot = Snapshot<1, {
+export type BundleUploadSnapshot = Snapshot<1, {
   appId: AppID,
   uploaderId: UserProfileID,
   createdAt: number,
   deletedAt: number | null,
 }>;
-export const AppBundleUploadSnapshot = registerSnapshot<AppBundleUploadSnapshot>();
+export const BundleUploadSnapshot = registerSnapshot<BundleUploadSnapshot>();
 
-export type AppBundleUploadDTO = {
-  id: AppBundleUploadID,
+export type BundleUploadDTO = {
+  id: BundleUploadID,
   appId: AppID,
   uploaderId: UserProfileID,
   isDeleted: boolean,
 };
 
-export class AppBundleUpload extends Aggregate<
-AppBundleUploadID,
-AppBundleUploadEvent,
-AppBundleUploadSnapshot,
-AppBundleUploadDTO
+export class BundleUpload extends Aggregate<
+BundleUploadID,
+BundleUploadEvent,
+BundleUploadSnapshot,
+BundleUploadDTO
 > {
-  readonly typename = 'AppBundleUpload' as const;
+  readonly typename = 'BundleUpload' as const;
   readonly snapshotVersion = 1 as const;
 
   get isDeleted() {
@@ -58,7 +58,7 @@ AppBundleUploadDTO
     return this.$snapshot.uploaderId;
   }
 
-  toJSON(): AppBundleUploadDTO {
+  toJSON(): BundleUploadDTO {
     return {
       id: this.id,
       appId: this.appId,
@@ -67,7 +67,7 @@ AppBundleUploadDTO
     };
   }
 
-  validate(state: Partial<AppBundleUploadSnapshot>): state is AppBundleUploadSnapshot {
+  validate(state: Partial<BundleUploadSnapshot>): state is BundleUploadSnapshot {
     return typeof state.appId === 'string' &&
       typeof state.uploaderId === 'string' &&
       typeof state.createdAt === 'number' &&
@@ -75,16 +75,16 @@ AppBundleUploadDTO
       (state.deletedAt === null || typeof state.deletedAt === 'number');
   }
 
-  reduce(current: AppBundleUploadSnapshot, event: AppBundleUploadEvent): void {
+  reduce(current: BundleUploadSnapshot, event: BundleUploadEvent): void {
     switch (event.eventName) {
-      case 'AppBundleUploaded': {
+      case 'BundleUploaded': {
         current.appId = event.eventPayload.appId;
         current.uploaderId = event.eventPayload.uploaderId;
         current.createdAt = event.eventDate;
         current.deletedAt = null;
         break;
       }
-      case 'AppBundleDeleted': {
+      case 'BundleDeleted': {
         current.deletedAt = event.eventDate;
         break;
       }
@@ -92,16 +92,16 @@ AppBundleUploadDTO
   }
 
   static create(props: {
-    id: AppBundleUploadID,
+    id: BundleUploadID,
     uploaderId: UserProfileID,
     appId: AppID,
   }) {
     const id = props.id;
-    const upload = new AppBundleUpload(id);
+    const upload = new BundleUpload(id);
     upload.$publishEvent({
       aggregateName: upload.typename,
       aggregateId: id,
-      eventName: 'AppBundleUploaded',
+      eventName: 'BundleUploaded',
       eventDate: Date.now(),
       eventPayload: {
         appId: props.appId,
@@ -115,7 +115,7 @@ AppBundleUploadDTO
     this.$publishEvent({
       aggregateName: this.typename,
       aggregateId: this.id,
-      eventName: 'AppBundleDeleted',
+      eventName: 'BundleDeleted',
       eventDate: Date.now(),
       eventPayload: {
       },

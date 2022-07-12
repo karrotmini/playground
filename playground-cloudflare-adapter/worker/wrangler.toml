@@ -18,8 +18,8 @@ name = "DO_App"
 class_name = "AppDurableObject"
 
 [[durable_objects.bindings]]
-name = "DO_AppBundleUpload"
-class_name = "AppBundleUploadDurableObject"
+name = "DO_BundleUpload"
+class_name = "BundleUploadDurableObject"
 
 [[durable_objects.bindings]]
 name = "DO_CustomHost"

@@ -2,22 +2,22 @@ import { describe, expect } from 'vitest';
 
 import {
   AppID,
-  AppBundleUpload,
-  AppBundleUploadID,
+  BundleUpload,
+  BundleUploadID,
   UserProfileID,
 } from '../entities';
 
-describe('AppBundleUpload', test => {
-  test('should have valid state after AppBundleUpload', () => {
-    const id = AppBundleUploadID('TEST');
+describe('BundleUpload', test => {
+  test('should have valid state after BundleUpload', () => {
+    const id = BundleUploadID('TEST');
     const appId = AppID('TEST');
     const uploaderId = UserProfileID('TEST');
 
-    const upload = new AppBundleUpload(id);
+    const upload = new BundleUpload(id);
     upload.$publishEvent({
       aggregateId: id,
-      aggregateName: 'AppBundleUpload',
-      eventName: 'AppBundleUploaded',
+      aggregateName: 'BundleUpload',
+      eventName: 'BundleUploaded',
       eventDate: new Date('2022-06-10').getTime(),
       eventPayload: {
         appId,

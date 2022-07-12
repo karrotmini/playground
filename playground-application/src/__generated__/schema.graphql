@@ -1,24 +1,24 @@
 type App implements Node {
-  currentBundle: AppBundle!
+  currentBundle: Bundle!
   customHost: CustomHost!
   id: ID!
   manifest: AppManifest!
   version: Int!
 }
 
-union AppBundle = AppBundleTemplate | AppBundleUpload
-
-type AppBundleTemplate {
-  id: ID!
-}
-
-type AppBundleUpload implements Node {
-  id: ID!
-}
-
 type AppManifest {
   icon: URL!
   name: String!
+}
+
+union Bundle = BundleTemplate | BundleUpload
+
+type BundleTemplate implements Node {
+  id: ID!
+}
+
+type BundleUpload implements Node {
+  id: ID!
 }
 
 input CreateAppInput {

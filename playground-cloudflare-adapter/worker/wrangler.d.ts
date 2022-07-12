@@ -6,7 +6,7 @@ declare interface WranglerEnv {
 
   // DOs
   DO_App: DurableObjectNamespace;
-  DO_AppBundleUpload: DurableObjectNamespace;
+  DO_BundleUpload: DurableObjectNamespace;
   DO_CustomHost: DurableObjectNamespace;
   DO_UserProfile: DurableObjectNamespace;
 }

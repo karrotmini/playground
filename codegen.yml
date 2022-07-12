@@ -23,14 +23,16 @@ generates:
         # Core Mappers
         App: "@karrotmini/playground-core/src/entities#App"
         AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
-        AppBundle: "@karrotmini/playground-core/src/entities#AppBundle"
-        AppBundleUpload: "@karrotmini/playground-core/src/entities#AppBundleUpload"
-        AppBundleTemplate: "@karrotmini/playground-core/src/entities#AppBundleTemplate"
+        Bundle: "@karrotmini/playground-core/src/entities#Bundle"
+        BundleUpload: "@karrotmini/playground-core/src/entities#BundleUpload"
+        BundleTemplate: "@karrotmini/playground-core/src/entities#BundleTemplate"
         CustomHost: "@karrotmini/playground-core/src/entities#CustomHost"
         UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
         HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"
         # Application Mappers
+        CreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateAppResult#Root"
         CreateUserProfileResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResult#Root"
+        CreateUserProfileResultCreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResultCreateAppResult#Root"
       mapperTypeSuffix: Model
       useTypeImports: true
       avoidOptionals: true
@@ -113,9 +115,9 @@ generates:
         # Core Mappers
         App: "@karrotmini/playground-core/src/entities#App"
         AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
-        AppBundle: "@karrotmini/playground-core/src/entities#AppBundle"
-        AppBundleUpload: "@karrotmini/playground-core/src/entities#AppBundleUpload"
-        AppBundleTemplate: "@karrotmini/playground-core/src/entities#AppBundleTemplate"
+        Bundle: "@karrotmini/playground-core/src/entities#Bundle"
+        BundleUpload: "@karrotmini/playground-core/src/entities#BundleUpload"
+        BundleTemplate: "@karrotmini/playground-core/src/entities#BundleTemplate"
         CustomHost: "@karrotmini/playground-core/src/entities#CustomHost"
         UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
         HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"

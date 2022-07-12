@@ -2,7 +2,7 @@ import { describe, expect } from 'vitest';
 
 import {
   AppID,
-  AppBundleTemplate,
+  BundleTemplate,
   CustomHost,
   CustomHostID,
   CustomHostSnapshot,
@@ -128,7 +128,7 @@ describe('CreateUserProfileWithFirstApp', test => {
             ownerId: userProfileId,
             initialBundle: {
               type: 'template',
-              id: AppBundleTemplate.centeringDiv().id,
+              id: BundleTemplate.centeringDiv().id,
             },
             manifest: {
               appId: 'myapp',
@@ -245,7 +245,7 @@ describe('CreateUserProfileWithFirstApp', test => {
             ownerId: userProfileId,
             initialBundle: {
               type: 'template',
-              id: AppBundleTemplate.centeringDiv().id,
+              id: BundleTemplate.centeringDiv().id,
             },
             manifest: {
               appId: 'myapp',
@@ -360,7 +360,7 @@ describe('CreateUserProfileWithFirstApp', test => {
             ownerId: userProfileId,
             initialBundle: {
               type: 'template',
-              id: AppBundleTemplate.centeringDiv().id,
+              id: BundleTemplate.centeringDiv().id,
             },
             manifest: {
               appId: 'myapp',

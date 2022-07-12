@@ -1,6 +1,6 @@
 import {
   App,
-  AppBundleTemplate,
+  BundleTemplate,
   AppIcon,
   AppManifest,
   CustomHost,
@@ -71,7 +71,7 @@ export async function createApp(
     name: args.input.name,
     icon: appIcon.toString(),
   });
-  const template = AppBundleTemplate.centeringDiv();
+  const template = BundleTemplate.centeringDiv();
   const app = App.createFromTemplate({
     id: appId,
     ownerId: userProfile.id,

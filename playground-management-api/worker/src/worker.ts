@@ -14,7 +14,7 @@ import {
 } from '@karrotmini/playground-application/src';
 import {
   AppRepository,
-  AppBundleUploadRepository,
+  BundleUploadRepository,
   CustomHostRepository,
   UserProfileRepository,
 } from '@karrotmini/playground-cloudflare-adapter/src';
@@ -67,7 +67,7 @@ API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
     },
     repos: {
       App: new AppRepository({ service: ctx.bindings.playground }),
-      AppBundleUpload: new AppBundleUploadRepository({ service: ctx.bindings.playground }),
+      BundleUpload: new BundleUploadRepository({ service: ctx.bindings.playground }),
       CustomHost: new CustomHostRepository({ service: ctx.bindings.playground }),
       UserProfile: new UserProfileRepository({ service: ctx.bindings.playground }),
     },

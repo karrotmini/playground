@@ -4,11 +4,10 @@ import {
 import {
   type QueryResolvers,
 } from '@karrotmini/playground-application/src/__generated__/types';
-
 import {
   Resource,
   type RepositoryName,
-} from '../runtime';
+} from '@karrotmini/playground-application/src/runtime';
 
 export const Query: QueryResolvers = {
   node(_root, args, context) {

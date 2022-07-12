@@ -7,14 +7,14 @@ import {
   type IAppBundleStorage,
   type IHostnameProvider,
   type IAppRepository,
-  type IAppBundleUploadRepository,
+  type IBundleUploadRepository,
   type ICustomHostRepository,
   type IUserProfileRepository,
 } from '../ports';
 
 export type Repositories = Readonly<{
   App: IAppRepository,
-  AppBundleUpload: IAppBundleUploadRepository,
+  BundleUpload: IBundleUploadRepository,
   CustomHost: ICustomHostRepository,
   UserProfile: IUserProfileRepository,
 }>;

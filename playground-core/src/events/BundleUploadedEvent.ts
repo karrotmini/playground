@@ -6,7 +6,7 @@ import {
   type UserProfileID,
 } from '../entities';
 
-export type AppBundleUploadedEvent = DomainEvent<'AppBundleUpload', 'AppBundleUploaded', {
+export type BundleUploadedEvent = DomainEvent<'BundleUpload', 'BundleUploaded', {
   appId: AppID,
   uploaderId: UserProfileID,
 }>;

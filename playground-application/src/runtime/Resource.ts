@@ -17,6 +17,13 @@ export function fromGlobalId(globalId: string): Resource {
 const IdDictionary: Record<string, string> = {
   UserProfile: '0',
   0: 'UserProfile',
+
   App: '1',
   1: 'App',
+
+  BundleUpload: '2',
+  2: 'BundleUpload',
+
+  BundleTemplate: '3',
+  3: 'BundleTemplate',
 };

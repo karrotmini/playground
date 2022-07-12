@@ -19,7 +19,7 @@ type App implements Node {
   version: Int!
   manifest: AppManifest!
   customHost: CustomHost!
-  currentBundle: AppBundle!
+  currentBundle: Bundle!
 }
 
 type AppManifest {
@@ -27,13 +27,13 @@ type AppManifest {
   icon: URL!
 }
 
-union AppBundle = AppBundleUpload | AppBundleTemplate
+union Bundle = BundleUpload | BundleTemplate
 
-type AppBundleUpload implements Node {
+type BundleUpload implements Node {
   id: ID!
 }
 
-type AppBundleTemplate {
+type BundleTemplate implements Node {
   id: ID!
 }
 

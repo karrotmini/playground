@@ -1,4 +1,4 @@
 export * from './AppRepository';
-export * from './AppBundleUploadRepository';
+export * from './BundleUploadRepository';
 export * from './CustomHostRepository';
 export * from './UserProfileRepository';

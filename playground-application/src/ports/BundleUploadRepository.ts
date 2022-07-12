@@ -2,8 +2,8 @@ import {
   type Aggregator,
 } from '@karrotmini/playground-core/src/framework';
 import {
-  type AppBundleUpload,
+  type BundleUpload,
 } from '@karrotmini/playground-core/src/entities';
 
-export interface IAppBundleUploadRepository extends Aggregator<AppBundleUpload> {
+export interface IBundleUploadRepository extends Aggregator<BundleUpload> {
 }

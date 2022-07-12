@@ -1,10 +1,10 @@
 import {
-  AppBundleUpload,
-  AppBundleUploadID,
-  type AppBundleUploadEvent,
+  BundleUpload,
+  BundleUploadID,
+  type BundleUploadEvent,
 } from '@karrotmini/playground-core/src';
 import {
-  type IAppBundleUploadRepository,
+  type IBundleUploadRepository,
 } from '@karrotmini/playground-application/src';
 
 import {
@@ -12,8 +12,8 @@ import {
   type ServiceBinding,
 } from '@karromtini/playground-cloudflare-adapter-transport/src/client';
 
-export class AppBundleUploadRepository
-  implements IAppBundleUploadRepository
+export class BundleUploadRepository
+  implements IBundleUploadRepository
 {
   #client: PlaygroundCloudflareAdapterClient;
 
@@ -25,27 +25,27 @@ export class AppBundleUploadRepository
     });
   }
 
-  async newId(): Promise<AppBundleUploadID> {
+  async newId(): Promise<BundleUploadID> {
     const response = await this.#client.request({
-      action: 'AppBundleUpload_newID',
+      action: 'BundleUpload_newID',
       payload: {},
     });
-    return AppBundleUploadID(response.id);
+    return BundleUploadID(response.id);
   }
 
-  async aggregate(id: AppBundleUploadID): Promise<AppBundleUpload | null> {
+  async aggregate(id: BundleUploadID): Promise<BundleUpload | null> {
     const response = await this.#client.request({
-      action: 'AppBundleUpload_aggregate',
+      action: 'BundleUpload_aggregate',
       payload: {
         id,
       },
     });
-    return response && new AppBundleUpload(id, response.snapshot);
+    return response && new BundleUpload(id, response.snapshot);
   }
 
-  async commit(app: AppBundleUpload): Promise<AppBundleUploadEvent[] | null> {
+  async commit(app: BundleUpload): Promise<BundleUploadEvent[] | null> {
     const response = await this.#client.request({
-      action: 'AppBundleUpload_commit',
+      action: 'BundleUpload_commit',
       payload: {
         id: app.id,
         snapshot: app.$snapshot,

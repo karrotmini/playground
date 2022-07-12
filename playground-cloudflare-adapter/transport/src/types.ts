@@ -3,10 +3,10 @@ import type {
   AppID,
   AppEvent,
   AppSnapshot,
-  AppBundleUpload,
-  AppBundleUploadID,
-  AppBundleUploadEvent,
-  AppBundleUploadSnapshot,
+  BundleUpload,
+  BundleUploadID,
+  BundleUploadEvent,
+  BundleUploadSnapshot,
   CustomHost,
   CustomHostID,
   CustomHostEvent,
@@ -57,41 +57,41 @@ export type Definition = (
     },
   }>
   | $def<{
-    action: 'AppBundleUpload_newID',
+    action: 'BundleUpload_newID',
     request: {
     },
     response: {
-      id: AppBundleUploadID,
+      id: BundleUploadID,
     },
     return: {
-      id: AppBundleUploadID,
+      id: BundleUploadID,
     },
   }>
   | $def<{
-    action: 'AppBundleUpload_aggregate',
+    action: 'BundleUpload_aggregate',
     request: {
-      id: AppBundleUploadID,
+      id: BundleUploadID,
     },
     response: Maybe<{
-      id: AppBundleUploadID,
-      snapshot: AppBundleUploadSnapshot,
+      id: BundleUploadID,
+      snapshot: BundleUploadSnapshot,
     }>,
     return: {
-      upload: AppBundleUpload,
+      upload: BundleUpload,
     },
   }>
   | $def<{
-    action: 'AppBundleUpload_commit',
+    action: 'BundleUpload_commit',
     request: {
-      id: AppBundleUploadID,
-      snapshot: AppBundleUploadSnapshot,
-      events: AppBundleUploadEvent[],
+      id: BundleUploadID,
+      snapshot: BundleUploadSnapshot,
+      events: BundleUploadEvent[],
     },
     response: {
-      published: Maybe<AppBundleUploadEvent[]>,
+      published: Maybe<BundleUploadEvent[]>,
     },
     return: {
-      published: Maybe<AppBundleUploadEvent[]>,
+      published: Maybe<BundleUploadEvent[]>,
     },
   }>
   | $def<{
