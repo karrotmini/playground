@@ -9,7 +9,7 @@ account_id = "aad5c82543cd1f267b89737d0f56405e"
 # main = "./dist/worker.mjs"
 
 [build]
-watch_dir = "src/in"
+watch_dir = "src"
 command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --format=esm"
 
 # Deprecated in Wrangler v2, But still required for miniflare
@@ -26,4 +26,4 @@ binding = "playground"
 service = "karrotmini-playground-adapter"
 
 [miniflare.mounts]
-playground-cloudflare-adapter = "../../playground-cloudflare-adapter/worker"
+karrotmini-playground-adapter = "../../playground-cloudflare-adapter/worker"
