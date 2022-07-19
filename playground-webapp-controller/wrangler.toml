@@ -1,0 +1,29 @@
+name = "karrotmini-playground-webapp-controller"
+workers_dev = true
+compatibility_date = "2022-07-18"
+routes = [
+  "*.karrotmini.app/*",
+  "webapp-controller.internal.karrotmini.dev/*"
+]
+
+[vars]
+WORKERS_RS_VERSION = "0.0.9"
+
+# FIXME: playground-bundle-storage 서비스 바인딩으로 대체하기
+# Blocked by https://github.com/cloudflare/workers-rs/pull/183
+[[kv_namespaces]]
+binding = "KV_BUNDLE_STORAGE"
+id = ""
+preview_id = ""
+
+[build]
+command = "worker-build --release"
+
+[build.upload]
+dir = "build/worker"
+format = "modules"
+main = "./shim.mjs"
+
+[[build.upload.rules]]
+globs = ["**/*.wasm"]
+type = "CompiledWasm"

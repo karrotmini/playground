@@ -2,5 +2,9 @@
 members = [
   "karrotmini-miniapp-manifest",
   "karrotmini-miniapp-package",
+  "playground-bundle-storage",
   "playground-webapp-controller",
 ]
+
+[profile.release.package."*"]
+opt-level = "s"

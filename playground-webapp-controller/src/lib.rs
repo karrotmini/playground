@@ -5,26 +5,16 @@ use zip::read::ZipArchive;
 
 mod utils;
 
-fn log_request(req: &Request) {
-    console_log!(
-        "{} - [{}], located at: {:?}, within: {}",
-        Date::now().to_string(),
-        req.path(),
-        req.cf().coordinates().unwrap_or_default(),
-        req.cf().region().unwrap_or("unknown region".into())
-    );
-}
-
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
-    log_request(&req);
-
-    // Optionally, get more helpful error messages written to the console in the case of a panic.
     utils::set_panic_hook();
     
     let url = req.url()?;
     let hostname = url.host_str().unwrap();
-    let kv = KvStore::from_this(&env, "APP_BUNDLE_STORE")?;
+
+    // FIXME: Bundle Storage 구현을 playground-bundle-storage 서비스 바인딩으로 분리
+    // blocked by https://github.com/cloudflare/workers-rs/pull/183
+    let kv = KvStore::from_this(&env, "KV_BUNDLE_STORE")?;
 
     if let Some(index) = kv.get(hostname).text().await? {
         if let Some(bytes) = kv.get(index.as_str()).bytes().await? {

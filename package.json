@@ -9,7 +9,9 @@
     "playground-application",
     "playground-cloudflare-adapter/*",
     "playground-management-api/*",
-    "playground-remix-ui"
+    "playground-remix-ui",
+    "playground-bundle-storage",
+    "playground-webapp-controller"
   ],
   "scripts": {
     "codegen": "graphql-codegen",

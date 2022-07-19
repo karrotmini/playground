@@ -1,0 +1,14 @@
+{
+  "name": "@karrotmini/playground-bundle-storage",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "miniflare": "miniflare",
+    "wrangler": "wrangler"
+  },
+  "devDependencies": {
+    "miniflare": "^2.6.0",
+    "wrangler": "^2.0.22"
+  },
+  "packageManager": "yarn@3.2.1"
+}
