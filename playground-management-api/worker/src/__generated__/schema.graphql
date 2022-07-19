@@ -1,9 +1,16 @@
 type App implements Node {
-  currentBundle: Bundle!
-  customHost: CustomHost!
+  canonicalHost: CustomHost!
+  deployments: [AppDeployment!]!
   id: ID!
+  liveDeployment: AppDeployment
   manifest: AppManifest!
-  version: Int!
+}
+
+type AppDeployment {
+  bundle: Bundle!
+  customHost: CustomHost!
+  delployedAt: DateTime!
+  name: String!
 }
 
 type AppManifest {
@@ -61,8 +68,10 @@ type CreateUserProfileResultCreateAppResult {
 
 type CustomHost implements Node {
   id: ID!
-  providerInfo: HostnameProviderInfo
+  providerInfo: HostnameProviderInfo!
 }
+
+scalar DateTime
 
 type HostnameProviderInfo {
   healthCheckUrl: URL!

@@ -5,3 +5,4 @@ export * from './HostnameAlreadyUsedError';
 export * from './HostnameNotAvailableError';
 export * from './AppNameRequiredError';
 export * from './ReservedAppIdError';
+export * from './ProtectedDeploymentError';

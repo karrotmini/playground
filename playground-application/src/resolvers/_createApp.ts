@@ -40,12 +40,14 @@ export async function createApp(
   const appId = await repos.App.newId();
 
   let customHost: CustomHost | null = await repos.CustomHost.queryByHostname(hostname);
-  if (customHost?.connectedAppId) {
+  if (customHost?.connectedApp) {
     throw new HostnameAlreadyUsedError(hostname);
   } else if (!customHost) {
     const customHostId = await repos.CustomHost.newId();
-    const providerInfo = await services.hostnameProvider.searchHostname({ hostname }) ??
-      await services.hostnameProvider.createHostname({ hostname });
+    let providerInfo = await services.hostnameProvider.searchHostname({ hostname });
+    if (!providerInfo) {
+      providerInfo = await services.hostnameProvider.createHostname({ hostname });
+    }
     if (!providerInfo) {
       throw new HostnameNotAvailableError(hostname);
     }
@@ -72,16 +74,17 @@ export async function createApp(
     icon: appIcon.toString(),
   });
   const template = BundleTemplate.centeringDiv();
-  const app = App.createFromTemplate({
+
+  const { app, deployment } = App.bootstrapFromTemplate({
     id: appId,
+    manifest,
     ownerId: userProfile.id,
     customHostId: customHost.id,
-    manifest,
-    template,
+    templateId: template.id,
   });
 
   userProfile.addApp({ appId });
-  customHost.connect({ appId });
+  customHost.connect({ appId, deploymentName: deployment.name });
 
   return {
     userProfile,

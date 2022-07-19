@@ -1,7 +1,10 @@
-import { type SerializableObject } from './Serializable';
+import {
+  type SerializableObject,
+  type MustSerializable,
+} from './Serializable';
 
 export type Snapshot<Version extends number, Payload extends SerializableObject> = (
-  & Payload
+  & MustSerializable<Payload>
   & { __tag: 'Snapshot', __version: Version }
 );
 

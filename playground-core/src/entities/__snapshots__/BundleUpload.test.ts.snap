@@ -4,7 +4,7 @@ exports[`BundleUpload > should have valid state after BundleUpload > $snapshot v
 {
   "appId": "TEST",
   "createdAt": 1654819200000,
-  "deletedAt": null,
+  "tag": "",
   "uploaderId": "TEST",
 }
 `;

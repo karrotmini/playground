@@ -3,7 +3,7 @@ import {
   type UserProfile,
 } from '@karrotmini/playground-core/src/entities';
 
-export type Root = {
+export type CreateUserProfileResultRoot = {
   userProfile: UserProfile,
 };
 

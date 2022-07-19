@@ -1,5 +1,5 @@
 export * from './AppRepository';
-export * from './AppBundleStorage';
+export * from './BundleStorage';
 export * from './BundleUploadRepository';
 export * from './CustomHostRepository';
 export * from './HostnameProvider';

@@ -1,12 +1,12 @@
 import {
-  ResourceLoadFailureError,
-} from '@karrotmini/playground-core/src/framework';
-import {
   UserProfileID,
 } from '@karrotmini/playground-core/src/entities';
 import {
   Resource,
 } from '@karrotmini/playground-application/src/runtime';
+import {
+  ResourceLoadingError,
+} from '@karrotmini/playground-application/src/errors';
 import {
   type MutationResolvers,
 } from '@karrotmini/playground-application/src/__generated__/types';
@@ -29,7 +29,7 @@ export const createApp: MutationResolvers['createApp'] = async (
   const userProfileId = UserProfileID(resource.id);
   const userProfile = await loaders.UserProfile.load(userProfileId);
   if (!userProfile) {
-    throw new ResourceLoadFailureError(resource);
+    throw new ResourceLoadingError(resource);
   }
 
   const result = await _createApp(

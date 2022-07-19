@@ -1,9 +1,6 @@
 import {
-  BundleTemplate,
-} from '@karrotmini/playground-core/src/entities';
-import {
-  InvariantError,
-} from '@karrotmini/playground-core/src/errors';
+  ResourceLoadingError,
+} from '@karrotmini/playground-application/src/errors';
 import {
   type AppResolvers,
 } from '@karrotmini/playground-application/src/__generated__/types';
@@ -12,31 +9,21 @@ import { globalIdResolver } from './_globalId';
 
 export const App: AppResolvers = {
   id: globalIdResolver,
-  version(app) {
-    return app.currentVersion;
-  },
   manifest(app) {
     return app.manifest;
   },
-  async customHost(app, _args, context) {
+  liveDeployment(app) {
+    return app.liveDeployment;
+  },
+  deployments(app) {
+    return Object.values(app.deployments)
+      .sort((a, b) => b.deployedAt - a.deployedAt);
+  },
+  async canonicalHost(app, _args, context) {
     const customHost = await context.loaders.CustomHost.load(app.customHostId);
     if (!customHost) {
-      throw new InvariantError(`couldn't load CustomHost(${app.customHostId})`);
+      throw new ResourceLoadingError({ typename: 'CustomHost', id: app.customHostId });
     }
     return customHost;
-  },
-  async currentBundle(app, _args, context) {
-    switch (app.currentBundle.type) {
-      case 'template': {
-        return new BundleTemplate(app.currentBundle.id);
-      }
-      case 'upload': {
-        const upload = await context.loaders.BundleUpload.load(app.currentBundle.id);
-        if (!upload) {
-          throw new InvariantError(`couldn't load AppBundleUpload(${app.currentBundle.id})`);
-        }
-        return upload;
-      }
-    }
   },
 };

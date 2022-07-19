@@ -3,29 +3,26 @@ import {
   registerGUID,
   registerSnapshot,
   type GUID,
-  type Resource,
   type Snapshot,
-  type Serializable,
+  type MustSerializable,
 } from '../framework';
 import {
   type AppCreatedEvent,
-  type AppDeletedEvent,
+  type AppDeploymentCreatedEvent,
+  type AppDeploymentDeletedEvent,
   type AppManifestUpdatedEvent,
-  type AppVersionUpdatedEvent,
 } from '../events';
 import {
   AppManifest,
   type AppManifestPayload,
-  type BundleUpload,
-  type BundleID,
-  type BundleUploadID,
-  type BundleTemplate,
+  type BundleRef,
   type BundleTemplateID,
   type CustomHostID,
+  type DeploymentRef,
   type UserProfileID,
 } from '../entities';
 import {
-  InvariantError,
+  ProtectedDeploymentError,
 } from '../errors';
 
 export type AppID = GUID<'App'>;
@@ -33,38 +30,33 @@ export const AppID = registerGUID<AppID>();
 
 export type AppEvent = (
   | AppCreatedEvent
-  | AppDeletedEvent
+  | AppDeploymentCreatedEvent
+  | AppDeploymentDeletedEvent
   | AppManifestUpdatedEvent
-  | AppVersionUpdatedEvent
 );
 
 export type AppSnapshot = Snapshot<1, {
   createdAt: number,
-  deletedAt: number | null,
-  manifest: AppManifestPayload,
-  versions: BundleID[],
   ownerId: UserProfileID,
-  isTemplate: boolean,
   customHostId: CustomHostID,
+  manifest: AppManifestPayload,
+  deployments: Record<DeploymentRef['name'], DeploymentRef>,
 }>;
 export const AppSnapshot = registerSnapshot<AppSnapshot>();
 
-export type AppDTO = Serializable<{
+export type AppDTO = MustSerializable<{
   id: AppID,
   manifest: AppManifestPayload,
   ownerId: UserProfileID,
   customHostId: CustomHostID,
-  currentVersion: number,
-  currentBundle: (
-    | { type: 'template', id: BundleTemplateID }
-    | { type: 'upload', id: BundleUploadID }
-  ),
+  deployments: Record<DeploymentRef['name'], DeploymentRef>,
 }>;
 
 export class App
   extends Aggregate<AppID, AppEvent, AppSnapshot, AppDTO>
-  implements Resource
 {
+  static DEFAULT_DEPLOYMENT_NAME = 'live' as const;
+
   readonly typename = 'App' as const;
   readonly snapshotVersion = 1 as const;
 
@@ -80,40 +72,21 @@ export class App
     return this.$snapshot.customHostId;
   }
 
-  get currentVersion() {
-    return this.$snapshot.versions.length;
+  get deployments() {
+    return structuredClone(this.$snapshot.deployments);
   }
 
-  get currentBundle() {
-    const latestBundleId = this.$snapshot.versions.at(-1);
-    if (!latestBundleId) {
-      throw new InvariantError('App doesn\'t have bundle');
-    }
-    if (this.$snapshot.isTemplate) {
-      return {
-        type: 'template' as const,
-        id: latestBundleId as BundleTemplateID,
-      };
-    } else {
-      return {
-        type: 'upload' as const,
-        id: latestBundleId as BundleUploadID,
-      };
-    }
+  get liveDeployment() {
+    return this.deployments[App.DEFAULT_DEPLOYMENT_NAME];
   }
 
-  get isDeleted() {
-    return this.$snapshot.deletedAt === null;
-  }
-
-  toJSON(): AppDTO {
+  toJSON(): Readonly<AppDTO> {
     return Object.freeze({
       id: this.id,
       manifest: this.manifest.toJSON(),
-      currentVersion: this.currentVersion,
       ownerId: this.ownerId,
       customHostId: this.customHostId,
-      currentBundle: this.currentBundle,
+      deployments: this.deployments,
     });
   }
 
@@ -121,7 +94,13 @@ export class App
     if (!state.manifest) {
       return false;
     }
+
     new AppManifest(state.manifest);
+
+    if (!state.deployments) {
+      return false;
+    }
+
     return true;
   }
 
@@ -129,39 +108,45 @@ export class App
     switch (event.eventName) {
       case 'AppCreated': {
         current.createdAt = event.eventDate;
-        current.deletedAt = null;
         current.manifest = event.eventPayload.manifest;
         current.ownerId = event.eventPayload.ownerId;
         current.customHostId = event.eventPayload.customHostId;
-        current.isTemplate = event.eventPayload.initialBundle.type === 'template';
-        current.versions = [event.eventPayload.initialBundle.id];
+        current.deployments = {};
         break;
       }
+      case 'AppDeploymentCreated': {
+        current.deployments[event.eventPayload.deployment.name] = {
+          name: event.eventPayload.deployment.name,
+          deployedAt: event.eventDate,
+          bundle: event.eventPayload.deployment.bundle,
+          customHostId: event.eventPayload.deployment.customHostId,
+        };
+        break;
+      };
+      case 'AppDeploymentDeleted': {
+        delete current.deployments[event.eventPayload.deploymentName];
+        break;
+      };
       case 'AppManifestUpdated': {
         current.manifest = event.eventPayload.manifest;
-        break;
-      }
-      case 'AppVersionUpdated': {
-        current.versions.push(event.eventPayload.to.bundleId);
-        current.isTemplate = event.eventPayload.to.isTemplate;
-        break;
-      }
-      case 'AppDeleted': {
-        current.deletedAt = event.eventDate;
         break;
       }
     }
   }
 
-  static createFromTemplate(props: {
+  static bootstrapFromTemplate(props: {
     id: AppID,
     manifest: AppManifest,
     ownerId: UserProfileID,
-    template: BundleTemplate,
     customHostId: CustomHostID,
-  }): App {
+    templateId: BundleTemplateID,
+  }): {
+    app: App,
+    deployment: DeploymentRef,
+  } {
     const id = props.id;
     const app = new App(id);
+
     app.$publishEvent({
       aggregateName: app.typename,
       aggregateId: id,
@@ -169,57 +154,78 @@ export class App
       eventDate: Date.now(),
       eventPayload: {
         manifest: props.manifest.toJSON(),
-        initialBundle: {
-          type: 'template',
-          id: props.template.id,
-        },
         ownerId: props.ownerId,
         customHostId: props.customHostId,
       },
     });
-    return app;
-  }
 
-  updateBundle(upload: BundleUpload): void {
-    this.$publishEvent({
-      aggregateName: this.typename,
-      aggregateId: this.id,
-      eventName: 'AppVersionUpdated',
-      eventDate: Date.now(),
-      eventPayload: {
-        from: {
-          version: this.currentVersion,
-          bundleId: this.currentBundle.id,
-          isTemplate: this.$snapshot.isTemplate,
-        },
-        to: {
-          version: this.currentVersion + 1,
-          bundleId: upload.id,
-          isTemplate: false,
-        },
+    const deployment = app.createDeployment({
+      name: App.DEFAULT_DEPLOYMENT_NAME,
+      bundle: {
+        type: 'template',
+        id: props.templateId
       },
+      customHostId: props.customHostId,
     });
+
+    return { app, deployment };
   }
 
-  updateManifest(manifest: AppManifest): void {
+  updateManifest(props: {
+    manifest: AppManifest,
+  }): void {
     this.$publishEvent({
       aggregateName: this.typename,
       aggregateId: this.id,
       eventName: 'AppManifestUpdated',
       eventDate: Date.now(),
       eventPayload: {
-        manifest: manifest.toJSON(),
+        manifest: props.manifest.toJSON(),
       },
     });
   }
 
-  delete(): void {
+  createDeployment(props: {
+    name: string,
+    bundle: BundleRef,
+    customHostId: CustomHostID,
+  }): DeploymentRef {
+    const eventDate = Date.now();
+
+    const deploymentRef: DeploymentRef = {
+      name: props.name,
+      bundle: props.bundle,
+      customHostId: props.customHostId,
+      deployedAt: eventDate,
+    };
+
     this.$publishEvent({
       aggregateName: this.typename,
       aggregateId: this.id,
-      eventName: 'AppDeleted',
+      eventName: 'AppDeploymentCreated',
+      eventDate,
+      eventPayload: {
+        deployment: deploymentRef,
+      },
+    });
+
+    return deploymentRef;
+  }
+
+  deleteDeployment(props: {
+    name: string,
+  }): void {
+    if (props.name === App.DEFAULT_DEPLOYMENT_NAME) {
+      throw new ProtectedDeploymentError(App.DEFAULT_DEPLOYMENT_NAME);
+    }
+
+    this.$publishEvent({
+      aggregateName: this.typename,
+      aggregateId: this.id,
+      eventName: 'AppDeploymentDeleted',
       eventDate: Date.now(),
       eventPayload: {
+        deploymentName: props.name,
       },
     });
   }

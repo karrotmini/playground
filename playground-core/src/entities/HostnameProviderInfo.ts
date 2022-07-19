@@ -27,11 +27,11 @@ export class HostnameProviderInfo {
     this.#managementUrl = new URL(payload.managementUrl);
   }
 
-  toJSON(): HostnameProviderInfoPayload {
-    return {
+  toJSON(): Readonly<HostnameProviderInfoPayload> {
+    return Object.freeze({
       hostname: this.hostname,
       healthCheckUrl: this.healthCheckUrl.toJSON(),
       managementUrl: this.managementUrl.toJSON(),
-    };
+    });
   }
 }

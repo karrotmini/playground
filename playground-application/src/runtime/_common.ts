@@ -4,7 +4,7 @@ import {
   type Aggregator,
 } from '@karrotmini/playground-core/src/framework';
 import {
-  type IAppBundleStorage,
+  type IBundleStorage,
   type IHostnameProvider,
   type IAppRepository,
   type IBundleUploadRepository,
@@ -32,6 +32,6 @@ export type RepositoryLoaders = Readonly<{
 export type RepositoryLoader = RepositoryLoaders[RepositoryName];
 
 export type Services = Readonly<{
-  appBundleStorage: IAppBundleStorage,
+  bundleStorage: IBundleStorage,
   hostnameProvider: IHostnameProvider,
 }>;

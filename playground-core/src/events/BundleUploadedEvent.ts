@@ -7,6 +7,7 @@ import {
 } from '../entities';
 
 export type BundleUploadedEvent = DomainEvent<'BundleUpload', 'BundleUploaded', {
+  tag: string,
   appId: AppID,
   uploaderId: UserProfileID,
 }>;

@@ -1,4 +1,5 @@
 scalar URL
+scalar DateTime
 
 schema {
   query: Query
@@ -16,15 +17,22 @@ interface Node {
 
 type App implements Node {
   id: ID!
-  version: Int!
   manifest: AppManifest!
-  customHost: CustomHost!
-  currentBundle: Bundle!
+  canonicalHost: CustomHost!
+  liveDeployment: AppDeployment
+  deployments: [AppDeployment!]!
 }
 
 type AppManifest {
   name: String!
   icon: URL!
+}
+
+type AppDeployment {
+  name: String!
+  bundle: Bundle!
+  customHost: CustomHost!
+  delployedAt: DateTime!
 }
 
 union Bundle = BundleUpload | BundleTemplate
@@ -39,7 +47,7 @@ type BundleTemplate implements Node {
 
 type CustomHost implements Node {
   id: ID!
-  providerInfo: HostnameProviderInfo
+  providerInfo: HostnameProviderInfo!
 }
 
 type HostnameProviderInfo {

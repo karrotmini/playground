@@ -1,9 +1,14 @@
-export type SerializableValue = null | number | string | boolean | SerializableValue[] | {
-  [x: string]: SerializableValue,
-};
+export type Serializable = (
+  | null
+  | number
+  | string
+  | boolean
+  | Serializable[]
+  | SerializableObject
+);
 
 export type SerializableObject = {
-  [x: string]: SerializableValue,
+  [x: string]: Serializable,
 };
 
-export type Serializable<T extends SerializableObject = SerializableObject> = T;
+export type MustSerializable<T extends Serializable = Serializable> = T;

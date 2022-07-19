@@ -1,15 +1,17 @@
 import { makeGlobalID } from '@cometjs/relay-utils';
-import { type Resource } from '@karrotmini/playground-core/src/framework';
 
 const goi = makeGlobalID();
 
-export type T = Resource;
+export type T = {
+  typename: string,
+  id: string,
+};
 
-export function toGlobalId({ typename, id }: Resource): string {
+export function toGlobalId({ typename, id }: T): string {
   return goi.toID({ typename: IdDictionary[typename] || typename, id });
 }
 
-export function fromGlobalId(globalId: string): Resource {
+export function fromGlobalId(globalId: string): T {
   const { typename, id } = goi.fromID(globalId);
   return { typename: IdDictionary[typename] || typename, id };
 }
@@ -26,4 +28,7 @@ const IdDictionary: Record<string, string> = {
 
   BundleTemplate: '3',
   3: 'BundleTemplate',
+
+  CustomHost: '4',
+  4: 'CustomHost',
 };

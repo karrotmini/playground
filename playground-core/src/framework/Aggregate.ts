@@ -2,7 +2,7 @@ import { Entity } from './Entity';
 import { type AnyGUID } from './GUID';
 import { type AnyDomainEvent } from './Event';
 import { type AnySnapshot } from './Snapshot';
-import { type SerializableObject } from './Serializable';
+import { type Serializable } from './Serializable';
 
 export type AnyAggregate = Aggregate<any, any, any, any>;
 
@@ -42,7 +42,7 @@ export abstract class Aggregate<
   ID extends AnyGUID,
   Event extends AnyDomainEvent<ID['__typename']>,
   Snapshot extends AnySnapshot,
-  DTO extends SerializableObject,
+  DTO extends Serializable,
 > extends Entity<ID> {
   #events: Event[];
 

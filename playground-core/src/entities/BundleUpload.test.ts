@@ -20,6 +20,7 @@ describe('BundleUpload', test => {
       eventName: 'BundleUploaded',
       eventDate: new Date('2022-06-10').getTime(),
       eventPayload: {
+        tag: '',
         appId,
         uploaderId,
       },

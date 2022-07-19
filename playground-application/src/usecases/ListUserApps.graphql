@@ -1,11 +1,10 @@
 fragment AppCard on App {
   id
-  version
   manifest {
     name
     icon
   }
-  customHost {
+  canonicalHost {
     providerInfo {
       url
     }

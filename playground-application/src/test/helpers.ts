@@ -23,7 +23,7 @@ export type SpyOf<T extends object, K extends keyof T> = (
 );
 
 export function eventMatch<E extends AnyDomainEvent>(
-  eventPartial: Partial<AnyDomainEvent>,
+  eventPartial: Partial<E>,
 ): E {
   return expect.objectContaining(eventPartial);
 }

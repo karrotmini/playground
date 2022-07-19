@@ -2,7 +2,7 @@ import { type vi } from 'vitest';
 
 import {
   type App,
-  type AppBundleUpload,
+  type BundleUpload,
   type UserProfile,
 } from '@karrotmini/playground-core/src/entities';
 import {
@@ -18,7 +18,7 @@ import {
   BypassResourceAuthorizer,
   VitestAggregator,
   VitestCustomHostRepository,
-  VitestAppBundleStorage,
+  VitestBundleStorage,
   VitestHostnameProvider,
 } from '../builtin';
 
@@ -30,12 +30,12 @@ export class VitestApplicationContext implements IApplicationContext {
   authz: IApplicationContext['authz'];
   repos: {
     App: VitestAggregator<App>,
-    AppBundleUpload: VitestAggregator<AppBundleUpload>,
+    BundleUpload: VitestAggregator<BundleUpload>,
     CustomHost: VitestCustomHostRepository,
     UserProfile: VitestAggregator<UserProfile>,
   };
   services: {
-    appBundleStorage: VitestAppBundleStorage,
+    bundleStorage: VitestBundleStorage,
     hostnameProvider: VitestHostnameProvider,
   };
 
@@ -58,7 +58,7 @@ export class VitestApplicationContext implements IApplicationContext {
     this.authz = new BypassResourceAuthorizer();
     this.reporter = config.reporter ?? new NoopReporter();
     this.services = {
-      appBundleStorage: new VitestAppBundleStorage(config),
+      bundleStorage: new VitestBundleStorage(config),
       hostnameProvider: new VitestHostnameProvider(config),
     };
     const repoConfig = {
@@ -67,7 +67,7 @@ export class VitestApplicationContext implements IApplicationContext {
     };
     this.repos = {
       App: new VitestAggregator(repoConfig),
-      AppBundleUpload: new VitestAggregator(repoConfig),
+      BundleUpload: new VitestAggregator(repoConfig),
       CustomHost: new VitestCustomHostRepository(repoConfig),
       UserProfile: new VitestAggregator(repoConfig),
     };

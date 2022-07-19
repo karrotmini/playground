@@ -2,11 +2,10 @@ import { describe, expect } from 'vitest';
 import {
   App,
   AppManifest,
+  BundleTemplate,
   AppID,
   UserProfileID,
   CustomHostID,
-  BundleTemplate,
-  BundleUploadID,
 } from '../entities';
 
 describe('App', test => {
@@ -14,7 +13,6 @@ describe('App', test => {
     const id = AppID('TEST');
     const ownerId = UserProfileID('TEST');
     const customHostId = CustomHostID('TEST');
-    const bundleId = BundleUploadID('TEST');
     const manifest = new AppManifest({
       appId: '123123',
       name: 'TEST',
@@ -29,10 +27,6 @@ describe('App', test => {
       eventDate: new Date('2022-06-10').getTime(),
       eventPayload: {
         manifest: manifest.toJSON(),
-        initialBundle: {
-          type: 'upload',
-          id: bundleId,
-        },
         ownerId,
         customHostId,
       },
@@ -42,34 +36,43 @@ describe('App', test => {
     expect(app.$snapshot).toMatchSnapshot(`$snapshot version ${app.snapshotVersion}`);
   });
 
-  test('createFromTemplate', () => {
+  test('bootstrapFromTemplate', () => {
     const id = AppID('TEST');
     const ownerId = UserProfileID('TEST');
     const customHostId = CustomHostID('TEST');
-    const template = BundleTemplate.centeringDiv();
+    const templateId = BundleTemplate.centeringDiv().id;
     const manifest = new AppManifest({
       appId: '123123',
       name: 'TEST',
       icon: 'file:///icon',
     });
 
-    const app = App.createFromTemplate({
+    const { app, deployment } = App.bootstrapFromTemplate({
       id,
       ownerId,
       customHostId,
       manifest,
-      template,
+      templateId,
     });
 
+    const expectedDeployment = {
+      name: 'live',
+      bundle: {
+        type: 'template',
+        id: templateId,
+      },
+      customHostId,
+      deployedAt: expect.any(Number),
+    };
+
+    expect(deployment).toEqual(expectedDeployment);
     expect(app.toJSON()).toEqual({
       id,
       manifest: manifest.toJSON(),
       ownerId,
       customHostId,
-      currentVersion: 1,
-      currentBundle: {
-        type: 'template',
-        id: template.id,
+      deployments: {
+        [expectedDeployment.name]: expectedDeployment,
       },
     });
   });

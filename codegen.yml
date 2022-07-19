@@ -22,6 +22,7 @@ generates:
       mappers:
         # Core Mappers
         App: "@karrotmini/playground-core/src/entities#App"
+        AppDeployment: "@karrotmini/playground-core/src/entities#DeploymentRef"
         AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
         Bundle: "@karrotmini/playground-core/src/entities#Bundle"
         BundleUpload: "@karrotmini/playground-core/src/entities#BundleUpload"
@@ -30,9 +31,9 @@ generates:
         UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
         HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"
         # Application Mappers
-        CreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateAppResult#Root"
-        CreateUserProfileResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResult#Root"
-        CreateUserProfileResultCreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResultCreateAppResult#Root"
+        CreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateAppResult#CreateAppResultRoot"
+        CreateUserProfileResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResult#CreateUserProfileResultRoot"
+        CreateUserProfileResultCreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResultCreateAppResult#CreateUserProfileResultCreateAppResultRoot"
       mapperTypeSuffix: Model
       useTypeImports: true
       avoidOptionals: true
@@ -114,6 +115,7 @@ generates:
       mappers:
         # Core Mappers
         App: "@karrotmini/playground-core/src/entities#App"
+        AppDeployment: "@karrotmini/playground-core/src/entities#DeploymentRef"
         AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
         Bundle: "@karrotmini/playground-core/src/entities#Bundle"
         BundleUpload: "@karrotmini/playground-core/src/entities#BundleUpload"

@@ -25,7 +25,7 @@ import {
 import typeDefs from './__generated__/schema';
 import * as resolvers from './resolvers';
 import { type Context } from './context';
-import * as Trust from './trust';
+import * as Gateway from './gateway';
 import * as Authz from './authorization';
 
 import {
@@ -42,7 +42,7 @@ const API = new Router<Context>();
 
 API.prepare = compose(
   CORS.preflight(),
-  Trust.guard(),
+  Gateway.trust(),
   Authz.permit(),
   Cache.sync(),
 );

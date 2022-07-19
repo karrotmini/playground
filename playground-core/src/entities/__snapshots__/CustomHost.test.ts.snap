@@ -2,9 +2,8 @@
 
 exports[`CustomHost > should be valid after CustomHostProvisioned > $snapshot version 1 1`] = `
 {
-  "connectedAppId": null,
+  "connectedApp": null,
   "createdAt": 1654819200000,
-  "deletedAt": null,
   "providerInfo": {
     "healthCheckUrl": "https://management/",
     "hostname": "test.karrotmini.app",

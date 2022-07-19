@@ -1,5 +1,3 @@
-export * from './UserProfile';
-// export * from './Credential';
 export * from './App';
 export * from './AppIcon';
 export * from './AppManifest';
@@ -7,4 +5,6 @@ export * from './Bundle';
 export * from './BundleTemplate';
 export * from './BundleUpload';
 export * from './CustomHost';
+export * from './Deployment';
 export * from './HostnameProviderInfo';
+export * from './UserProfile';

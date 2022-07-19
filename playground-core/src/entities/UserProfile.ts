@@ -4,7 +4,6 @@ import {
   registerSnapshot,
   type GUID,
   type Snapshot,
-  type Resource,
 } from '../framework';
 import {
   type UserProfileCreatedEvent,
@@ -18,12 +17,6 @@ import {
 export type UserProfileID = GUID<'UserProfile'>;
 export const UserProfileID = registerGUID<UserProfileID>();
 
-export type UserProfileEvent = (
-  | UserProfileCreatedEvent
-  | UserProfileUpdatedEvent
-  | UserAppAddedEvent
-);
-
 export type UserProfileSnapshot = Snapshot<1, {
   createdAt: number,
   deletedAt: number | null,
@@ -32,6 +25,12 @@ export type UserProfileSnapshot = Snapshot<1, {
   appIds: AppID[],
 }>;
 export const UserProfileSnapshot = registerSnapshot<UserProfileSnapshot>();
+
+export type UserProfileEvent = (
+  | UserProfileCreatedEvent
+  | UserProfileUpdatedEvent
+  | UserAppAddedEvent
+);
 
 export type UserProfileDTO = {
   id: UserProfileID,
@@ -42,7 +41,6 @@ export type UserProfileDTO = {
 
 export class UserProfile
   extends Aggregate<UserProfileID, UserProfileEvent, UserProfileSnapshot, UserProfileDTO>
-  implements Resource
 {
   static DEFAULT_NAME = 'Guest';
   static DEFAULT_PROFILE_IMAGE_URL = 'https://dnvefa72aowie.cloudfront.net/origin/profile/profile_default.png';
@@ -173,7 +171,6 @@ export class UserProfile
       eventDate: Date.now(),
       eventPayload: {
         appId: props.appId,
-        userProfileId: this.id,
       },
     });
   }

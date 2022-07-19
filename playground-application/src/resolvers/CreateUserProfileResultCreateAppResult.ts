@@ -5,7 +5,7 @@ import {
   type UserProfile,
 } from '@karrotmini/playground-core/src/entities';
 
-export type Root = {
+export type CreateUserProfileResultCreateAppResultRoot = {
   app: App,
   customHost: CustomHost,
   userProfile: UserProfile,

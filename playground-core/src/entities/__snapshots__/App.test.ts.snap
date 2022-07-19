@@ -4,16 +4,12 @@ exports[`App > should have valid state after AppCreated > $snapshot version 1 1`
 {
   "createdAt": 1654819200000,
   "customHostId": "TEST",
-  "deletedAt": null,
-  "isTemplate": false,
+  "deployments": {},
   "manifest": {
     "appId": "123123",
     "icon": "file:///icon",
     "name": "TEST",
   },
   "ownerId": "TEST",
-  "versions": [
-    "TEST",
-  ],
 }
 `;

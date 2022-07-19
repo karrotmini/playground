@@ -8,5 +8,5 @@ export * from './PlaygroundResourceAuthorizer';
 export * from './VitestAggregator';
 export * from './VitestCustomHostRepository';
 export * from './VitestApplicationContext';
-export * from './VitestAppBundleStorage';
+export * from './VitestBundleStorage';
 export * from './VitestHostnameProvider';

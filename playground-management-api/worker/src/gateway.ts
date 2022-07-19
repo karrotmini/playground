@@ -3,7 +3,7 @@ import { reply } from 'worktop/response';
 
 import { type Context } from './context';
 
-export function guard(): Handler<Context> {
+export function trust(): Handler<Context> {
   return async function(request, context) {
     const authPattern = /X-Playground-Management-Key (?<key>\w+)/i;
     const authHeader = request.headers.get('Authorization');

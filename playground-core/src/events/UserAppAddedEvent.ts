@@ -3,10 +3,8 @@ import {
 } from '../framework';
 import {
   type AppID,
-  type UserProfileID,
 } from '../entities';
 
 export type UserAppAddedEvent = DomainEvent<'UserProfile', 'UserAppAdded', {
   appId: AppID,
-  userProfileId: UserProfileID,
 }>;

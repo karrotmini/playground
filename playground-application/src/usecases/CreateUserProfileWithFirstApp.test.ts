@@ -1,14 +1,22 @@
 import { describe, expect } from 'vitest';
 
 import {
+  App,
   AppID,
-  BundleTemplate,
   CustomHost,
   CustomHostID,
   CustomHostSnapshot,
   UserProfileID,
   HostnameProviderInfo,
 } from '@karrotmini/playground-core/src/entities';
+import {
+  AppCreatedEvent,
+  AppDeploymentCreatedEvent,
+  CustomHostConnectedEvent,
+  CustomHostProvisionedEvent,
+  UserAppAddedEvent,
+  UserProfileCreatedEvent,
+} from '@karrotmini/playground-core/src/events';
 import {
   MutationResult,
 } from '../runtime';
@@ -54,7 +62,6 @@ describe('CreateUserProfileWithFirstApp', test => {
         });
       });
 
-
     const result = await executor.execute(
       CreateUserProfileWithFirstAppDocument, {
         name: 'TEST',
@@ -71,7 +78,7 @@ describe('CreateUserProfileWithFirstApp', test => {
 
     const userProfileEvents = record.filter(event => event.aggregateName === 'UserProfile');
     expect(userProfileEvents).toEqual([
-      eventMatch({
+      eventMatch<UserProfileCreatedEvent>({
         aggregateId: userProfileId,
         aggregateName: 'UserProfile',
         eventName: 'UserProfileCreated',
@@ -80,20 +87,19 @@ describe('CreateUserProfileWithFirstApp', test => {
           profileImageUrl: null,
         },
       }),
-      eventMatch({
+      eventMatch<UserAppAddedEvent>({
         aggregateId: userProfileId,
         aggregateName: 'UserProfile',
         eventName: 'UserAppAdded',
         eventPayload: {
           appId: appId,
-          userProfileId,
         },
       }),
     ]);
 
     const customHostEvents = record.filter(event => event.aggregateName === 'CustomHost');
     expect(customHostEvents).toEqual([
-      eventMatch({
+      eventMatch<CustomHostProvisionedEvent>({
         aggregateId: customHostId,
         aggregateName: 'CustomHost',
         eventName: 'CustomHostProvisioned',
@@ -105,40 +111,50 @@ describe('CreateUserProfileWithFirstApp', test => {
           },
         },
       }),
-      eventMatch({
+      eventMatch<CustomHostConnectedEvent>({
         aggregateId: customHostId,
         aggregateName: 'CustomHost',
         eventName: 'CustomHostConnected',
         eventPayload: {
           appId,
-          customHostId,
+          deploymentName: App.DEFAULT_DEPLOYMENT_NAME,
         },
       }),
     ]);
 
     const appEvnets = record.filter(event => event.aggregateName === 'App');
-    expect(appEvnets).toEqual(
-      [
-        eventMatch({
-          aggregateId: appId,
-          aggregateName: 'App',
-          eventName: 'AppCreated',
-          eventPayload: {
-            customHostId,
-            ownerId: userProfileId,
-            initialBundle: {
-              type: 'template',
-              id: BundleTemplate.centeringDiv().id,
-            },
-            manifest: {
-              appId: 'myapp',
-              name: 'TEST',
-              icon: expect.stringMatching(/^data:image\/svg\+xml,/),
-            },
+    expect(appEvnets).toEqual([
+      eventMatch<AppCreatedEvent>({
+        aggregateId: appId,
+        aggregateName: 'App',
+        eventName: 'AppCreated',
+        eventPayload: {
+          customHostId,
+          ownerId: userProfileId,
+          manifest: {
+            appId: 'myapp',
+            name: 'TEST',
+            icon: expect.stringMatching(/^data:image\/svg\+xml,/),
           },
-        }),
-      ],
-    );
+        },
+      }),
+      eventMatch<AppDeploymentCreatedEvent>({
+        aggregateId: appId,
+        aggregateName: 'App',
+        eventName: 'AppDeploymentCreated',
+        eventPayload: {
+          deployment: {
+            name: App.DEFAULT_DEPLOYMENT_NAME,
+            bundle: {
+              type: 'template',
+              id: expect.any(String),
+            },
+            customHostId,
+            deployedAt: expect.any(Number),
+          },
+        },
+      }),
+    ]);
   });
 
   test('Create UserProfile and App, reuse a dangling hostname', async () => {
@@ -188,7 +204,7 @@ describe('CreateUserProfileWithFirstApp', test => {
 
     const userProfileEvents = record.filter(event => event.aggregateName === 'UserProfile');
     expect(userProfileEvents).toEqual([
-      eventMatch({
+      eventMatch<UserProfileCreatedEvent>({
         aggregateId: userProfileId,
         aggregateName: 'UserProfile',
         eventName: 'UserProfileCreated',
@@ -197,20 +213,19 @@ describe('CreateUserProfileWithFirstApp', test => {
           profileImageUrl: null,
         },
       }),
-      eventMatch({
+      eventMatch<UserAppAddedEvent>({
         aggregateId: userProfileId,
         aggregateName: 'UserProfile',
         eventName: 'UserAppAdded',
         eventPayload: {
           appId: appId,
-          userProfileId,
         },
       }),
     ]);
 
     const customHostEvents = record.filter(event => event.aggregateName === 'CustomHost');
     expect(customHostEvents).toEqual([
-      eventMatch({
+      eventMatch<CustomHostProvisionedEvent>({
         aggregateId: customHostId,
         aggregateName: 'CustomHost',
         eventName: 'CustomHostProvisioned',
@@ -222,40 +237,50 @@ describe('CreateUserProfileWithFirstApp', test => {
           },
         },
       }),
-      eventMatch({
+      eventMatch<CustomHostConnectedEvent>({
         aggregateId: customHostId,
         aggregateName: 'CustomHost',
         eventName: 'CustomHostConnected',
         eventPayload: {
           appId,
-          customHostId,
+          deploymentName: App.DEFAULT_DEPLOYMENT_NAME,
         },
       }),
     ]);
 
     const appEvnets = record.filter(event => event.aggregateName === 'App');
-    expect(appEvnets).toEqual(
-      [
-        eventMatch({
-          aggregateId: appId,
-          aggregateName: 'App',
-          eventName: 'AppCreated',
-          eventPayload: {
-            customHostId,
-            ownerId: userProfileId,
-            initialBundle: {
-              type: 'template',
-              id: BundleTemplate.centeringDiv().id,
-            },
-            manifest: {
-              appId: 'myapp',
-              name: 'TEST',
-              icon: expect.stringMatching(/^data:image\/svg\+xml,/),
-            },
+    expect(appEvnets).toEqual([
+      eventMatch<AppCreatedEvent>({
+        aggregateId: appId,
+        aggregateName: 'App',
+        eventName: 'AppCreated',
+        eventPayload: {
+          customHostId,
+          ownerId: userProfileId,
+          manifest: {
+            appId: 'myapp',
+            name: 'TEST',
+            icon: expect.stringMatching(/^data:image\/svg\+xml,/),
           },
-        }),
-      ],
-    );
+        },
+      }),
+      eventMatch<AppDeploymentCreatedEvent>({
+        aggregateId: appId,
+        aggregateName: 'App',
+        eventName: 'AppDeploymentCreated',
+        eventPayload: {
+          deployment: {
+            name: App.DEFAULT_DEPLOYMENT_NAME,
+            bundle: {
+              type: 'template',
+              id: expect.any(String),
+            },
+            customHostId,
+            deployedAt: expect.any(Number),
+          },
+        },
+      }),
+    ]);
   });
 
   test('Create UserProfile and App, reuse a dangling CustomHost instance', async () => {
@@ -278,13 +303,12 @@ describe('CreateUserProfileWithFirstApp', test => {
       .mockImplementationOnce(async hostname => {
         return new CustomHost(customHostId, CustomHostSnapshot({
           createdAt: Date.now(),
-          deletedAt: null,
           providerInfo: {
             hostname,
             healthCheckUrl: 'https://healthcheck/',
             managementUrl: 'https://management/',
           },
-          connectedAppId: null,
+          connectedApp: null,
         }));
       });
 
@@ -315,7 +339,7 @@ describe('CreateUserProfileWithFirstApp', test => {
 
     const userProfileEvents = record.filter(event => event.aggregateName === 'UserProfile');
     expect(userProfileEvents).toEqual([
-      eventMatch({
+      eventMatch<UserProfileCreatedEvent>({
         aggregateId: userProfileId,
         aggregateName: 'UserProfile',
         eventName: 'UserProfileCreated',
@@ -324,52 +348,61 @@ describe('CreateUserProfileWithFirstApp', test => {
           profileImageUrl: null,
         },
       }),
-      eventMatch({
+      eventMatch<UserAppAddedEvent>({
         aggregateId: userProfileId,
         aggregateName: 'UserProfile',
         eventName: 'UserAppAdded',
         eventPayload: {
           appId: appId,
-          userProfileId,
         },
       }),
     ]);
 
     const customHostEvents = record.filter(event => event.aggregateName === 'CustomHost');
     expect(customHostEvents).toEqual([
-      eventMatch({
+      eventMatch<CustomHostConnectedEvent>({
         aggregateId: customHostId,
         aggregateName: 'CustomHost',
         eventName: 'CustomHostConnected',
         eventPayload: {
           appId,
-          customHostId,
+          deploymentName: App.DEFAULT_DEPLOYMENT_NAME,
         },
       }),
     ]);
 
     const appEvnets = record.filter(event => event.aggregateName === 'App');
-    expect(appEvnets).toEqual(
-      [
-        eventMatch({
-          aggregateId: appId,
-          aggregateName: 'App',
-          eventName: 'AppCreated',
-          eventPayload: {
-            customHostId,
-            ownerId: userProfileId,
-            initialBundle: {
-              type: 'template',
-              id: BundleTemplate.centeringDiv().id,
-            },
-            manifest: {
-              appId: 'myapp',
-              name: 'TEST',
-              icon: expect.stringMatching(/^data:image\/svg\+xml,/),
-            },
+    expect(appEvnets).toEqual([
+      eventMatch<AppCreatedEvent>({
+        aggregateId: appId,
+        aggregateName: 'App',
+        eventName: 'AppCreated',
+        eventPayload: {
+          customHostId,
+          ownerId: userProfileId,
+          manifest: {
+            appId: 'myapp',
+            name: 'TEST',
+            icon: expect.stringMatching(/^data:image\/svg\+xml,/),
           },
-        }),
-      ],
-    );
+        },
+      }),
+      eventMatch<AppDeploymentCreatedEvent>({
+        aggregateId: appId,
+        aggregateName: 'App',
+        eventName: 'AppDeploymentCreated',
+        eventPayload: {
+          deployment: {
+            name: App.DEFAULT_DEPLOYMENT_NAME,
+            bundle: {
+              type: 'template',
+              id: expect.any(String),
+            },
+            customHostId,
+            deployedAt: expect.any(Number),
+          },
+        },
+      }),
+    ]);
   });
 });

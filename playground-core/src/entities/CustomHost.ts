@@ -9,7 +9,6 @@ import {
   type CustomHostProvisionedEvent,
   type CustomHostConnectedEvent,
   type CustomHostDisconnectedEvent,
-  type CustomHostDeletedEvent,
 } from '../events';
 import {
   HostnameProviderInfo,
@@ -20,26 +19,28 @@ import {
 export type CustomHostID = GUID<'CustomHost'>;
 export const CustomHostID = registerGUID<CustomHostID>();
 
+type CustomHostAppConnection = {
+  id: AppID,
+  deploymentName: string,
+};
+
+export type CustomHostSnapshot = Snapshot<1, {
+  createdAt: number,
+  providerInfo: HostnameProviderInfoPayload,
+  connectedApp: CustomHostAppConnection | null,
+}>;
+export const CustomHostSnapshot = registerSnapshot<CustomHostSnapshot>();
+
 export type CustomHostEvent = (
   | CustomHostProvisionedEvent
-  | CustomHostDeletedEvent
   | CustomHostConnectedEvent
   | CustomHostDisconnectedEvent
 );
 
-export type CustomHostSnapshot = Snapshot<1, {
-  createdAt: number,
-  deletedAt: number | null,
-  connectedAppId: AppID | null,
-  providerInfo: HostnameProviderInfoPayload,
-}>;
-export const CustomHostSnapshot = registerSnapshot<CustomHostSnapshot>();
-
 export type CustomHostDTO = {
   id: string,
-  connectedAppId: AppID | null,
-  providerInfo: HostnameProviderInfoPayload | null,
-  isDeleted: boolean,
+  providerInfo: HostnameProviderInfoPayload,
+  connectedApp: CustomHostAppConnection | null,
 };
 
 export class CustomHost
@@ -48,59 +49,39 @@ export class CustomHost
   readonly typename = 'CustomHost' as const;
   readonly snapshotVersion = 1 as const;
 
-  get connectedAppId() {
-    return this.$snapshot.connectedAppId;
+  get connectedApp() {
+    return this.$snapshot.connectedApp;
   }
 
   get providerInfo() {
-    return this.$snapshot.providerInfo && new HostnameProviderInfo(this.$snapshot.providerInfo);
+    return new HostnameProviderInfo(this.$snapshot.providerInfo);
   }
 
   get hostname() {
-    return this.providerInfo?.hostname || null;
+    return this.providerInfo.hostname;
   }
 
   get healthCheckUrl() {
-    return this.providerInfo?.healthCheckUrl
-      ? new URL(this.providerInfo.healthCheckUrl)
-      : null;
+    return this.providerInfo.healthCheckUrl;
   }
 
   get managementUrl() {
-    return this.providerInfo?.managementUrl
-      ? new URL(this.providerInfo.managementUrl)
-      : null;
+    return this.providerInfo.managementUrl;
   }
 
   get url() {
-    return this.hostname
-      ? new URL(`https://${this.hostname}`)
-      : null;
+    return new URL(`https://${this.hostname}`);
   }
 
-  get isDeleted() {
-    return this.$snapshot.deletedAt != null;
-  }
-
-  toJSON(): CustomHostDTO {
+  toJSON(): Readonly<CustomHostDTO> {
     return Object.freeze({
       id: this.id,
-      connectedAppId: this.connectedAppId,
-      providerInfo: this.providerInfo?.toJSON() ?? null,
-      isDeleted: this.isDeleted,
+      providerInfo: this.providerInfo.toJSON(),
+      connectedApp: this.connectedApp,
     });
   }
 
   validate(state: Partial<CustomHostSnapshot>): state is CustomHostSnapshot {
-    if (!(
-      ('providerInfo' in state) &&
-      (state.connectedAppId === null || typeof state.connectedAppId === 'string') &&
-      typeof state.createdAt === 'number' &&
-      (state.deletedAt === null || typeof state.deletedAt === 'number')
-    )) {
-      return false;
-    }
-
     if (state.providerInfo) {
       new HostnameProviderInfo(state.providerInfo);
     }
@@ -113,20 +94,18 @@ export class CustomHost
       case 'CustomHostProvisioned': {
         current.createdAt = event.eventDate;
         current.providerInfo = event.eventPayload.providerInfo;
-        current.connectedAppId = null;
-        current.deletedAt = null;
+        current.connectedApp = null;
         break;
       }
       case 'CustomHostDisconnected': {
-        current.connectedAppId = null;
+        current.connectedApp = null;
         break;
       }
       case 'CustomHostConnected': {
-        current.connectedAppId = event.eventPayload.appId;
-        break;
-      }
-      case 'CustomHostDeleted': {
-        current.deletedAt = event.eventDate;
+        current.connectedApp = {
+          id: event.eventPayload.appId,
+          deploymentName: event.eventPayload.deploymentName,
+        };
         break;
       }
     }
@@ -153,8 +132,9 @@ export class CustomHost
 
   connect(props: {
     appId: AppID,
+    deploymentName: string,
   }) {
-    if (this.connectedAppId) {
+    if (this.connectedApp) {
       this.disconnect();
     }
 
@@ -165,35 +145,22 @@ export class CustomHost
       eventDate: Date.now(),
       eventPayload: {
         appId: props.appId,
-        customHostId: this.id,
+        deploymentName: props.deploymentName,
       },
     });
   }
 
   disconnect() {
-    if (this.connectedAppId) {
+    if (this.connectedApp) {
       this.$publishEvent({
         aggregateName: this.typename,
         aggregateId: this.id,
         eventName: 'CustomHostDisconnected',
         eventDate: Date.now(),
         eventPayload: {
-          appId: this.connectedAppId,
-          customHostId: this.id,
+          appId: this.connectedApp.id,
         },
       });
     }
-  }
-
-  delete() {
-    this.$publishEvent({
-      aggregateName: this.typename,
-      aggregateId: this.id,
-      eventName: 'CustomHostDeleted',
-      eventDate: Date.now(),
-      eventPayload: {
-        customHostId: this.id,
-      },
-    });
   }
 }

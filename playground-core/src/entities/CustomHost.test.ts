@@ -48,8 +48,7 @@ describe('CustomHost', test => {
     expect(customHost.toJSON()).toEqual({
       id,
       providerInfo: providerInfo.toJSON(),
-      connectedAppId: null,
-      isDeleted: false,
+      connectedApp: null,
     });
   });
 
@@ -69,8 +68,7 @@ describe('CustomHost', test => {
     expect(customHost.toJSON()).toEqual({
       id,
       providerInfo: providerInfo.toJSON(),
-      connectedAppId: null,
-      isDeleted: false,
+      connectedApp: null,
     });
   });
 });

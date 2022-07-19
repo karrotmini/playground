@@ -3,7 +3,7 @@ import {
   type App,
 } from '@karrotmini/playground-core/src/entities';
 
-export type Root = {
+export type CreateAppResultRoot = {
   app: App,
 };
 

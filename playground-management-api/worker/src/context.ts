@@ -3,7 +3,7 @@ import {
 } from 'worktop';
 import {
   type IResourceAuthorizer,
-} from '@karrotmini/playground-core/src';
+} from '@karrotmini/playground-application/src';
 
 export interface Context extends WorktopContext {
   bindings: WranglerEnv,
