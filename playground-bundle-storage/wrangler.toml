@@ -11,8 +11,8 @@ WORKERS_RS_VERSION = "0.0.9"
 
 [[kv_namespaces]]
 binding = "KV_BUNDLE_STORAGE"
-id = ""
-preview_id = ""
+id = "9ef081f0198246058c3c8a4f5d86a68d"
+preview_id = "e35c547eef174fa1a224d799b64ffc62"
 
 [build]
 command = "worker-build --release"
