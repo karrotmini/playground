@@ -29,6 +29,9 @@ import * as Gateway from './gateway';
 import * as Authz from './authorization';
 
 import {
+  PlaygroundBundleStorage,
+} from './adapters/PlaygroundBundleStorage';
+import {
   IssueAppCredentialDocument,
   IssueUserProfileCredentialDocument,
 } from './usecases';
@@ -59,6 +62,9 @@ API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
       },
     },
     services: {
+      bundleStorage: new PlaygroundBundleStorage({
+        service: ctx.bindings.bundleStorage,
+      }),
       hostnameProvider: new CloudflareHostnameProvider({
         fetch,
         zoneId: ctx.bindings.CLOUDFLARE_CUSTOMHOST_ZONE_ID,
@@ -66,10 +72,18 @@ API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
       }),
     },
     repos: {
-      App: new AppRepository({ service: ctx.bindings.playground }),
-      BundleUpload: new BundleUploadRepository({ service: ctx.bindings.playground }),
-      CustomHost: new CustomHostRepository({ service: ctx.bindings.playground }),
-      UserProfile: new UserProfileRepository({ service: ctx.bindings.playground }),
+      App: new AppRepository({
+        service: ctx.bindings.playground,
+      }),
+      BundleUpload: new BundleUploadRepository({
+        service: ctx.bindings.playground
+      }),
+      CustomHost: new CustomHostRepository({
+        service: ctx.bindings.playground,
+      }),
+      UserProfile: new UserProfileRepository({
+        service: ctx.bindings.playground,
+      }),
     },
     reporter: new ConsoleReporter(console),
     eventBus: new NoopEventBus(),

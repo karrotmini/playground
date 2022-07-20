@@ -25,5 +25,10 @@ HOSTNAME_PATTERN = "*.karrotmini.app"
 binding = "playground"
 service = "karrotmini-playground-adapter"
 
+[[services]]
+binding = "bundleStorage"
+service = "karrotmini-playground-bundle-storage"
+
 [miniflare.mounts]
 karrotmini-playground-adapter = "../../playground-cloudflare-adapter/worker"
+karrotmini-playground-bundle-storage = "../../playground-bundle-storage"

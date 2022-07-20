@@ -16,6 +16,7 @@ declare interface WranglerEnv {
 
   // service bindings
   playground: ServiceBinding;
+  bundleStorage: ServiceBinding;
 
   [key: string]: any;
 }
