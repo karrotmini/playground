@@ -10,7 +10,7 @@ account_id = "aad5c82543cd1f267b89737d0f56405e"
 
 [build]
 watch_dir = "src"
-command = "yarn esbuild src/worker.ts --bundle --outfile=dist/worker.mjs --format=esm"
+command = "yarn esbuild src/worker.ts --bundle --minify --outfile=dist/worker.mjs --format=esm"
 
 # Deprecated in Wrangler v2, But still required for miniflare
 [build.upload]
