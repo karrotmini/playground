@@ -37,7 +37,7 @@ export type AppEvent = (
 
 export type AppSnapshot = Snapshot<1, {
   createdAt: number,
-  ownerId: UserProfileID,
+  ownerId: UserProfileID | null,
   customHostId: CustomHostID,
   manifest: AppManifestPayload,
   deployments: Record<DeploymentRef['name'], DeploymentRef>,
@@ -47,7 +47,7 @@ export const AppSnapshot = registerSnapshot<AppSnapshot>();
 export type AppDTO = MustSerializable<{
   id: AppID,
   manifest: AppManifestPayload,
-  ownerId: UserProfileID,
+  ownerId: UserProfileID | null,
   customHostId: CustomHostID,
   deployments: Record<DeploymentRef['name'], DeploymentRef>,
 }>;
@@ -137,7 +137,7 @@ export class App
   static bootstrapFromTemplate(props: {
     id: AppID,
     manifest: AppManifest,
-    ownerId: UserProfileID,
+    ownerId: UserProfileID | null,
     customHostId: CustomHostID,
     templateId: BundleTemplateID,
   }): {

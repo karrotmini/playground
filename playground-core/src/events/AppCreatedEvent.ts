@@ -9,6 +9,6 @@ import {
 
 export type AppCreatedEvent = DomainEvent<'App', 'AppCreated', {
   manifest: AppManifestPayload,
-  ownerId: UserProfileID,
+  ownerId: UserProfileID | null,
   customHostId: CustomHostID,
 }>;
