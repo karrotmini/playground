@@ -5,32 +5,14 @@ import * as CORS from 'worktop/cors';
 import { start } from 'worktop/cfw';
 import * as Cache from 'worktop/cfw.cache';
 import { makeJsonDecoder } from '@urlpack/json';
+import { Executor } from '@karrotmini/playground-application/src';
 
-import {
-  Executor,
-  ConsoleReporter,
-  NoopEventBus,
-  makeApplicationContext,
-} from '@karrotmini/playground-application/src';
-import {
-  AppRepository,
-  BundleUploadRepository,
-  CustomHostRepository,
-  UserProfileRepository,
-} from '@karrotmini/playground-cloudflare-adapter/src';
-import {
-  CloudflareHostnameProvider,
-} from '@karrotmini/cloudflare-hostname-provider/src';
-
-import typeDefs from './__generated__/schema';
-import * as resolvers from './resolvers';
-import { type Context } from './context';
+import * as Context from './context';
 import * as Gateway from './gateway';
 import * as Authz from './authorization';
 
-import {
-  PlaygroundBundleStorage,
-} from './adapters/PlaygroundBundleStorage';
+import typeDefs from './__generated__/schema';
+import * as resolvers from './resolvers';
 import {
   IssueAppCredentialDocument,
   IssueUserProfileCredentialDocument,
@@ -41,67 +23,29 @@ const operationDict: Record<string, DocumentNode | undefined> = {
   IssueUserProfileCredential: IssueUserProfileCredentialDocument,
 };
 
-const API = new Router<Context>();
+const API = new Router<Context.T>();
 
 API.prepare = compose(
   CORS.preflight(),
   Gateway.trust(),
   Authz.permit(),
+  Context.setup(),
   Cache.sync(),
 );
 
-API.add('POST', '/api/graphql/:operation', async (req, ctx) => {
-  const applicationContext = makeApplicationContext({
-    env: {
-      crypto,
-      vars: {
-        HOSTNAME_PATTERN: ctx.bindings.HOSTNAME_PATTERN,
-      },
-      secrets: {
-        CREDENTIAL_SECRET: ctx.bindings.CREDENTIAL_SECRET,
-      },
-    },
-    services: {
-      bundleStorage: new PlaygroundBundleStorage({
-        service: ctx.bindings.bundleStorage,
-      }),
-      hostnameProvider: new CloudflareHostnameProvider({
-        fetch,
-        zoneId: ctx.bindings.CLOUDFLARE_CUSTOMHOST_ZONE_ID,
-        apiToken: ctx.bindings.CLOUDFLARE_CUSTOMHOST_ZONE_MANAGEMENT_KEY,
-      }),
-    },
-    repos: {
-      App: new AppRepository({
-        service: ctx.bindings.playground,
-      }),
-      BundleUpload: new BundleUploadRepository({
-        service: ctx.bindings.playground
-      }),
-      CustomHost: new CustomHostRepository({
-        service: ctx.bindings.playground,
-      }),
-      UserProfile: new UserProfileRepository({
-        service: ctx.bindings.playground,
-      }),
-    },
-    reporter: new ConsoleReporter(console),
-    eventBus: new NoopEventBus(),
-    authz: ctx.authz,
-  });
-
+API.add('POST', '/api/graphql/:operation', async (request, context) => {
   const executor = new Executor({
-    context: applicationContext,
+    context,
     additionalTypeDefs: typeDefs,
     additionalResolvers: resolvers,
   });
 
-  const operation = operationDict[ctx.params.operation];
+  const operation = operationDict[context.params.operation];
   if (!operation) {
     return reply(404, 'Unknown operation');
   }
 
-  const variablesParam = new URL(req.url).searchParams.get('variables');
+  const variablesParam = new URL(request.url).searchParams.get('variables');
   if (!variablesParam) {
     return reply(400, 'Missing variables');
   }

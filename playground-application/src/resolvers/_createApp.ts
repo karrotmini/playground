@@ -14,7 +14,7 @@ import {
   createRandomColor,
 } from '@karrotmini/playground-core/src/utils';
 import {
-  type IApplicationContext,
+  type IExecutorContext,
 } from '@karrotmini/playground-application/src/runtime';
 
 export async function createApp(
@@ -28,10 +28,12 @@ export async function createApp(
     },
   },
   {
-    env,
-    repos,
-    services,
-  }: IApplicationContext,
+    application: {
+      env,
+      repos,
+      services,
+    },
+  }: IExecutorContext,
 ) {
   const { userProfile } = root;
 

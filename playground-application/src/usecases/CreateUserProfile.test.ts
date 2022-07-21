@@ -7,7 +7,7 @@ import {
   MutationResult,
 } from '../runtime';
 import {
-  setupVitestContext,
+  setupApplication,
   eventMatch,
 } from '../test/helpers';
 
@@ -19,7 +19,7 @@ describe('CreateUserProfile', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const aggregateId = UserProfileID('TEST');
     context.repos.UserProfile.newId

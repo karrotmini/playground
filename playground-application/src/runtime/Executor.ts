@@ -14,7 +14,12 @@ import * as resolvers from '../resolvers';
 
 import { type ExecutionResult } from './ExecutionResult';
 
-export interface IExecutor {
+export interface IExecutorContext {
+  application: IApplicationContext,
+}
+
+export interface IExecutor<Context extends IExecutorContext> {
+  bindContext(context: Context): void;
   execute<
     ResponseData extends Record<string, unknown>,
     RequestVariables extends Record<string, unknown>,
@@ -28,13 +33,13 @@ type ConfigType<T> = T extends (config: infer U) => any ? U : never;
 type TypeDefsConfig = ConfigType<typeof makeExecutableSchema>['typeDefs'];
 type ResolversConfig = ConfigType<typeof makeExecutableSchema>['resolvers'];
 
-export class Executor implements IExecutor {
-  #context: IApplicationContext;
+export class Executor<Context extends IExecutorContext> implements IExecutor<Context> {
+  #context: Context;
   #schema: GraphQLSchema;
   #execute: ExecuteFunction;
 
   constructor(config: {
-    context: IApplicationContext,
+    context: Context,
     plugins?: PluginOrDisabledPlugin[],
     additionalTypeDefs?: TypeDefsConfig,
     additionalResolvers?: ResolversConfig,
@@ -68,7 +73,7 @@ export class Executor implements IExecutor {
     return this.#schema;
   }
 
-  bindContext(context: IApplicationContext) {
+  bindContext(context: Context) {
     this.#context = context;
   }
 

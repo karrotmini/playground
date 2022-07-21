@@ -13,9 +13,9 @@ export const UserProfile: UserProfileResolvers = {
   profileImageUrl(userProfile) {
     return userProfile.profileImageUrl.toString();
   },
-  async apps(userProfile, _args, context) {
+  async apps(userProfile, _args, { application }) {
     const apps = await Promise.all(
-      userProfile.appIds.map(appId => context.loaders.App.load(appId)),
+      userProfile.appIds.map(appId => application.loaders.App.load(appId)),
     );
     return apps.filter(Condition.isTruthy);
   },

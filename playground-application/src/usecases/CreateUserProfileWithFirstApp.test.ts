@@ -21,7 +21,7 @@ import {
   MutationResult,
 } from '../runtime';
 import {
-  setupVitestContext,
+  setupApplication,
   eventMatch,
 } from '../test/helpers';
 
@@ -35,7 +35,7 @@ describe('CreateUserProfileWithFirstApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     context.repos.UserProfile.newId
@@ -162,7 +162,7 @@ describe('CreateUserProfileWithFirstApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     context.repos.UserProfile.newId
@@ -288,7 +288,7 @@ describe('CreateUserProfileWithFirstApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     context.repos.UserProfile.newId

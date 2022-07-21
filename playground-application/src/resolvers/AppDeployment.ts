@@ -15,21 +15,21 @@ export const AppDeployment: AppDeploymentResolvers = {
   delployedAt(deployment) {
     return deployment.deployedAt;
   },
-  async customHost(deployment, _args, ctx) {
-    const customHost = await ctx.loaders.CustomHost.load(deployment.customHostId);
+  async customHost(deployment, _args, { application }) {
+    const customHost = await application.loaders.CustomHost.load(deployment.customHostId);
     if (!customHost) {
       throw new ResourceLoadingError({ typename: 'CustomHost', id: deployment.customHostId });
     }
     return customHost;
   },
-  async bundle(deployment, _args, ctx) {
+  async bundle(deployment, _args, { application }) {
     switch (deployment.bundle.type) {
       case 'template': {
         return new BundleTemplate(deployment.bundle.id);
       }
 
       case 'upload': {
-        const upload = await ctx.loaders.BundleUpload.load(deployment.bundle.id);
+        const upload = await application.loaders.BundleUpload.load(deployment.bundle.id);
         if (!upload) {
           throw new ResourceLoadingError({ typename: 'BundleUpload', id: deployment.bundle.id });
         }

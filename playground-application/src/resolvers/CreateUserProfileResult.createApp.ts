@@ -12,7 +12,7 @@ export const createApp: CreateUserProfileResultResolvers['createApp'] = async (
   context,
 ) => {
   const {
-    mutator,
+    application,
   } = context;
 
   const result = await _createApp(
@@ -21,5 +21,5 @@ export const createApp: CreateUserProfileResultResolvers['createApp'] = async (
     context,
   );
 
-  return mutator.commit(result);
+  return application.mutator.commit(result);
 };

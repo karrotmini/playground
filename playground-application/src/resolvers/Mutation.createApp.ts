@@ -19,15 +19,13 @@ export const createApp: MutationResolvers['createApp'] = async (
   context,
 ) => {
   const {
-    authz,
-    mutator,
-    loaders,
+    application,
   } = context;
   const resource = Resource.fromGlobalId(args.input.userProfileId);
-  authz.guard(resource, 'write');
+  application.authz.guard(resource, 'write');
 
   const userProfileId = UserProfileID(resource.id);
-  const userProfile = await loaders.UserProfile.load(userProfileId);
+  const userProfile = await application.loaders.UserProfile.load(userProfileId);
   if (!userProfile) {
     throw new ResourceLoadingError(resource);
   }
@@ -38,5 +36,5 @@ export const createApp: MutationResolvers['createApp'] = async (
     context,
   );
 
-  return mutator.commit(result);
+  return application.mutator.commit(result);
 };

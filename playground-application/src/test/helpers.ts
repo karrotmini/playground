@@ -28,8 +28,9 @@ export function eventMatch<E extends AnyDomainEvent>(
   return expect.objectContaining(eventPartial);
 }
 
-export function setupVitestContext() {
+export function setupApplication() {
   const eventBus = new MemoryEventBus();
+
   const context = new VitestApplicationContext({
     eventBus,
     vitestUtils: vi,
@@ -37,7 +38,7 @@ export function setupVitestContext() {
   });
 
   const executor = new Executor({
-    context,
+    context: { application: context },
   });
 
   return { eventBus, context, executor };

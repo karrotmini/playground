@@ -8,14 +8,12 @@ import {
 export const createUserProfile: MutationResolvers['createUserProfile'] = async (
   _root,
   _args,
-  {
-    repos,
-    mutator,
-  },
+  { application },
 ) => {
-  const id = await repos.UserProfile.newId();
+  const id = await application.repos.UserProfile.newId();
   const userProfile = UserProfile.create({ id });
-  return mutator.commit({
+
+  return application.mutator.commit({
     userProfile,
   });
 };

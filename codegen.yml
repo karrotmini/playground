@@ -1,6 +1,41 @@
 schema:
   - playground-application/src/resolvers/*.graphql
 
+config:
+  useTypeImports: true
+  avoidOptionals: true
+  skipTypename: true
+  nonOptionalTypename: true
+  maybeValue: T | null
+  enumsAsTypes: true
+  scalars:
+    URL: URL | string
+    DateTime: Date | string | number
+  customResolverFn: |
+    (
+      parent: TParent,
+      args: TArgs,
+      context: TContext,
+    ) => Promise<TResult> | TResult;
+
+  mapperTypeSuffix: Type
+
+  # Core entities should be used across workspaces
+  #
+  # But mappers config is not merged with plugin config
+  # See https://github.com/dotansimha/graphql-code-generator/pull/8125
+  #
+  mappers:
+    App: "@karrotmini/playground-core/src/entities#App"
+    AppDeployment: "@karrotmini/playground-core/src/entities#DeploymentRef"
+    AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
+    Bundle: "@karrotmini/playground-core/src/entities#Bundle"
+    BundleUpload: "@karrotmini/playground-core/src/entities#BundleUpload"
+    BundleTemplate: "@karrotmini/playground-core/src/entities#BundleTemplate"
+    CustomHost: "@karrotmini/playground-core/src/entities#CustomHost"
+    UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
+    HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"
+
 generates:
   playground-application/src/__generated__/schema.graphql:
     plugins:
@@ -16,11 +51,10 @@ generates:
       - typescript
       - typescript-resolvers
     config:
-      contextType: "@karrotmini/playground-application/src/runtime/ApplicationContext#IApplicationContext"
-      scalars:
-        URL: string
+      contextType: "@karrotmini/playground-application/src/runtime/Executor#IExecutorContext"
       mappers:
-        # Core Mappers
+        # Core mappers
+        # FIXME: delete it later
         App: "@karrotmini/playground-core/src/entities#App"
         AppDeployment: "@karrotmini/playground-core/src/entities#DeploymentRef"
         AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
@@ -30,22 +64,10 @@ generates:
         CustomHost: "@karrotmini/playground-core/src/entities#CustomHost"
         UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
         HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"
-        # Application Mappers
+
         CreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateAppResult#CreateAppResultRoot"
         CreateUserProfileResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResult#CreateUserProfileResultRoot"
         CreateUserProfileResultCreateAppResult: "@karrotmini/playground-application/src/resolvers/CreateUserProfileResultCreateAppResult#CreateUserProfileResultCreateAppResultRoot"
-      mapperTypeSuffix: Model
-      useTypeImports: true
-      avoidOptionals: true
-      skipTypename: true
-      nonOptionalTypename: true
-      maybeValue: T | null
-      customResolverFn: |
-        (
-          parent: TParent,
-          args: TArgs,
-          context: TContext,
-        ) => Promise<TResult> | TResult;
 
   playground-application/src/__generated__/:
     documents:
@@ -59,14 +81,6 @@ generates:
           content: '/* eslint-disable */'
       - typescript-operations
       - typed-document-node
-    config:
-      scalars:
-        URL: string
-      useTypeImports: true
-      maybeValue: T | null
-      avoidOptionals: true
-      skipTypename: true
-      nonOptionalTypename: true
 
   playground-management-api/worker/src/__generated__/:
     schema:
@@ -82,14 +96,6 @@ generates:
           content: '/* eslint-disable */'
       - typescript-operations
       - typed-document-node
-    config:
-      scalars:
-        URL: string
-      useTypeImports: true
-      maybeValue: T | null
-      avoidOptionals: true
-      skipTypename: true
-      nonOptionalTypename: true
 
   playground-management-api/worker/src/__generated__/schema.graphql:
     schema:
@@ -109,30 +115,4 @@ generates:
       - typescript
       - typescript-resolvers
     config:
-      contextType: "@karrotmini/playground-application/src/runtime/ApplicationContext#IApplicationContext"
-      scalars:
-        URL: string
-      mappers:
-        # Core Mappers
-        App: "@karrotmini/playground-core/src/entities#App"
-        AppDeployment: "@karrotmini/playground-core/src/entities#DeploymentRef"
-        AppManifest: "@karrotmini/playground-core/src/entities#AppManifest"
-        Bundle: "@karrotmini/playground-core/src/entities#Bundle"
-        BundleUpload: "@karrotmini/playground-core/src/entities#BundleUpload"
-        BundleTemplate: "@karrotmini/playground-core/src/entities#BundleTemplate"
-        CustomHost: "@karrotmini/playground-core/src/entities#CustomHost"
-        UserProfile: "@karrotmini/playground-core/src/entities#UserProfile"
-        HostnameProviderInfo: "@karrotmini/playground-core/src/entities#HostnameProviderInfo"
-        # Application Mappers
-      mapperTypeSuffix: Model
-      useTypeImports: true
-      avoidOptionals: true
-      skipTypename: true
-      nonOptionalTypename: true
-      maybeValue: T | null
-      customResolverFn: |
-        (
-          parent: TParent,
-          args: TArgs,
-          context: TContext,
-        ) => Promise<TResult> | TResult;
+      contextType: "@karrotmini/playground-management-api-worker/src/context#WorkerContext"

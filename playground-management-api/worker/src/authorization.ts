@@ -7,10 +7,10 @@ import {
   type AuthorizationState,
 } from '@karrotmini/playground-application/src';
 
-import { type Context } from './context';
+import { type WorkerContext } from './context';
 import * as Credential from './credential';
 
-export function permit(): Handler<Context> {
+export function permit(): Handler<WorkerContext> {
   return async function(request, context) {
     const authState = await authStateFromHeaders(request.headers, context.bindings.CREDENTIAL_SECRET);
     const authorizer = new PlaygroundResourceAuthorizer(authState);

@@ -27,7 +27,7 @@ import {
   MutationResult,
 } from '../runtime';
 import {
-  setupVitestContext,
+  setupApplication,
   eventMatch,
 } from '../test/helpers';
 
@@ -41,7 +41,7 @@ describe('CreateUserApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     const userProfile = new UserProfile(userProfileId, UserProfileSnapshot({
@@ -167,7 +167,7 @@ describe('CreateUserApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     const userProfile = new UserProfile(userProfileId, UserProfileSnapshot({
@@ -294,7 +294,7 @@ describe('CreateUserApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     const userProfile = new UserProfile(userProfileId, UserProfileSnapshot({
@@ -409,7 +409,7 @@ describe('CreateUserApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     const userProfile = new UserProfile(userProfileId, UserProfileSnapshot({
@@ -464,7 +464,7 @@ describe('CreateUserApp', test => {
       executor,
       context,
       eventBus,
-    } = setupVitestContext();
+    } = setupApplication();
 
     const userProfileId = UserProfileID('TEST');
     const userProfile = new UserProfile(userProfileId, UserProfileSnapshot({

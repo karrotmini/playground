@@ -10,13 +10,13 @@ import {
 } from '@karrotmini/playground-application/src/runtime';
 
 export const Query: QueryResolvers = {
-  node(_root, args, context) {
+  node(_root, args, { application }) {
     const { typename, id } = Resource.fromGlobalId(args.id);
-    const loader = context.loaders[typename as RepositoryName];
+    const loader = application.loaders[typename as RepositoryName];
     return loader.load(id as any);
   },
-  userProfile(_root, args, context) {
+  userProfile(_root, args, { application }) {
     const { id } = Resource.fromGlobalId(args.id);
-    return context.loaders.UserProfile.load(UserProfileID(id));
+    return application.loaders.UserProfile.load(UserProfileID(id));
   },
 };
