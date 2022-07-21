@@ -1,2 +1,2 @@
-pub mod result;
+mod result;
 pub mod package;
