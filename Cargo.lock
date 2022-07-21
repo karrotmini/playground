@@ -301,6 +301,10 @@ dependencies = [
 [[package]]
 name = "karrotmini-miniapp-package"
 version = "0.0.1"
+dependencies = [
+ "karrotmini-miniapp-manifest",
+ "zip",
+]
 
 [[package]]
 name = "lazy_static"
@@ -483,6 +487,8 @@ version = "0.0.1"
 dependencies = [
  "cfg-if 0.1.10",
  "console_error_panic_hook",
+ "karrotmini-miniapp-manifest",
+ "karrotmini-miniapp-package",
  "serde_json",
  "worker",
 ]

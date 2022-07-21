@@ -3,3 +3,8 @@ name = "karrotmini-miniapp-package"
 version = "0.0.1"
 authors = ["Hyeseong Kim <tim@daangn.com>"]
 edition = "2021"
+
+[dependencies]
+zip = { version = "0.6.2", default-features = false, features = ["deflate"] }
+
+karrotmini-miniapp-manifest = { path = "../karrotmini-miniapp-manifest" }

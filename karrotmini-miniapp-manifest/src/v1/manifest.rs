@@ -3,7 +3,9 @@ use serde::{Serialize, Deserialize};
 
 use crate::v1::error::ManifestError;
 
-#[derive(Debug, Serialize, Deserialize)]
+pub const MANIFEST_FILENAME: &'static str = "mini.json";
+
+#[derive(Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Manifest {
     pub app_id: String,
     pub name: String,
@@ -14,6 +16,23 @@ impl FromStr for Manifest {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let manifest: Self = serde_json::from_str(s)?;
+        Ok(manifest)
+    }
+}
+
+impl TryFrom<String> for Manifest {
+    type Error = ManifestError;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        Manifest::from_str(value.as_str())
+    }
+}
+
+impl TryFrom<Vec<u8>> for Manifest {
+    type Error = ManifestError;
+
+    fn try_from(value: Vec<u8>) -> Result<Self, Self::Error> {
+        let manifest = serde_json::from_slice(value.as_slice())?;
         Ok(manifest)
     }
 }
@@ -42,4 +61,3 @@ fn v1_manifest_missing_app_id() {
     let manifest = Manifest::from_str(&json);
     assert!(manifest.is_err());
 }
-
