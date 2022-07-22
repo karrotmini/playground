@@ -26,13 +26,12 @@ export class CustomHostRepository
   }
 
   newId(): Promise<CustomHostID> {
-    return Promise.resolve(
-      CustomHostID(Util.generateShortId(13)),
-    );
+    const id = this.#namespace.newUniqueId();
+    return Promise.resolve(CustomHostID(id.toString()));
   }
 
   convertId(id: CustomHostID): DurableObjectId {
-    return this.#namespace.idFromName(id);
+    return this.#namespace.idFromString(id);
   }
 
   spawn(id: CustomHostID, snapshot?: CustomHostSnapshot): CustomHost {

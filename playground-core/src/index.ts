@@ -1,6 +1,7 @@
 export * from './entities';
 export * from './errors';
-export * from './utils';
+
+export * as Utils from './utils';
 
 export {
   EntityID,

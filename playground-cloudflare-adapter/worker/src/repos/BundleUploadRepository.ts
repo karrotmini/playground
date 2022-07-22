@@ -10,7 +10,6 @@ import {
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';
-import * as Util from '../base/Util';
 
 export class BundleUploadRepository
   extends AggregatorProtocolClient<BundleUpload>
@@ -26,13 +25,12 @@ export class BundleUploadRepository
   }
 
   newId(): Promise<BundleUploadID> {
-    return Promise.resolve(
-      BundleUploadID(Util.generateShortId(13)),
-    );
+    const id = this.#namespace.newUniqueId();
+    return Promise.resolve(BundleUploadID(id.toString()));
   }
 
   convertId(id: BundleUploadID): DurableObjectId {
-    return this.#namespace.idFromName(id);
+    return this.#namespace.idFromString(id);
   }
 
   spawn(id: BundleUploadID, snapshot?: BundleUploadSnapshot): BundleUpload {

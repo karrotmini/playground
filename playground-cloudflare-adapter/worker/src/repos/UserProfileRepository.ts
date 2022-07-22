@@ -2,6 +2,7 @@ import {
   UserProfile,
   UserProfileID,
   type UserProfileSnapshot,
+  Utils,
 } from '@karrotmini/playground-core/src';
 import {
   type IUserProfileRepository,
@@ -10,25 +11,25 @@ import {
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';
-import * as Util from '../base/Util';
 
 export class UserProfileRepository
   extends AggregatorProtocolClient<UserProfile>
   implements IUserProfileRepository
 {
   #namespace: DurableObjectNamespace;
+  #seq: Generator<string>;
 
   constructor(config: {
     namespace: DurableObjectNamespace,
   }) {
     super(config);
     this.#namespace = config.namespace;
+    this.#seq = Utils.shortId(Math.random, 13);
   }
 
   newId(): Promise<UserProfileID> {
-    return Promise.resolve(
-      UserProfileID(Util.generateShortId(13)),
-    );
+    const id = this.#seq.next().value;
+    return Promise.resolve(UserProfileID(id));
   }
 
   convertId(id: UserProfileID): DurableObjectId {

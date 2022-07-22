@@ -2,6 +2,7 @@ import {
   App,
   AppID,
   type AppSnapshot,
+  Utils,
 } from '@karrotmini/playground-core/src';
 import {
   type IAppRepository,
@@ -10,25 +11,25 @@ import {
 import {
   AggregatorProtocolClient,
 } from '../base/DurableObjectAggregatorProtocol';
-import * as Util from '../base/Util';
 
 export class AppRepository
   extends AggregatorProtocolClient<App>
   implements IAppRepository
 {
   #namespace: DurableObjectNamespace;
+  #seq: Generator<string>;
 
   constructor(config: {
     namespace: DurableObjectNamespace,
   }) {
     super(config);
     this.#namespace = config.namespace;
+    this.#seq = Utils.shortId(Math.random, 13);
   }
 
   newId(): Promise<AppID> {
-    return Promise.resolve(
-      AppID(Util.generateShortId(13)),
-    );
+    const id = this.#seq.next().value;
+    return Promise.resolve(AppID(id));
   }
 
   convertId(id: AppID): DurableObjectId {

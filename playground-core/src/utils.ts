@@ -1,15 +1,20 @@
-export function generateShortId(n = 13) {
+// generate random number in 0..1
+type RNG = () => number;
+
+export function *shortId(RNG: RNG, len = 13): Generator<string, void> {
   const CHARS = '0123456789abcdefghijklmnopqrstuvwxyz';
   const N = CHARS.length;
 
-  let id = '';
-  for (let i = 0; i < n; i++) {
-    id += CHARS.charAt(Math.random() * N | 0);
+  while (true) {
+    let id = '';
+    for (let i = 0; i < len; i++) {
+      id += CHARS.charAt(RNG() * N | 0);
+    }
+    yield id;
   }
-  return id;
 }
 
-export function createRandomColor(RNG: () => number): string {
+export function createRandomColor(RNG: RNG): string {
   const letters = '0123456789abcdef';
   let color = '#';
   for (let i = 0; i < 6; i++) {
