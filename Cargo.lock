@@ -489,6 +489,7 @@ dependencies = [
  "console_error_panic_hook",
  "karrotmini-miniapp-manifest",
  "karrotmini-miniapp-package",
+ "serde",
  "serde_json",
  "worker",
 ]
