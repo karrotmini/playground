@@ -20,7 +20,6 @@ export type ApplicationEnvironment = Readonly<{
     HOSTNAME_PATTERN: string,
   }>,
   secrets: Readonly<{
-    CREDENTIAL_SECRET: string,
   }>,
 }>;
 
