@@ -45,3 +45,7 @@ new_classes = [
   "CustomHostDurableObject",
   "UserProfileDurableObject",
 ]
+
+[miniflare]
+kv_persist = true
+durable_objects_persist = true
