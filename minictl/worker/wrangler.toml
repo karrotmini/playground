@@ -1,0 +1,19 @@
+name = "minictl"
+workers_dev = true
+compatibility_date = "2022-07-21"
+compatibility_flags = [
+  "url_standard",
+]
+account_id = "aad5c82543cd1f267b89737d0f56405e"
+
+[build]
+watch_dir = "src"
+command = "mkdir -p dist && cp src/worker.mjs dist/worker.mjs"
+
+[build.upload]
+format = "modules"
+dir = "./dist"
+main = "./worker.mjs"
+
+# [secrets]
+# MANAGEMENT_KEY

@@ -4,7 +4,7 @@
   "packageManager": "yarn@3.2.1",
   "workspaces": [
     "cloudflare-hostname-provider",
-    "minictl",
+    "minictl/*",
     "playground-core",
     "playground-application",
     "playground-cloudflare-adapter/*",
