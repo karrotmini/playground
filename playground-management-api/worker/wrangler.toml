@@ -8,18 +8,12 @@ account_id = "aad5c82543cd1f267b89737d0f56405e"
 
 # main = "./dist/worker.mjs"
 
-[build]
-watch_dir = "src"
-command = "yarn esbuild src/worker.ts --bundle --minify --outfile=dist/worker.mjs --format=esm"
-
-# Deprecated in Wrangler v2, But still required for miniflare
-[build.upload]
-format = "modules"
-dir = "./dist"
-main = "./worker.mjs"
-
-[[vars]]
+[vars]
 HOSTNAME_PATTERN = "*.karrotmini.app"
+
+[[services]]
+binding = "minictl"
+service = "minictl"
 
 [[services]]
 binding = "playground"
@@ -30,5 +24,16 @@ binding = "bundleStorage"
 service = "karrotmini-playground-bundle-storage"
 
 [miniflare.mounts]
+minictl = "../../minictl/worker"
 karrotmini-playground-adapter = "../../playground-cloudflare-adapter/worker"
 karrotmini-playground-bundle-storage = "../../playground-bundle-storage"
+
+[build]
+watch_dir = "src"
+command = "yarn esbuild src/worker.ts --bundle --minify --outfile=dist/worker.mjs --format=esm"
+
+# Deprecated in Wrangler v2, But still required for miniflare
+[build.upload]
+format = "modules"
+dir = "./dist"
+main = "./worker.mjs"

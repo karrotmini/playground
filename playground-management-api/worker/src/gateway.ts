@@ -1,14 +1,25 @@
 import { type Handler } from 'worktop';
 import { reply } from 'worktop/response';
 
-import { type Context } from './context';
+import { type WorkerContext } from './context';
+import { MiniControl } from './adapters/MiniControl';
 
-export function trust(): Handler<Context> {
+export function trust(): Handler<WorkerContext> {
   return async function(request, context) {
-    const authPattern = /X-Playground-Management-Key (?<key>\w+)/i;
-    const authHeader = request.headers.get('Authorization');
-    const authorization = authHeader?.match(authPattern)?.groups?.key;
-    if (!authorization || authorization !== context.bindings.MANAGEMENT_KEY) {
+    const control = new MiniControl({
+      service: context.bindings.minictl,
+    });
+
+    const pattern = /X-Playground-Management-Key (?<key>\w+)/i;
+    const header = request.headers.get('Authorization');
+    const mangementKey = header?.match(pattern)?.groups?.key;
+
+    if (!mangementKey) {
+      return reply(401, 'operation not permitted');
+    }
+
+    const valid = await control.validateManagementKey(mangementKey);
+    if (!valid) {
       return reply(401, 'operation not permitted');
     }
   }

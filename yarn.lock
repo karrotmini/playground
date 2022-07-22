@@ -5102,9 +5102,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minictl@workspace:minictl":
+"minictl-worker@workspace:minictl/worker":
   version: 0.0.0-use.local
-  resolution: "minictl@workspace:minictl"
+  resolution: "minictl-worker@workspace:minictl/worker"
+  dependencies:
+    wrangler: ^2.0.22
+  languageName: unknown
+  linkType: soft
+
+"minictl@workspace:minictl/cli":
+  version: 0.0.0-use.local
+  resolution: "minictl@workspace:minictl/cli"
   languageName: unknown
   linkType: soft
 

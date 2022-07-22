@@ -10,11 +10,11 @@ declare interface WranglerEnv {
   CLOUDFLARE_CUSTOMHOST_ZONE_ID: string;
 
   // secrets
-  MANAGEMENT_KEY: string;
   CREDENTIAL_SECRET: string;
   CLOUDFLARE_CUSTOMHOST_ZONE_MANAGEMENT_KEY: string;
 
   // service bindings
+  minictl: ServiceBinding;
   playground: ServiceBinding;
   bundleStorage: ServiceBinding;
 
