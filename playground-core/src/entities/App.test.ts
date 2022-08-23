@@ -1,32 +1,31 @@
 import { describe, expect } from 'vitest';
 import {
   App,
-  AppManifest,
-  BundleTemplate,
   AppID,
-  UserProfileID,
+  BundleTemplate,
+  BundleTemplateID,
   CustomHostID,
+  UserProfileID,
+  type DeploymentRef,
 } from '../entities';
 
 describe('App', test => {
   test('should have valid state after AppCreated', () => {
     const id = AppID('TEST');
+    const templateId = BundleTemplateID('TEST');
     const ownerId = UserProfileID('TEST');
     const customHostId = CustomHostID('TEST');
-    const manifest = new AppManifest({
-      appId: '123123',
-      name: 'TEST',
-      icon: 'file:///icon',
-    });
 
     const app = new App(id);
     app.$publishEvent({
       aggregateId: id,
       aggregateName: 'App',
-      eventName: 'AppCreated',
+      eventName: 'AppCreatedFromTemplate',
       eventDate: new Date('2022-06-10').getTime(),
       eventPayload: {
-        manifest: manifest.toJSON(),
+        name: 'test',
+        tenantId: 'test.karrotmini.app',
+        templateId,
         ownerId,
         customHostId,
       },
@@ -41,39 +40,28 @@ describe('App', test => {
     const ownerId = UserProfileID('TEST');
     const customHostId = CustomHostID('TEST');
     const templateId = BundleTemplate.centeringDiv().id;
-    const manifest = new AppManifest({
-      appId: '123123',
-      name: 'TEST',
-      icon: 'file:///icon',
-    });
 
     const { app, deployment } = App.bootstrapFromTemplate({
+      name: 'test',
+      tenantId: 'test.karrotmini.app',
       id,
       ownerId,
       customHostId,
-      manifest,
       templateId,
     });
 
-    const expectedDeployment = {
+    const expectedDeployment: DeploymentRef = {
       name: 'live',
       bundle: {
-        type: 'template',
-        id: templateId,
+        kind: 'Template',
+        value: {
+          id: templateId,
+        },
       },
-      customHostId,
-      deployedAt: expect.any(Number),
+      custom_host_id: customHostId,
+      deployed_at: expect.any(Number),
     };
 
     expect(deployment).toEqual(expectedDeployment);
-    expect(app.toJSON()).toEqual({
-      id,
-      manifest: manifest.toJSON(),
-      ownerId,
-      customHostId,
-      deployments: {
-        [expectedDeployment.name]: expectedDeployment,
-      },
-    });
   });
 });

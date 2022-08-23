@@ -32,20 +32,19 @@ export type Payload = SigningInfo & (
 
 export type SigningInfo = {
   via: string,
-  for: string,
   at: number,
 };
 
 type UserProfileCredentialPayload = {
   typename: 'UserProfile',
   id: UserProfileID,
-  grant: Array<'read' | 'write' | 'owner'>,
+  grant: Array<'READ' | 'WRITE' | 'ADMIN'>,
 };
 
 type AppCredentialPayload = {
   typename: 'App',
   id: AppID,
-  grant: Array<'read' | 'write' | 'owner'>,
+  grant: Array<'READ' | 'WRITE' | 'ADMIN'>,
 };
 
 async function importSingingKey(props: {

@@ -1,21 +1,16 @@
 import {
-  AppIcon,
-} from '../entities';
-import {
   AppNameRequiredError,
   ReservedAppIdError,
 } from '../errors';
 
 export type AppManifestPayload = {
-  appId: string,
+  app_id: string,
   name: string,
-  icon: string,
 };
 
 export class AppManifest {
   #appId: string;
   #name: string;
-  #icon: AppIcon;
 
   get name() {
     return this.#name;
@@ -25,27 +20,21 @@ export class AppManifest {
     return this.#appId;
   }
 
-  get icon() {
-    return this.#icon;
-  }
-
   constructor(payload: AppManifestPayload) {
     AppManifest.validatePayload(payload);
-    this.#appId = payload.appId;
+    this.#appId = payload.app_id;
     this.#name = payload.name;
-    this.#icon = new AppIcon(payload.icon);
   }
 
   toJSON(): AppManifestPayload {
     return {
-      appId: this.appId,
+      app_id: this.appId,
       name: this.name,
-      icon: this.icon.toJSON(),
     };
   }
 
   static validatePayload(payload: AppManifestPayload) {
-    AppManifest.validateAppId(payload.appId);
+    AppManifest.validateAppId(payload.app_id);
     AppManifest.validateAppName(payload.name);
   }
 

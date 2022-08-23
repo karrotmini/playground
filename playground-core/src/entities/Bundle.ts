@@ -5,16 +5,7 @@ import {
   type BundleUploadID,
 } from '../entities';
 
+export type { BundleRef } from './_snapshots';
+
 export type Bundle = BundleTemplate | BundleUpload;
 export type BundleID = Bundle['id'];
-
-export type BundleRef = (
-  | {
-    type: 'template',
-    id: BundleTemplateID,
-  }
-  | {
-    type: 'upload',
-    id: BundleUploadID,
-  }
-);

@@ -3,8 +3,6 @@ use serde::{Serialize, Deserialize};
 
 use crate::v1::error::ManifestError;
 
-pub const MANIFEST_FILENAME: &'static str = "mini.json";
-
 #[derive(Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Manifest {
     pub app_id: String,
@@ -51,10 +49,22 @@ fn v1_manifest_full() {
 }
 
 #[test]
-fn v1_manifest_missing_app_id() {
+fn v1_invalid_manifest_missing_app_id() {
     let json = r#"
       {
         "name": "My First App"
+      }
+    "#;
+
+    let manifest = Manifest::from_str(&json);
+    assert!(manifest.is_err());
+}
+
+#[test]
+fn v1_invalid_manifest_missing_name() {
+    let json = r#"
+      {
+        "app_id": "test"
       }
     "#;
 

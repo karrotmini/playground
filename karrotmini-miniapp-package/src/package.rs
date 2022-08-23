@@ -1,12 +1,14 @@
 use std::io::{Cursor, Read};
 
-use karrotmini_miniapp_manifest::v1::manifest::{self, Manifest};
+use karrotmini_miniapp_manifest::v1::manifest::Manifest;
 use zip::ZipArchive;
 
 use crate::result::{PackageResult, PackageError};
 
 pub type Error = PackageError;
 pub type Result<T> = PackageResult<T>;
+
+pub const MANIFEST_FILENAME: &'static str = "mini.json";
 
 #[derive(Debug)]
 pub struct Package {
@@ -20,7 +22,7 @@ impl Package {
         let mut archive = ZipArchive::new(Cursor::new(bytes))?;
         let mut buf: Vec<u8> = Vec::new();
 
-        let _ = archive.by_name(manifest::MANIFEST_FILENAME).map(|mut file| {
+        let _ = archive.by_name(MANIFEST_FILENAME).map(|mut file| {
             file.read_to_end(&mut buf).unwrap();
         });
 
@@ -103,6 +105,6 @@ mod test {
 
         let empty_bytes: Vec<u8> = Vec::new();
         let package = Package::from_bytes(empty_bytes);
-        assert!(package.is_err())
+        assert!(package.is_err());
     }
 }

@@ -1,0 +1,50 @@
+type timestamp = int
+
+type app_manifest = {
+  app_id: string;
+  name: string;
+}
+
+type app_snapshot_v1 = {
+  name: string;
+  created_at: timestamp;
+  tenant_id: string;
+  owner_id: string nullable;
+  custom_host_id: string;
+  bundles: bundle_ref list;
+  deployments: (string * deployment_ref) list;
+}
+
+type bundle_template_ref = {
+  id: string;
+}
+
+type bundle_upload_ref = {
+  id: string;
+}
+
+type bundle_ref = [
+  | Template of bundle_template_ref
+  | Upload of bundle_upload_ref
+]
+
+type deployment_ref = {
+  name: string;
+  bundle: bundle_ref;
+  custom_host_id: string;
+  deployed_at: timestamp;
+}
+
+type bundle_upload_snapshot_v1 = {
+  app_id: string;
+  tag: string;
+  uploader_id: string;
+  created_at: timestamp;
+  manifest: app_manifest nullable;
+}
+
+type user_profile_snapshot_v1 = {
+  app_ids: string list;
+  name: string nullable;
+  profile_image_url: string nullable;
+}

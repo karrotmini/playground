@@ -37,6 +37,10 @@ export class Mutator implements IMutator {
     this.#loaders = config.loaders;
   }
 
+  /**
+   * FIXME
+   * Should implement global proper Saga orchestrator
+   */
   async commit<AggregateMap extends { [key: string]: unknown }>(
     aggregateMap: AggregateMap,
   ): Promise<AggregateMap> {
@@ -60,7 +64,7 @@ export class Mutator implements IMutator {
       }
     } finally {
       if (this.#eventBus) {
-        await this.#eventBus.push(
+        this.#eventBus.push(
           ...shouldPublish.sort((a, b) => a.eventDate - b.eventDate),
         );
       }

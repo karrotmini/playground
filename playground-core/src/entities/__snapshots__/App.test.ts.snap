@@ -2,14 +2,19 @@
 
 exports[`App > should have valid state after AppCreated > $snapshot version 1 1`] = `
 {
-  "createdAt": 1654819200000,
-  "customHostId": "TEST",
-  "deployments": {},
-  "manifest": {
-    "appId": "123123",
-    "icon": "file:///icon",
-    "name": "TEST",
-  },
-  "ownerId": "TEST",
+  "bundles": [
+    {
+      "kind": "Template",
+      "value": {
+        "id": "TEST",
+      },
+    },
+  ],
+  "created_at": 1654819200000,
+  "custom_host_id": "TEST",
+  "deployments": [],
+  "name": "test",
+  "owner_id": "TEST",
+  "tenant_id": "test.karrotmini.app",
 }
 `;

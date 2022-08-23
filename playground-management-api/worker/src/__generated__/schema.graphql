@@ -81,23 +81,21 @@ type HostnameProviderInfo {
 }
 
 type IssueAppCredentialInput {
-  appId: ID
+  appId: ID!
   permission: AppPermision!
 }
 
 type IssueAppCredentialResult {
-  app: App!
   credential: String!
 }
 
 type IssueUserProfileCredentialInput {
   permission: UserProfilePermision!
-  userProfileId: ID
+  userProfileId: ID!
 }
 
 type IssueUserProfileCredentialResult {
   credential: String!
-  userProfile: UserProfile!
 }
 
 type Mutation {

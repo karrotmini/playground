@@ -7,49 +7,41 @@ import {
   type MustSerializable,
 } from '../framework';
 import {
-  type AppCreatedEvent,
+  type AppCreatedFromTemplateEvent,
   type AppDeploymentCreatedEvent,
   type AppDeploymentDeletedEvent,
-  type AppManifestUpdatedEvent,
 } from '../events';
 import {
-  AppManifest,
-  type AppManifestPayload,
   type BundleRef,
   type BundleTemplateID,
-  type CustomHostID,
   type DeploymentRef,
-  type UserProfileID,
+  CustomHostID,
+  UserProfileID,
 } from '../entities';
 import {
   ProtectedDeploymentError,
 } from '../errors';
 
+import {
+  writeAppSnapshotV1,
+  type AppSnapshotV1,
+} from './_snapshots';
+
 export type AppID = GUID<'App'>;
 export const AppID = registerGUID<AppID>();
 
 export type AppEvent = (
-  | AppCreatedEvent
+  | AppCreatedFromTemplateEvent
   | AppDeploymentCreatedEvent
   | AppDeploymentDeletedEvent
-  | AppManifestUpdatedEvent
 );
 
-export type AppSnapshot = Snapshot<1, {
-  createdAt: number,
-  ownerId: UserProfileID | null,
-  customHostId: CustomHostID,
-  manifest: AppManifestPayload,
-  deployments: Record<DeploymentRef['name'], DeploymentRef>,
-}>;
+export type AppSnapshot = Snapshot<1, AppSnapshotV1>;
 export const AppSnapshot = registerSnapshot<AppSnapshot>();
 
 export type AppDTO = MustSerializable<{
   id: AppID,
-  manifest: AppManifestPayload,
-  ownerId: UserProfileID | null,
-  customHostId: CustomHostID,
-  deployments: Record<DeploymentRef['name'], DeploymentRef>,
+  // Note: 나중에 필요할 때 추가해...
 }>;
 
 export class App
@@ -60,83 +52,76 @@ export class App
   readonly typename = 'App' as const;
   readonly snapshotVersion = 1 as const;
 
-  get manifest(): AppManifest {
-    return new AppManifest(this.$snapshot.manifest);
+  get ownerId(): UserProfileID | null {
+    return this.$snapshot.owner_id
+      ? UserProfileID(this.$snapshot.owner_id)
+      : null;
   }
 
-  get ownerId() {
-    return this.$snapshot.ownerId;
-  }
-
-  get customHostId() {
-    return this.$snapshot.customHostId;
-  }
-
-  get deployments() {
-    return structuredClone(this.$snapshot.deployments);
-  }
-
-  get liveDeployment() {
-    return this.deployments[App.DEFAULT_DEPLOYMENT_NAME];
+  get customHostId(): CustomHostID {
+    return CustomHostID(this.$snapshot.custom_host_id);
   }
 
   toJSON(): Readonly<AppDTO> {
     return Object.freeze({
       id: this.id,
-      manifest: this.manifest.toJSON(),
-      ownerId: this.ownerId,
-      customHostId: this.customHostId,
-      deployments: this.deployments,
     });
   }
 
   validate(state: Partial<AppSnapshot>): state is AppSnapshot {
-    if (!state.manifest) {
+    try {
+      writeAppSnapshotV1(state as AppSnapshot);
+      return true;
+    } catch {
       return false;
     }
-
-    new AppManifest(state.manifest);
-
-    if (!state.deployments) {
-      return false;
-    }
-
-    return true;
   }
 
   reduce(current: AppSnapshot, event: AppEvent): void {
     switch (event.eventName) {
-      case 'AppCreated': {
-        current.createdAt = event.eventDate;
-        current.manifest = event.eventPayload.manifest;
-        current.ownerId = event.eventPayload.ownerId;
-        current.customHostId = event.eventPayload.customHostId;
-        current.deployments = {};
-        break;
-      }
-      case 'AppDeploymentCreated': {
-        current.deployments[event.eventPayload.deployment.name] = {
-          name: event.eventPayload.deployment.name,
-          deployedAt: event.eventDate,
-          bundle: event.eventPayload.deployment.bundle,
-          customHostId: event.eventPayload.deployment.customHostId,
+      case 'AppCreatedFromTemplate': {
+        current.created_at = event.eventDate;
+        current.name = event.eventPayload.name;
+        current.tenant_id = event.eventPayload.tenantId;
+        current.owner_id = event.eventPayload.ownerId;
+        current.custom_host_id = event.eventPayload.customHostId;
+        current.bundles = [];
+        current.deployments = [];
+
+        const bundle: BundleRef = {
+          kind: 'Template',
+          value: {
+            id: event.eventPayload.templateId,
+          },
         };
-        break;
-      };
-      case 'AppDeploymentDeleted': {
-        delete current.deployments[event.eventPayload.deploymentName];
-        break;
-      };
-      case 'AppManifestUpdated': {
-        current.manifest = event.eventPayload.manifest;
+        current.bundles.push(bundle);
         break;
       }
+
+      case 'AppDeploymentCreated': {
+        const newDeployment = event.eventPayload.deployment;
+
+        const deployments = new Map(current.deployments);
+        deployments.set(newDeployment.name, newDeployment);
+
+        current.deployments = [...deployments.entries()];
+        break;
+      };
+
+      case 'AppDeploymentDeleted': {
+        const deployments = new Map(current.deployments);
+        deployments.delete(event.eventPayload.deploymentName);
+
+        current.deployments = [...deployments.entries()];
+        break;
+      };
     }
   }
 
   static bootstrapFromTemplate(props: {
     id: AppID,
-    manifest: AppManifest,
+    name: string,
+    tenantId: string,
     ownerId: UserProfileID | null,
     customHostId: CustomHostID,
     templateId: BundleTemplateID,
@@ -150,39 +135,31 @@ export class App
     app.$publishEvent({
       aggregateName: app.typename,
       aggregateId: id,
-      eventName: 'AppCreated',
+      eventName: 'AppCreatedFromTemplate',
       eventDate: Date.now(),
       eventPayload: {
-        manifest: props.manifest.toJSON(),
+        name: props.name,
+        tenantId: props.tenantId,
+        templateId: props.templateId,
         ownerId: props.ownerId,
         customHostId: props.customHostId,
       },
     });
 
+    const bundle: BundleRef = {
+      kind: 'Template',
+      value: {
+        id: props.templateId,
+      },
+    };
+
     const deployment = app.createDeployment({
       name: App.DEFAULT_DEPLOYMENT_NAME,
-      bundle: {
-        type: 'template',
-        id: props.templateId
-      },
+      bundle,
       customHostId: props.customHostId,
     });
 
     return { app, deployment };
-  }
-
-  updateManifest(props: {
-    manifest: AppManifest,
-  }): void {
-    this.$publishEvent({
-      aggregateName: this.typename,
-      aggregateId: this.id,
-      eventName: 'AppManifestUpdated',
-      eventDate: Date.now(),
-      eventPayload: {
-        manifest: props.manifest.toJSON(),
-      },
-    });
   }
 
   createDeployment(props: {
@@ -195,8 +172,8 @@ export class App
     const deploymentRef: DeploymentRef = {
       name: props.name,
       bundle: props.bundle,
-      customHostId: props.customHostId,
-      deployedAt: eventDate,
+      custom_host_id: props.customHostId,
+      deployed_at: eventDate,
     };
 
     this.$publishEvent({

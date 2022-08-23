@@ -1,10 +1,10 @@
 /* eslint-disable */
 import type { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import type { App as AppModel, DeploymentRef as DeploymentRefModel, AppManifest as AppManifestModel, Bundle as BundleModel, BundleUpload as BundleUploadModel, BundleTemplate as BundleTemplateModel, CustomHost as CustomHostModel, UserProfile as UserProfileModel, HostnameProviderInfo as HostnameProviderInfoModel } from '@karrotmini/playground-core/src/entities';
-import type { CreateAppResultRoot as CreateAppResultRootModel } from '@karrotmini/playground-application/src/resolvers/CreateAppResult';
-import type { CreateUserProfileResultRoot as CreateUserProfileResultRootModel } from '@karrotmini/playground-application/src/resolvers/CreateUserProfileResult';
-import type { CreateUserProfileResultCreateAppResultRoot as CreateUserProfileResultCreateAppResultRootModel } from '@karrotmini/playground-application/src/resolvers/CreateUserProfileResultCreateAppResult';
-import type { IApplicationContext } from '@karrotmini/playground-application/src/runtime/ApplicationContext';
+import type { App as AppType, DeploymentRef as DeploymentRefType, AppManifest as AppManifestType, Bundle as BundleType, BundleUpload as BundleUploadType, BundleTemplate as BundleTemplateType, CustomHost as CustomHostType, UserProfile as UserProfileType, HostnameProviderInfo as HostnameProviderInfoType } from '@karrotmini/playground-core/src/entities';
+import type { CreateAppResultRoot as CreateAppResultRootType } from '@karrotmini/playground-application/src/resolvers/CreateAppResult';
+import type { CreateUserProfileResultRoot as CreateUserProfileResultRootType } from '@karrotmini/playground-application/src/resolvers/CreateUserProfileResult';
+import type { CreateUserProfileResultCreateAppResultRoot as CreateUserProfileResultCreateAppResultRootType } from '@karrotmini/playground-application/src/resolvers/CreateUserProfileResultCreateAppResult';
+import type { IExecutorContext } from '@karrotmini/playground-application/src/runtime/Executor';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -24,8 +24,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: any;
-  URL: string;
+  DateTime: Date | string | number;
+  URL: URL | string;
 };
 
 export type App = Node & {
@@ -210,59 +210,59 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  App: ResolverTypeWrapper<AppModel>;
-  AppDeployment: ResolverTypeWrapper<DeploymentRefModel>;
-  AppManifest: ResolverTypeWrapper<AppManifestModel>;
+  App: ResolverTypeWrapper<AppType>;
+  AppDeployment: ResolverTypeWrapper<DeploymentRefType>;
+  AppManifest: ResolverTypeWrapper<AppManifestType>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Bundle: ResolverTypeWrapper<BundleModel>;
-  BundleTemplate: ResolverTypeWrapper<BundleTemplateModel>;
-  BundleUpload: ResolverTypeWrapper<BundleUploadModel>;
+  Bundle: ResolverTypeWrapper<BundleType>;
+  BundleTemplate: ResolverTypeWrapper<BundleTemplateType>;
+  BundleUpload: ResolverTypeWrapper<BundleUploadType>;
   CreateAppInput: CreateAppInput;
-  CreateAppResult: ResolverTypeWrapper<CreateAppResultRootModel>;
+  CreateAppResult: ResolverTypeWrapper<CreateAppResultRootType>;
   CreateUserProfileInput: CreateUserProfileInput;
-  CreateUserProfileResult: ResolverTypeWrapper<CreateUserProfileResultRootModel>;
+  CreateUserProfileResult: ResolverTypeWrapper<CreateUserProfileResultRootType>;
   CreateUserProfileResultCreateAppInput: CreateUserProfileResultCreateAppInput;
-  CreateUserProfileResultCreateAppResult: ResolverTypeWrapper<CreateUserProfileResultCreateAppResultRootModel>;
-  CustomHost: ResolverTypeWrapper<CustomHostModel>;
+  CreateUserProfileResultCreateAppResult: ResolverTypeWrapper<CreateUserProfileResultCreateAppResultRootType>;
+  CustomHost: ResolverTypeWrapper<CustomHostType>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
-  HostnameProviderInfo: ResolverTypeWrapper<HostnameProviderInfoModel>;
+  HostnameProviderInfo: ResolverTypeWrapper<HostnameProviderInfoType>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolversTypes['App'] | ResolversTypes['BundleTemplate'] | ResolversTypes['BundleUpload'] | ResolversTypes['CustomHost'] | ResolversTypes['UserProfile'];
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   URL: ResolverTypeWrapper<Scalars['URL']>;
-  UserProfile: ResolverTypeWrapper<UserProfileModel>;
+  UserProfile: ResolverTypeWrapper<UserProfileType>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  App: AppModel;
-  AppDeployment: DeploymentRefModel;
-  AppManifest: AppManifestModel;
+  App: AppType;
+  AppDeployment: DeploymentRefType;
+  AppManifest: AppManifestType;
   Boolean: Scalars['Boolean'];
-  Bundle: BundleModel;
-  BundleTemplate: BundleTemplateModel;
-  BundleUpload: BundleUploadModel;
+  Bundle: BundleType;
+  BundleTemplate: BundleTemplateType;
+  BundleUpload: BundleUploadType;
   CreateAppInput: CreateAppInput;
-  CreateAppResult: CreateAppResultRootModel;
+  CreateAppResult: CreateAppResultRootType;
   CreateUserProfileInput: CreateUserProfileInput;
-  CreateUserProfileResult: CreateUserProfileResultRootModel;
+  CreateUserProfileResult: CreateUserProfileResultRootType;
   CreateUserProfileResultCreateAppInput: CreateUserProfileResultCreateAppInput;
-  CreateUserProfileResultCreateAppResult: CreateUserProfileResultCreateAppResultRootModel;
-  CustomHost: CustomHostModel;
+  CreateUserProfileResultCreateAppResult: CreateUserProfileResultCreateAppResultRootType;
+  CustomHost: CustomHostType;
   DateTime: Scalars['DateTime'];
-  HostnameProviderInfo: HostnameProviderInfoModel;
+  HostnameProviderInfo: HostnameProviderInfoType;
   ID: Scalars['ID'];
   Mutation: {};
   Node: ResolversParentTypes['App'] | ResolversParentTypes['BundleTemplate'] | ResolversParentTypes['BundleUpload'] | ResolversParentTypes['CustomHost'] | ResolversParentTypes['UserProfile'];
   Query: {};
   String: Scalars['String'];
   URL: Scalars['URL'];
-  UserProfile: UserProfileModel;
+  UserProfile: UserProfileType;
 };
 
-export type AppResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
+export type AppResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
   canonicalHost: Resolver<ResolversTypes['CustomHost'], ParentType, ContextType>;
   deployments: Resolver<Array<ResolversTypes['AppDeployment']>, ParentType, ContextType>;
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -271,7 +271,7 @@ export type AppResolvers<ContextType = IApplicationContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppDeploymentResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['AppDeployment'] = ResolversParentTypes['AppDeployment']> = {
+export type AppDeploymentResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['AppDeployment'] = ResolversParentTypes['AppDeployment']> = {
   bundle: Resolver<ResolversTypes['Bundle'], ParentType, ContextType>;
   customHost: Resolver<ResolversTypes['CustomHost'], ParentType, ContextType>;
   delployedAt: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -279,47 +279,47 @@ export type AppDeploymentResolvers<ContextType = IApplicationContext, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppManifestResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['AppManifest'] = ResolversParentTypes['AppManifest']> = {
+export type AppManifestResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['AppManifest'] = ResolversParentTypes['AppManifest']> = {
   icon: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type BundleResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['Bundle'] = ResolversParentTypes['Bundle']> = {
+export type BundleResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['Bundle'] = ResolversParentTypes['Bundle']> = {
   __resolveType: TypeResolveFn<'BundleTemplate' | 'BundleUpload', ParentType, ContextType>;
 };
 
-export type BundleTemplateResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['BundleTemplate'] = ResolversParentTypes['BundleTemplate']> = {
+export type BundleTemplateResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['BundleTemplate'] = ResolversParentTypes['BundleTemplate']> = {
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type BundleUploadResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['BundleUpload'] = ResolversParentTypes['BundleUpload']> = {
+export type BundleUploadResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['BundleUpload'] = ResolversParentTypes['BundleUpload']> = {
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CreateAppResultResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['CreateAppResult'] = ResolversParentTypes['CreateAppResult']> = {
+export type CreateAppResultResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['CreateAppResult'] = ResolversParentTypes['CreateAppResult']> = {
   app: Resolver<ResolversTypes['App'], ParentType, ContextType>;
   customHost: Resolver<ResolversTypes['CustomHost'], ParentType, ContextType>;
   userProfile: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CreateUserProfileResultResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['CreateUserProfileResult'] = ResolversParentTypes['CreateUserProfileResult']> = {
+export type CreateUserProfileResultResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['CreateUserProfileResult'] = ResolversParentTypes['CreateUserProfileResult']> = {
   createApp: Resolver<ResolversTypes['CreateUserProfileResultCreateAppResult'], ParentType, ContextType, RequireFields<CreateUserProfileResultCreateAppArgs, 'input'>>;
   userProfile: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CreateUserProfileResultCreateAppResultResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['CreateUserProfileResultCreateAppResult'] = ResolversParentTypes['CreateUserProfileResultCreateAppResult']> = {
+export type CreateUserProfileResultCreateAppResultResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['CreateUserProfileResultCreateAppResult'] = ResolversParentTypes['CreateUserProfileResultCreateAppResult']> = {
   app: Resolver<ResolversTypes['App'], ParentType, ContextType>;
   customHost: Resolver<ResolversTypes['CustomHost'], ParentType, ContextType>;
   userProfile: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CustomHostResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['CustomHost'] = ResolversParentTypes['CustomHost']> = {
+export type CustomHostResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['CustomHost'] = ResolversParentTypes['CustomHost']> = {
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   providerInfo: Resolver<ResolversTypes['HostnameProviderInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -329,7 +329,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
-export type HostnameProviderInfoResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['HostnameProviderInfo'] = ResolversParentTypes['HostnameProviderInfo']> = {
+export type HostnameProviderInfoResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['HostnameProviderInfo'] = ResolversParentTypes['HostnameProviderInfo']> = {
   healthCheckUrl: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
   hostname: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   managementUrl: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
@@ -337,17 +337,17 @@ export type HostnameProviderInfoResolvers<ContextType = IApplicationContext, Par
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type MutationResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+export type MutationResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createApp: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>;
   createUserProfile: Resolver<ResolversTypes['CreateUserProfileResult'], ParentType, ContextType, RequireFields<MutationCreateUserProfileArgs, 'input'>>;
 };
 
-export type NodeResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
+export type NodeResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
   __resolveType: TypeResolveFn<'App' | 'BundleTemplate' | 'BundleUpload' | 'CustomHost' | 'UserProfile', ParentType, ContextType>;
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
-export type QueryResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   node: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   userProfile: Resolver<Maybe<ResolversTypes['UserProfile']>, ParentType, ContextType, RequireFields<QueryUserProfileArgs, 'id'>>;
 };
@@ -356,7 +356,7 @@ export interface UrlScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
   name: 'URL';
 }
 
-export type UserProfileResolvers<ContextType = IApplicationContext, ParentType extends ResolversParentTypes['UserProfile'] = ResolversParentTypes['UserProfile']> = {
+export type UserProfileResolvers<ContextType = IExecutorContext, ParentType extends ResolversParentTypes['UserProfile'] = ResolversParentTypes['UserProfile']> = {
   apps: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -364,7 +364,7 @@ export type UserProfileResolvers<ContextType = IApplicationContext, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type Resolvers<ContextType = IApplicationContext> = {
+export type Resolvers<ContextType = IExecutorContext> = {
   App: AppResolvers<ContextType>;
   AppDeployment: AppDeploymentResolvers<ContextType>;
   AppManifest: AppManifestResolvers<ContextType>;

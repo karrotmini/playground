@@ -4,11 +4,13 @@ import {
 import {
   type UserProfileID,
   type CustomHostID,
-  type AppManifestPayload,
+  type BundleTemplateID,
 } from '../entities';
 
-export type AppCreatedEvent = DomainEvent<'App', 'AppCreated', {
-  manifest: AppManifestPayload,
+export type AppCreatedFromTemplateEvent = DomainEvent<'App', 'AppCreatedFromTemplate', {
+  name: string,
+  tenantId: string,
+  templateId: BundleTemplateID,
   ownerId: UserProfileID | null,
   customHostId: CustomHostID,
 }>;

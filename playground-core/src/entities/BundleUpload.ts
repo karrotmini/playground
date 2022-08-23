@@ -12,6 +12,10 @@ import {
   type AppID,
   type UserProfileID,
 } from '../entities';
+import {
+  writeBundleUploadSnapshotV1,
+  type BundleUploadSnapshotV1,
+} from './_snapshots';
 
 export type BundleUploadID = GUID<'BundleUpload'>;
 export const BundleUploadID = registerGUID<BundleUploadID>();
@@ -30,9 +34,6 @@ export type BundleUploadEvent = (
 
 export type BundleUploadDTO = {
   id: BundleUploadID,
-  tag: string,
-  appId: AppID,
-  uploaderId: UserProfileID,
 };
 
 export class BundleUpload
@@ -56,9 +57,6 @@ export class BundleUpload
   toJSON(): Readonly<BundleUploadDTO> {
     return Object.freeze({
       id: this.id,
-      tag: this.tag,
-      appId: this.appId,
-      uploaderId: this.uploaderId,
     });
   }
 
